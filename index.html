@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <title>My Octopress Blog</title>
-  <meta name="author" content="Your Name">
+  <meta name="author" content="ailen">
 
   
   <meta name="description" content="1.Object#tap 是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
@@ -421,57 +421,69 @@ Ruby中还有一种更好的方法就是使用flat_map：</p>
 <p>自行车是一种非常高效的机器，部分原因在于它使用齿轮给人类带来的方便。在骑自行车时候你可以选择使用小齿轮（容易踩踏，但是不够快）活着选择大齿轮（踩踏费力，但是前进速度快）。 <br/>
 齿轮工作原理为：在双脚每踩动一圈踏板后，带动自行车所跑过的距离。具体讲，即齿轮控制了每踩动车轮所转过的圈数。如果用小齿轮，则需要双脚踩动多次才能让车轮转一次，采用
 大齿轮，完整踏一次则可以让车轮转动很多圈。 <br/>
-“小”和“大”这些术语都不够精确。对于不同齿轮，单车族采用了&#8221;齿轮牙齿比率&#8221;的概念。如下面的简单的Ruby脚本: <br/>
-        chainring cog = 52                      # number of teeth
-        ratio         = 11                      # -> 4.72727272727273
-        puts ratio    = chainring / cog.to_f    # -> 1.11111111111111
-        chainring cog = 30                      ￼￼￼
-        ratio         = 27                      # number of teeth
-        puts ratio    = chainring / cog.to_f    # -> 4.72727272727273
-一个代码52颗齿轮的牙盘和一个带有11颗齿的飞轮组合在一起（52x11）形成的齿轮拥有率为4.73，每踩踏一次，轮子转动圈数接近5。而（30x27）的结构踩起来会更轻松。<br/>
+“小”和“大”这些术语都不够精确。对于不同齿轮，单车族采用了&#8221;齿轮牙齿比率&#8221;的概念。如下面的简单的Ruby脚本:</p>
+
+<pre><code>    chainring cog = 52                      # number of teeth
+    ratio         = 11                      # -&gt; 4.72727272727273
+    puts ratio    = chainring / cog.to_f    # -&gt; 1.11111111111111
+    chainring cog = 30                      ￼￼￼
+    ratio         = 27                      # number of teeth
+    puts ratio    = chainring / cog.to_f    # -&gt; 4.72727272727273
+</code></pre>
+
+<p>一个代码52颗齿轮的牙盘和一个带有11颗齿的飞轮组合在一起（52x11）形成的齿轮拥有率为4.73，每踩踏一次，轮子转动圈数接近5。而（30x27）的结构踩起来会更轻松。<br/>
 如果通读一下上面的那些描述，并找出表示领域内对象的一些名词，你便会看到像自行车和齿轮这样的词组。这些名词代表了最简单的可以成为类的候选项。直觉告诉我们自行车应是
 一个类，但是上面描述没有任何关于自行车行为。因此到目前为止还不具资格。不过齿轮由牙盘、飞轮和比率。即是说它拥有了数据和行为。它应该理解为一个类。根据上面的描述
-可以创拟建这样一个简单的Gear类: <br/>
-      class Gear
-        attr_reader :chainring, :cog def initialize(chainring, cog)
-        @chainring = chainring
-        @cog = cog end
-        def ratio
-          chainring / cog.to_f
-        end
-      end
-      puts Gear.new(52, 11).ratio puts Gear.new(30, 27).ratio
-这个gear类很简单。在提供牙盘和飞轮具体齿数后，你便可以创建一个新的Gear实例。每一个i实现了三个方法，chainring、cog和ratio。<br/>
+可以创拟建这样一个简单的Gear类:</p>
+
+<pre><code>  class Gear
+    attr_reader :chainring, :cog def initialize(chainring, cog)
+    @chainring = chainring
+    @cog = cog end
+    def ratio
+      chainring / cog.to_f
+    end
+  end
+  puts Gear.new(52, 11).ratio puts Gear.new(30, 27).ratio
+</code></pre>
+
+<p>这个gear类很简单。在提供牙盘和飞轮具体齿数后，你便可以创建一个新的Gear实例。每一个i实现了三个方法，chainring、cog和ratio。<br/>
 这是将你的齿轮计算器展示给某个朋友，他会发现这个很有用，但是立即要求更改。他有两辆自行车，这些自行车拥有完全相同的齿轮，但是只是轮子尺寸不一样。他希望你考虑到不同
 车轮带来的影响。<br/>
 在美国有一种“齿轮英寸数”的方法来对拥有不同齿轮和轮子的自行车进行比较。计算公式为：<br/>
 齿轮英寸数 = 轮子直径 x 齿轮比率，其中轮子直径 = 钢圈直径 + 两倍轮胎直径。 <br/>
-更改Gear类，添加新行为：<br/>
-    class Gear
-      attr_reader :chainring, :cog, :rim, :tire def initialize(chainring, cog, rim, tire)
-        @chainring = chainring @cog = cog
-        @rim = rim
-        @tire = tire
-      end
-      def ratio
-        chainring / cog.to_f
-      end
-      def gear_inches
-        # tire goes around rim twice for diameter
-        ratio * (rim + (tire * 2))
-      end
-    end
-    puts Gear.new(52, 11, 26, 1.5).gear_inches
-    # -> 137.090909090909
-    puts Gear.new(52, 11, 24, 1.25).gear_inches # -> 125.272727272727
-这个新的gear_inches方法假定符合钢圈和轮胎尺寸的单位为英寸，这个可能正确，也可能不正确。尽管有次警告，但是Gear类还是符合规范，而且代码也能工作，只是下面的错误
-要排除在外面
-    puts Gear.new(52, 11).ratio # didn&rsquo;t this used to work?
-    # ArgumentError: wrong number of arguments (2 for 4)
-    # from (irb):20:in &lsquo;initialize&rsquo;
-    # from (irb):20:in &lsquo;new&rsquo;
-    # from (irb):20
-在添加gear_inches会引入上面这个错误。在更改后构造方法又引入了额外两个参数：rim和tire。更改某个方法参数个数会对现有的调用的那些函数产生影响。有可能会产生严重的问题。 <br/>
+更改Gear类，添加新行为：</p>
+
+<pre><code>class Gear
+  attr_reader :chainring, :cog, :rim, :tire def initialize(chainring, cog, rim, tire)
+    @chainring = chainring @cog = cog
+    @rim = rim
+    @tire = tire
+  end
+  def ratio
+    chainring / cog.to_f
+  end
+  def gear_inches
+    # tire goes around rim twice for diameter
+    ratio * (rim + (tire * 2)) 
+  end
+end
+puts Gear.new(52, 11, 26, 1.5).gear_inches
+# -&gt; 137.090909090909
+puts Gear.new(52, 11, 24, 1.25).gear_inches # -&gt; 125.272727272727
+</code></pre>
+
+<p>这个新的gear_inches方法假定符合钢圈和轮胎尺寸的单位为英寸，这个可能正确，也可能不正确。尽管有次警告，但是Gear类还是符合规范，而且代码也能工作，只是下面的错误
+要排除在外面</p>
+
+<pre><code>puts Gear.new(52, 11).ratio # didn't this used to work?
+# ArgumentError: wrong number of arguments (2 for 4) 
+# from (irb):20:in 'initialize'
+# from (irb):20:in 'new' 
+# from (irb):20
+</code></pre>
+
+<p>在添加gear_inches会引入上面这个错误。在更改后构造方法又引入了额外两个参数：rim和tire。更改某个方法参数个数会对现有的调用的那些函数产生影响。有可能会产生严重的问题。 <br/>
 既然有了基本的Gear类，那么现在有一个问题，这种组织代码的结构是组好的么？<br/>
 答案是：视具体情况而定。如果其中程序永远不变，那么当前就够了，但是已经预料到了：有可能需要为单车一族提供一个完成的计算器程序。在即将发生演变的程序里，Gear是众多类
 的一个，为了让演变更加有效，代码必须易于更改。</p>
@@ -484,41 +496,51 @@ Ruby中还有一种更好的方法就是使用flat_map：</p>
 
 <h4>1隐藏实例变量</h4>
 
-<p>将实例变量总是包裹在访问器里面，而不是直接应用做法具体如下：<br/>
-    class Gear
-      attr_reader :chainring, :cog # &lt;&mdash;&mdash;-
-      def initialize(chainring, cog)
-        @chainring = chainring
-        @cog = cog
-      end
-      def ratio
-        chainring / cog.to_f
-      end
-    end
-    内部实现为:
-    def cog
-      @cog
-    end
-现在这个cog便是这段代码唯一能够理解cog含义的地方。cog变成了消息发送的结果，实现这个方法cog由数据(四处应用)变成了行为（只被定义了一次）。<br/>
-如果@cog被引用10次，那么突然需要调整，这段代码也需要大量的调整，但是如果放到访问器里面，那么只需要改动一次。甚至会有更复杂的实现也只需要改动一次如下。<br/>
-    def cog
-      @cog * (foo? ? bar_adjustment : baz_adjustment)
-    end</p>
+<p>将实例变量总是包裹在访问器里面，而不是直接应用做法具体如下：</p>
+
+<pre><code>class Gear
+  attr_reader :chainring, :cog # &lt;------- 
+  def initialize(chainring, cog)
+    @chainring = chainring
+    @cog = cog 
+  end
+  def ratio
+    chainring / cog.to_f
+  end 
+end
+内部实现为:
+def cog 
+  @cog
+end
+</code></pre>
+
+<p>现在这个cog便是这段代码唯一能够理解cog含义的地方。cog变成了消息发送的结果，实现这个方法cog由数据(四处应用)变成了行为（只被定义了一次）。<br/>
+如果@cog被引用10次，那么突然需要调整，这段代码也需要大量的调整，但是如果放到访问器里面，那么只需要改动一次。甚至会有更复杂的实现也只需要改动一次如下。</p>
+
+<pre><code>def cog
+  @cog * (foo? ? bar_adjustment : baz_adjustment)
+end
+</code></pre>
 
 <h4>2隐藏数据结构</h4>
 
-<p>如果说附带一个实例变量是一个坏事情，那么依赖于一个复杂的数据结构则是糟糕透顶的事情，一起看看下面这个类：
-     class ObscuringReferences
-       attr_reader :data
-       def initialize(data)
-         @data = data
-       end
-       def diameters
-        data.collect {|cell|cell[0] + (cell[1] * 2)}
-       end
-     end
-这个类希望使用一个由钢圈和轮胎构成的二维数组进行初始化：<br/>
-    @data = [[622, 20], [622, 23], [559, 30], [559, 40]]</p>
+<p>如果说附带一个实例变量是一个坏事情，那么依赖于一个复杂的数据结构则是糟糕透顶的事情，一起看看下面这个类：</p>
+
+<pre><code> class ObscuringReferences
+   attr_reader :data
+   def initialize(data)
+     @data = data 
+   end
+   def diameters
+    data.collect {|cell|cell[0] + (cell[1] * 2)} 
+   end
+ end
+</code></pre>
+
+<p>这个类希望使用一个由钢圈和轮胎构成的二维数组进行初始化：</p>
+
+<pre><code>@data = [[622, 20], [622, 23], [559, 30], [559, 40]]
+</code></pre>
 
 <p>ObscuringReferences将其初始化参数放到变量@data中，并乖乖使用Ruby的attr_reader将@data包裹在方法里。 <br/>
 不过由@data包含一个复杂的数据结构，所以只隐藏实例变量还不够。方法@data仅仅是返回了这个数组。为做些有用的事情，data的每一位发送者还必须完全了解数据的哪一部分处于
@@ -529,21 +551,24 @@ Ruby中还有一种更好的方法就是使用flat_map：</p>
 这段代码确实很糟糕。加入data返回一个数组，而这个数组由被许多地方引用的散列构成，那么出现什么样的后果？改变它的结构会影响到整段代码，每次更改都意味着一次错误率的创建。
 这个问题非常隐蔽。<br/>
 在Ruby中很容易将结构与意义分离开来，就像你可以使用一个方法将整个变量包裹起来一样，Ruby中可以使用Struct类来包裹结构。当然C#也有类似于Struct的结构。<br/>
-在下面这示例，具有与前面那个类完全一样的接口，他接受一个二维数组作为初始化参数，并且实现了diameters方法。尽管他们外观很相同，但是内部实现却迥然不同。
-    class RevealingReferences attr_reader :wheels
-      def initialize(data)
-        @wheels = wheelify(data)
-      end
-      def diameters
-        wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)}
-      end
-      # &hellip; now everyone can send rim/tire to wheel
-      Wheel = Struct.new(:rim, :tire)
-      def wheelify(data) data.collect {|cell|
-        Wheel.new(cell[0], cell[1])}
-      end
-    end
-现在上面那个diameters对那个数组的结构一无所知。diameters知道的仅限于：消息wheels会返回一个枚举，并且每一个枚举会响应rim和tire请求。以前对cell[1]的应用变成了
+在下面这示例，具有与前面那个类完全一样的接口，他接受一个二维数组作为初始化参数，并且实现了diameters方法。尽管他们外观很相同，但是内部实现却迥然不同。</p>
+
+<pre><code>class RevealingReferences attr_reader :wheels
+  def initialize(data)
+    @wheels = wheelify(data) 
+  end
+  def diameters 
+    wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)} 
+  end
+  # ... now everyone can send rim/tire to wheel
+  Wheel = Struct.new(:rim, :tire)
+  def wheelify(data) data.collect {|cell|
+    Wheel.new(cell[0], cell[1])} 
+  end
+end
+</code></pre>
+
+<p>现在上面那个diameters对那个数组的结构一无所知。diameters知道的仅限于：消息wheels会返回一个枚举，并且每一个枚举会响应rim和tire请求。以前对cell[1]的应用变成了
 发送给wheel.tire消息。<br/>
 这样的样式代码让你不会受到外部所属的数据结构变化的影响。并且还能提高代码的可读性，以及让意图更加明显。它将对结构的索引转变成了往对象发送消息，上面的的wheelify方法将混乱的
 结构信息隔离起来，让这段代码更符合DRY原则。让整个类更适应变化。</p>
@@ -555,34 +580,46 @@ Ruby中还有一种更好的方法就是使用flat_map：</p>
 <h4>将额外的责任从方法里提取出来</h4>
 
 <p>与类一样方法也具有单一职责。所有原因都相同，只拥有一种职责可以让他们更易于更改和重用。所有设计技术在询问它做什么的时候，尽量用<strong>一句话来描述他们的职责</strong>。<br/>
-RevealingReferences的diameters方法： <br/>
-    def diameters
-      wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)}
-    end
-显然有两个职责：遍历轮子，并计算出每一个轮子的直径。<br/>
+RevealingReferences的diameters方法：</p>
+
+<pre><code>def diameters 
+  wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)} 
+end
+</code></pre>
+
+<p>显然有两个职责：遍历轮子，并计算出每一个轮子的直径。<br/>
 将其分为两个方法，每个方法承担一种责任，下面将计算轮子的直径放到了另外一个方法，当然这种重构会引入另外一个消息发送，但此时应该认为发送消息是没有代价的，现在的目的是编写
-易于更改的代码：
-    def diameters
-      wheels.collect {|wheel| diameter(wheel)}
-    end
-    # second - calculate diameter of ONE wheel
-    def diameter(wheel)
-      wheel.rim + (wheel.tire * 2))
-    end
-再看看前面的Gear里面的gear_inches方法: <br/>
-    def gear_inches
-      ratio * (rim + (tire * 2))
-    end
-仔细看看gear_inches是Gear类的一项职责么？假设他是也很合理，那为什么这个方法看上去还是让人感觉错了呢？他有点混乱不确定，最终导致这个问题的就是这个方法<em>自身</em>不止有
+易于更改的代码：</p>
+
+<pre><code>def diameters
+  wheels.collect {|wheel| diameter(wheel)}
+end
+# second - calculate diameter of ONE wheel
+def diameter(wheel)
+  wheel.rim + (wheel.tire * 2))
+end
+</code></pre>
+
+<p>再看看前面的Gear里面的gear_inches方法:</p>
+
+<pre><code>def gear_inches
+  ratio * (rim + (tire * 2)) 
+end
+</code></pre>
+
+<p>仔细看看gear_inches是Gear类的一项职责么？假设他是也很合理，那为什么这个方法看上去还是让人感觉错了呢？他有点混乱不确定，最终导致这个问题的就是这个方法<em>自身</em>不止有
 一种职责。<br/>
-隐藏在内部的是对车轮直径的计算，那么立刻行动，将直径计算放到新得方法,这样更容易检查类的职责：<br/>
-    def gear_inches
-      ratio * diameter
-    end
-    def diameter
-      rim + (tire * 2)
-    end
-这个重构并没有改变直径的计算方法，他只是将这个行为隔离在一个独立的方法里面。即使在你不了解最终设计的时候也很有必要这么做。<br/>
+隐藏在内部的是对车轮直径的计算，那么立刻行动，将直径计算放到新得方法,这样更容易检查类的职责：</p>
+
+<pre><code>def gear_inches 
+  ratio * diameter
+end
+def diameter
+  rim + (tire * 2)
+end
+</code></pre>
+
+<p>这个重构并没有改变直径的计算方法，他只是将这个行为隔离在一个独立的方法里面。即使在你不了解最终设计的时候也很有必要这么做。<br/>
 这个简单的重构让问题变得一目了然。Gear绝对要对gear_inches计算负责，但Gear不应该计算轮子直径。<br/>
 这种单个重构其影响力很小，但是这个编码风格积累起来的影响力确实巨大的。具有单一职责的方法具有以下几个优点：</p>
 
@@ -594,25 +631,28 @@ RevealingReferences的diameters方法： <br/>
 </ul>
 
 
-<p>Ruby允许你将计算直径的职责在不经指派的情况下从Gear一到另外一个新的类里面。下面的示例扩展了前面那个Wheel结构，增加了计算直径的方法：<br/>
-    class Gear
-      attr_reader :chainring, :cog, :wheel
-      def initialize(chainring, cog, rim, tire)
-        @chainring = chainring
-        @cog = cog
-        @wheel = Wheel.new(rim, tire)
-      end
-      def ratio
-        chainring / cog.to_f
-      end
-      def gear_inches
-        ratio * wheel.diameter
-      end
-      Wheel = Struct.new(:rim, :tire) do def diameter
-        rim + (tire * 2) end
-      end
-    end
-现在有了一个新的Wheel，它计算自己的直径，将这个Wheel嵌入到Gear里面显然不是长远目标，但是它距离最终设计又近了一步。 <br/>
+<p>Ruby允许你将计算直径的职责在不经指派的情况下从Gear一到另外一个新的类里面。下面的示例扩展了前面那个Wheel结构，增加了计算直径的方法：</p>
+
+<pre><code>class Gear
+  attr_reader :chainring, :cog, :wheel
+  def initialize(chainring, cog, rim, tire)
+    @chainring = chainring
+    @cog = cog
+    @wheel = Wheel.new(rim, tire)
+  end
+  def ratio
+    chainring / cog.to_f
+  end
+  def gear_inches
+    ratio * wheel.diameter
+  end
+  Wheel = Struct.new(:rim, :tire) do def diameter
+    rim + (tire * 2) end
+  end 
+end
+</code></pre>
+
+<p>现在有了一个新的Wheel，它计算自己的直径，将这个Wheel嵌入到Gear里面显然不是长远目标，但是它距离最终设计又近了一步。 <br/>
 如果有一个用过过多职责、混乱不堪的类，请将这些职责分离成不同的类。将精力全部集中到主类上面，决定他的职责，并迅速执行决定。如果你确定还有额外的职责无法删除，请将它
 隔离起来，不要让无关的职责渗透进来。</p>
 
@@ -1066,7 +1106,7 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Your Name -
+  Copyright &copy; 2015 - ailen -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

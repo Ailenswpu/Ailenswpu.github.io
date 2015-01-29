@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <title>Rails中一些不常用但是很实用的技巧 - My Octopress Blog</title>
-  <meta name="author" content="Your Name">
+  <meta name="author" content="ailen">
 
   
   <meta name="description" content="好久没有写博客了、感觉没有提高，先来检讨一下: 1.collection &amp;&amp; pluck 很多时候我们的代码里面充斥这如下这样的代码： published_book_titles = Book.published.map(&amp;:title) &hellip;">
@@ -97,13 +97,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#114;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#114;&#x65;&#x6e;&#107;&#x61;&#105;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#114;&#x65;&#110;&#107;&#97;&#x69;&#x73;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#114;&#101;&#x6e;&#x6b;&#x61;&#105;&#x73;&#x77;&#x70;&#x75;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#114;&#101;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#119;&#x70;&#x75;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x72;&#101;&#110;&#x6b;&#97;&#105;&#x73;&#119;&#x70;&#117;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#x72;&#x65;&#110;&#x6b;&#x61;&#x69;&#x73;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#110;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x72;&#101;&#x6e;&#107;&#97;&#x69;&#115;&#x77;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#x73;&#119;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -112,7 +112,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#x61;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#101;&#110;&#107;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#x65;&#x6e;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -153,7 +153,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
       
   
 
-<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+<span class="byline author vcard">Posted by <span class="fn">ailen</span></span>
 
       
 
@@ -228,7 +228,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Your Name -
+  Copyright &copy; 2015 - ailen -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
