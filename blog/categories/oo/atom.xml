@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Oo | My Octopress Blog]]></title>
+  <title><![CDATA[Category: Oo | coding on the way]]></title>
   <link href="http://ailenswpu.github.io/blog/categories/oo/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-01-29T22:01:56+08:00</updated>
+  <updated>2015-01-29T22:05:06+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
