@@ -1,0 +1,8 @@
+---
+layout: post
+title: "2013个人想法"
+date: 2013-03-23 10:33
+comments: true
+categories: person
+---
+这几天也在根据中国的教育情况构思了一个产品，暂且取名"icancode"。具体内容会慢慢加上来，敬请期待...
