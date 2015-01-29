@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Liftstyle | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/liftstyle/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[生活有感]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/07/17/sheng-huo-you-gan/"/>
+    <updated>2013-07-17T22:00:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/07/17/sheng-huo-you-gan</id>
+    <content type="html"><![CDATA[<p>很多天没有怎么接触代码了，确实有了与世隔绝的感觉，生活总是会眷顾我，让我有了一个懂事听话的老婆在我身边，<br/>
+生活中少呆在电脑面前，而更多的是做饭、洗衣服等.<br/>
+有时候总是会给自己说，</p>
+]]></content>
+  </entry>
+  
+</feed>

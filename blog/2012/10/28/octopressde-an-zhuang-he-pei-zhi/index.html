@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopress的安装和配置 - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="最近一时脑子发热想起了写博客，确实如此，很多时候发觉自己需要记录一些东西。因此按照rubychina上面一位高手的文章终于搭建成功了，并且成功用Github Pages部署到github上面去，博客地址为：http://ailenswpu.github.com.%E4%B8%8B%E9%9D% &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress的安装和配置</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-10-28T20:36:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>8:36 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>   最近一时脑子发热想起了写博客，确实如此，很多时候发觉自己需要记录一些东西。因此按照rubychina上面一位高手的文章终于搭建成功了，并且成功用Github Pages部署到github上面去，博客地址为：<a href="http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82">http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82</a>  首先Octopress源代码是根据Jekyll，采用rails来编写，最新的需要的配置环境如下：ruby1.9.3，rails3.X，git，ssh等。很多linux已经安装好了。<br/>
+  具体安装rails的过程请看：<a href="http://blog.csdn.net/renkai611919/article/details/7792252">http://blog.csdn.net/renkai611919/article/details/7792252</a><br/>
+   具体的安装过程看：<a href="http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82">http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82</a><br/>
+   需要加以说明的是如果你的github的用户名中有大小写字母的时候一定要严格按照大小写，否则在rake deploy的时候不能push上去（这个问题当时纠结了我好久）。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2012-10-28T20:36:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>8:36 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ailenswpu.github.io/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi/" data-via="" data-counturl="http://ailenswpu.github.io/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/10/29/ubuntu12-dot-04pei-zhi-jdk/" title="Next Post: Ubuntu12.04配置jdk">Ubuntu12.04配置jdk &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

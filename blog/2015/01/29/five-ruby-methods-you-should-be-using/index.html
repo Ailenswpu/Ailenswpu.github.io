@@ -1,0 +1,454 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Five Ruby Methods You Should Be Using - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="1.Object#tap 是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
+你通过调用hash.[]来更新hash，因此你必须明确地返回才能得到更新后的结果，代码如下: 1
+2
+3
+4
+def &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/blog/2015/01/29/five-ruby-methods-you-should-be-using/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Five Ruby Methods You Should Be Using</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-29T21:51:35+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:51 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>1.Object#tap</h1>
+
+<p>是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
+你通过调用hash.[]来更新hash，因此你必须明确地返回才能得到更新后的结果，代码如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+</span><span class='line'>  <span class="n">params</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代码最后一行的params看上去似乎是多余的。<br/>
+因此可以通过(Object#tap)[<a href="http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap">http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap</a>]来简化代码。对象只要调用tap方法，传递一个你需要
+执行的代码块，对象调用代码块的后返回自己。因此改进的update_params代码如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">.</span><span class="n">tap</span> <span class="p">{</span><span class="o">|</span><span class="nb">p</span><span class="o">|</span> <span class="nb">p</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Object#tap在很多地方都很有用.有一个简单法则：对象的方法本身不必要返回自己，当你需要时候即可以用Object#tap来替换。</p>
+
+<h1>2.Array#bsearch</h1>
+
+<p>不知道你们在工作中是否会遇到遍历数组?Ruby的枚举提供了很多寻找方法比如：select,reject和find，这些是我日常工作中经常使用的，但是当数据集很大的时候，我开始
+担心遍历这些数组需要耗费很多的时间。</p>
+
+<p>如果你使用过ActiveRecord来做SQL查询，在ActiveRecord背后封装了很多魔法，因此你必须要把搜索复杂的降到最低。但是很多时候你必须要把所有数据先查询出来然后
+才能做进一步工作。比如：当数据库中的数据做了加密的时候，你不能直接通过SQL来做操作。</p>
+
+<p>在这个时候，我通常思考如何使用算法复杂度最低(大O)的算法来做数据筛选，如果你不知道大O可以参考Justin Abrahms&#8217;s的<a href="https://justin.abrah.ms/computer-science/big-o-notation-explained.html"> Big-O Notation Explained By A Self-Taught Programmer</a>
+或者(Big-O Complexity Cheat Sheet)[<a href="http://bigocheatsheet.com/">http://bigocheatsheet.com/</a>]。</p>
+
+<p>基本的原则就是算法的复杂度决定着算法的运行时间的长短，复杂度从小打到依次排序为：O(1), O(log n), O(n), O(n log(n)), O(n<sup>2</sup>), O(2<sup>n</sup>), O(n!)，因此我们倾向于
+使用复杂度低的算法。</p>
+
+<p>在Ruby中，当对数组做查询的时候，第一反应是使用Enumerable#find，也可以是detect。但是这个方法会遍历整个数组，直到条件匹配。如果最终结果在前面那么还好，如果
+结果在数组最后面，那么最终搜索的复杂度为O(n)。</p>
+
+<p>在Ruby中有一个更快的方法(Array#bsearch)[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch">http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch</a>], 搜索的复杂度为O(log n)，如果想要查看
+Binary Search的工作原理，可以查看(Building A Binary Search)[<a href="http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/">http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/</a>]。</p>
+
+<p>下面是从50,000,000数字中搜索特定值的运行时间对比：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">50_000_000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:find</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:bsearch</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="n">user</span>       <span class="nb">system</span>     <span class="n">total</span>       <span class="n">real</span>
+</span><span class='line'><span class="n">find</span>     <span class="mi">3</span><span class="o">.</span><span class="mo">020000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">010000</span>   <span class="mi">3</span><span class="o">.</span><span class="mo">030000</span>   <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mo">02</span><span class="mi">8417</span><span class="p">)</span>
+</span><span class='line'><span class="n">bsearch</span>  <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mo">000006</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>正如你看到的，bsearch速度非常快。但是使用bsearch的大前提就是：数组必须是排序好的。这在很多时候限制了bsearch的用途，但是仍然在很多时候会用到，比如：当你在按照
+created_at排序好的数据库记录中按时间查询某个记录。</p>
+
+<h1>3.Enumerable#flat_map</h1>
+
+<p>当处理相关联的数据时候，我们通常需要查询一些不相关一些列数据，然后以嵌套的数组的形式返回。假设你有一个博客，你想查询出某些用户的上个月的所有的博客的评论的作者，那么
+代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">map</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你最终有可能得到如下结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[[[</span><span class="s1">&#39;Ben&#39;</span><span class="p">,</span> <span class="s1">&#39;Sam&#39;</span><span class="p">,</span> <span class="s1">&#39;David&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s1">&#39;Keith&#39;</span><span class="o">]]</span><span class="p">,</span> <span class="o">[[]</span><span class="p">,</span> <span class="o">[</span><span class="kp">nil</span><span class="o">]]</span><span class="p">,</span> <span class="o">[[</span><span class="s1">&#39;Chris&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是真正的需求是我想得到的是作者，而不是[]或者nil,因此你可以通过flatten来合并：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby
+Ruby中还有一种更好的方法就是使用flat_map：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">flat_map</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">flat_map</span> <span class="p">{</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面两种并没有太大区别，但是使用flat_map没必要多次调用flatten。</p>
+
+<h1>4.Array.new with a Block</h1>
+
+<p>一度在我集训的时候，我们导师Jeff Casimir (founder of (Turing School)[<a href="http://turing.io/">http://turing.io/</a>])让我们在一小时时间内去开发一个Battleship，这是一次很好的
+面向对象的编程练习，我们需要Rules, Players, Games, and Boards。<br/>
+创建Board的表现形式是一个很有趣的练习，在多次迭代之后，我发现了最简单的方式去构建一个8x8的格子:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Board</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">board</span>
+</span><span class='line'>    <span class="vi">@board</span> <span class="o">||=</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;0&#39;</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么到底发生了什么呢？当你调用(Array.new(n))[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new">http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new</a>],就会创建一个长度为n的数组：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当你传递代码块的时候，就会把代码块中的值加入到数组中：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;O&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因此如果你在代码块中传第一个包含8个&#8217;0&#8217;的数组，那么你就会得到一个8x8的所有元素为&#8217;0&#8217;的数组。使用Array.new加上代码块，你可以构建出任何大小，任何嵌套的数组。</p>
+
+<h1>5.&lt;=></h1>
+
+<p>这个如&#8221;宇宙飞船&#8221;的符号是我在Ruby中最喜欢的结构之一，它在广泛使用于Ruby的内置类中，同时在枚举中也广泛使用。</p>
+
+<p>下面通过整形数值调用&lt;=>来看一下用法，当你运行5&lt;=>5时候, 返回值 0，当你运行4&lt;=>5返回-1，当你运行5&lt;=>4，返回1.因此，如果两个数字一样，返回0，前者小于后者，返回-1，如果
+前者大于后者返回1.</p>
+
+<p>你可以使用&lt;=>来重新定义自己的逻辑，使其只返回0，1，-1.</p>
+
+<p>下面是&lt;=>的一个非常cool的使用场景，来自Exercism， 有一个练习叫做Clock，你必须使用自定义的+和-来调整时钟的小时分钟。当时间超过60分钟的时候就会变得非常复杂，
+因为超过60分钟是不合法的数据，因此你必须要加一个小时，同时减去60分钟。<br/>
+一个叫dalexj的聪明小伙子的解决方案如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">fix_minutes</span>
+</span><span class='line'>    <span class="k">until</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">60</span><span class="p">)</span><span class="o">.</span><span class="n">member?</span> <span class="n">minutes</span>
+</span><span class='line'>      <span class="vi">@hours</span> <span class="o">-=</span> <span class="mi">60</span> <span class="o">&lt;=&gt;</span> <span class="n">minutes</span>
+</span><span class='line'>      <span class="vi">@minutes</span> <span class="o">+=</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="mi">60</span> <span class="o">&lt;=&gt;</span> <span class="n">minutes</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@hours</span> <span class="o">%=</span> <span class="mi">24</span>
+</span><span class='line'>    <span class="nb">self</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&lt;=>符号非常适用于定义你自己对对象的排序，同时可以用于某些数学运算，因为它仅仅返回三个固定的数字。</p>
+
+<p>原文链接为：<a href="https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using">https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using</a></p>
+
+<p>处女翻译贴献给了ruby-china，如果哪里有错误的请大家及时指正。:smile:</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-01-29T21:51:35+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:51 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ailenswpu.github.io/blog/2015/01/29/five-ruby-methods-you-should-be-using/" data-via="" data-counturl="http://ailenswpu.github.io/blog/2015/01/29/five-ruby-methods-you-should-be-using/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/19/design-class-with-single-responsibility/" title="Previous Post: Chapter2: Designing Classes with a Single Responsibility">&laquo; Chapter2: Designing Classes with a Single Responsibility</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

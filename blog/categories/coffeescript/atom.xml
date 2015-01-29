@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Coffeescript | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/coffeescript/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Osx 安装coffeescript]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/12/08/osx-an-zhuang-coffeescript/"/>
+    <updated>2013-12-08T17:33:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/12/08/osx-an-zhuang-coffeescript</id>
+    <content type="html"><![CDATA[<p>最近学习<a href="http://coffeescript.org/">CoffeeScript</a>,因为电脑是OSX，在安装时候出现了一些问题，现将具体的安装步奏总结如下:</p>
+
+<h3>1.安装<a href="http://nodejs.org/">node.js</a></h3>
+
+<p>下载OSX的安装包<a href="http://nodejs.org/dist/v0.10.22/node-v0.10.22.pkg">node.js</a>,并安装。</p>
+
+<h3>2.  安装coffeescript</h3>
+
+<p>安装好了nodejs后利用node.js的<a href="https://npmjs.org/">nmp</a>的包管理工具安装coffeescrit,在console中输入:<br/>
+     npm install -g coffee-script
+console出现：</p>
+
+<pre><code>npm http GET https://registry.npmjs.org/coffee-script
+npm http 304 https://registry.npmjs.org/coffee-script
+/Users/mac/.npm-packages/bin/coffee -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/coffee
+/Users/mac/.npm-packages/bin/cake -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/cake
+coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
+</code></pre>
+
+<p>安装成功。</p>
+
+<h3>3.解决command not found问题:</h3>
+
+<p>因为npm没有把coffee加入到PATH中需要手动加入如下命令: <br/>
+    export PATH=/usr/local/share/npm/lib/node_modules/coffee-script/bin/:$PATH
+这样就安装成功。</p>
+]]></content>
+  </entry>
+  
+</feed>

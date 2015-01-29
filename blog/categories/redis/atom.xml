@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Redis | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/redis/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Redis Delete Key]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/03/22/redis-delete-key/"/>
+    <updated>2013-03-22T10:20:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/03/22/redis-delete-key</id>
+    <content type="html"><![CDATA[<p>redis中如果需要删除关于某一个key的所有的内容可以运行如下命令：
+      redis-cli -n 0 KEYS ub:2011-07-<em> | xargs redis-cli DEL(ub:2011-07-</em>是你要删除的某一个key)</p>
+]]></content>
+  </entry>
+  
+</feed>

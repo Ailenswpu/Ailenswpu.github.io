@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="好久没有写博客了、感觉没有提高，先来检讨一下: 1.collection &amp;&amp; pluck 很多时候我们的代码里面充斥这如下这样的代码： published_book_titles = Book.published.map(&amp;:title) &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/posts/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/11/railszhong-%5B_%5D-xie-bu-chang-yong-dan-shi-hen-shi-yong-de-ji-qiao/">Rails中一些不常用但是很实用的技巧</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-04-11T22:26:00+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:26 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>好久没有写博客了、感觉没有提高，先来检讨一下:</p>
+
+<h3>1.collection &amp;&amp; pluck</h3>
+
+<p>很多时候我们的代码里面充斥这如下这样的代码：
+    published_book_titles = Book.published.map(&amp;:title)
+这样的代码当数据量很大的时候效率很低，那么应该改成:
+    published_book_titles = Book.published.pluck(:title)
+pluck在做查询的时候会指针对特定的列进行查询，而上面一种写法会先把所有数据查询出来然后再进行特定列的筛选。</p>
+
+<h3>2.find_by</h3>
+
+<p>很多时候，如果我们需要查找单条记录代码会是:
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#114;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+但是rails设计的时候更常用的是dynamic finder:
+    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+如果你使用find_by可以写成这样子：
+    User.find_by(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#119;&#x70;&#x75;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    #或者写成
+    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#110;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
+
+<h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
+
+<pre><code>User.where(email: "renkaiswpu@gmail.com").first_or_create
+</code></pre>
+
+<p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#x61;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#101;&#110;&#107;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;).first_or_create do |user|
+       user.name = = &lsquo;renkai&rsquo;
+    end
+同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
+
+<h3>4.find_each &amp; find</h3>
+
+<p>当你在遍历成千上万条数据的时候，如果使用each那么会一次性从数据库中把记录查询出来，效率可想而知！！但是当你用find_each的时候那么rails会先加载前1000条数据，其他的会在后续时间继续加载，直到加载完全部放到内存中。
+    Book.where(:published => true).find_each do |book|
+       puts &ldquo;Do something with #{book.title} here!&rdquo;
+    end</p>
+
+<h3>4.rake notes</h3>
+
+<p>很多场合下我们会用todolist来提醒自己做一些feature,那么如何使用rake来提醒自己呢，只要在rb文件中加入如下格式的代码：
+    #encoding : utf-8
+    class Blog
+      # TODO: 使用mongodb
+      # FIXME: 修改bug
+      include Mongoid::Document
+      include Rails.application.routes.url_helpers
+      field :name, type: String
+      field :content, type: String
+      attr_accessible :file
+      field :file
+      mount_uploader :file, FileUploader
+    end
+那么再使用:
+    rake notes
+    rake notes:todo
+    rake notes:fixme
+就可以轻松知道自己的tasklist了。
+更加详细的请参考<a href="https://speakerdeck.com/jeg2/10-things-you-didnt-know-rails-could-do">rails技巧</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti/">ubuntu12.04开机无法进入问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-04-02T15:16:00+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>3:16 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天我的ubuntu12.04在我的强制关机后再一次英勇牺牲了。开机的时候出现了如下错误:
+     mount: mounting /dev on /root/dev failed: No such file or directory
+     mount: mounting /sys on /root/sys failed: No such file or directory
+     mount: mounting /proc on /root/proc failed: No such file or directory
+     Target filesystem doesn&rsquo;t have /sbin/init
+     [  3.392164] ioc0: LSI53C1030 B0 : Capabilities={Initiator}
+     No init found . Try passing init=bootarg.
+后来查了一下是引导分区的问题，具体解决办法如下:
+1. 先输入如下命令:
+    sudo fdisk -l
+得到如下结果:
+       Disk /dev/sda: 500.1 GB, 500107862016 bytes
+       255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
+       Units = sectors of 1 * 512 = 512 bytes
+       Sector size (logical/physical): 512 bytes / 4096 bytes
+       I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+       Disk identifier: 0x0c300c2f
+       Device Boot      Start         End      Blocks   Id  System
+       /dev/sda1   *          63   148038974    74019456    7  HPFS/NTFS/exFAT
+       Partition 1 does not start on physical sector boundary.
+       /dev/sda2       148039036   976768064   414364514+   5  Extended
+       Partition 2 does not start on physical sector boundary.
+       /dev/sda5       148039038   331388819    91674891    7  HPFS/NTFS/exFAT
+       Partition 5 does not start on physical sector boundary.
+       /dev/sda6       499171743   914433816   207631037    7  HPFS/NTFS/exFAT
+       Partition 6 does not start on physical sector boundary.
+       /dev/sda7       914435928   976768064    31166068+   7  HPFS/NTFS/exFAT
+       /dev/sda8       331388928   331780095      195584   83  Linux
+       /dev/sda9       331782144   371779583    19998720   83  Linux
+       /dev/sda10      371781632   375779327     1998848   82  Linux swap / Solaris
+       /dev/sda11      375781376   499169279    61693952   83  Linux</p>
+
+<pre><code>   Partition table entries are not in disk order
+</code></pre>
+
+<p>找到自己的linux分区，其中/dev/sda8是/boot 分区，/dev/sda9是/分区,输入:
+    sudo fsck /dev/sda8
+    sudo fsdk /dev/sda9
+对磁盘进行修复，最后启动ok.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/27/shi-yong-cloudfoundrybu-shu-zi-ji-ying-yong-spring,-grails,-scala,-play,-node-dot-js,-ruby/">使用CloudFoundry部署自己应用(Spring、Grails、Scala、Play、Node.js、Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-27T22:53:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:53 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天分享一下免费的CloudFoundry、据说大名鼎鼎的<a href="http://ruby-china.org/">ruby-china</a>也是挂在上面，包括新浪的SAE也是基于CloudFoundry.
+<a href="https://github.com/cloudfoundry/vmc">VMC介绍</a>。
+详细的教程看官方的翻译链接<a href="http://cndocs.cloudfoundry.com/getting-started.html">CloudFoundry</a>。
+感觉很不错，目前缺少原创的文章，慢慢习惯写blog。期待自己的改变。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/26/goagentshang-twitterde-cuo-wu/">Goagent上twitter的错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-26T22:11:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天学习了一下linux下面使用goagent来进行翻墙浏览twitter、facebook等。具体参照<a href="https://code.google.com/p/goagent/wiki/InstallGuide">IntallGuide</a>。不过出现了打开twitter等网站证书的问题，参照了<a href="http://ruby-china.org/topics/3114">ruby-china</a>，这个导入了证书还是没用。
+汗颜，搞了好久，最后终于在<a href="https://code.google.com/p/goagent/issues/detail?id=775">googlecode</a>知道到了如下方法:
+     使用中发现很多https网站弹出证书警示，需要将local/ca.crt证书导入，下面简单介绍ubuntu下chrome证书的导入方法。
+     安装libnss3-tools:sudo apt-get install libnss3-tools
+     然后导入证书(这里假定证书ca.crt位于&#8221;/goagent/local/ca.crt&#8221;):certutil -d sql:$HOME/.pki/nssdb -A -t &ldquo;C,,&rdquo; -n GoAgent -i &lsquo;/goagent/local/ca.crt&rsquo;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/26/githubgong-xian-kai-yuan-dai-ma/">Git+github创建分支&提交并贡献代码（linux环境）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-26T21:21:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:21 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近加了一个群，里面发起了一个git开源项目<a href="https://github.com/mistbow/cms_6bey">cms_6bey</a>,需求不明确，不过还是第一次像github贡献自己的代码。下面针对第一次使用github贡献代码的说一下具体的步骤：</p>
+
+<h4>1.在github创建指定项目分支</h4>
+
+<p>登录github，打开<a href="https://github.com/mistbow/cms_6bey">cms_6bey</a>项目地址，点击右上角的fork按钮，将项目fork到自己的github资源库中。地址为:<a href="https://github.com/YOUR_USERNAME/cms_6bey">https://github.com/YOUR_USERNAME/cms_6bey</a></p>
+
+<h4>2.克隆项目到本地</h4>
+
+<p>由于此时项目只是存在与远程GitHub，所以必须克隆到本地用于开发，
+执行如下命令
+    git clone <a href="https://github.com/YOUR_USERNAME/cms_6bey">https://github.com/YOUR_USERNAME/cms_6bey</a>
+这样即在本地创建了一个项目。</p>
+
+<h4>3.配置本地库与原始库的关联</h4>
+
+<p>由于克隆后的本地库的只有一个与自己的GitHub上的分支关联的名为origin的远程，所以要提交自己的更新到原始库，必须配置与原始库<a href="https://github.com/mistbow/cms_6bey%E7%9A%84%E5%85%B3%E8%81%94%EF%BC%8C%E5%90%8D%E4%B8%BAupstream">https://github.com/mistbow/cms_6bey%E7%9A%84%E5%85%B3%E8%81%94%EF%BC%8C%E5%90%8D%E4%B8%BAupstream</a>
+执行如下命令：
+    cd cms_6bey #进入项目目录
+    git remote add upstream <a href="https://github.com/mistbow/cms_6bey">https://github.com/mistbow/cms_6bey</a> #添加跟原始资源库关联，名为upstream
+    git fetch upstream #从原始库上获取最新更新</p>
+
+<h4>4.修改代码并提交和PUSH</h4>
+
+<p>修改项目中的代码，git add 你修改的文件
+    git commit  -m &lsquo;这里是备注&rsquo;
+    git push origin master  #这里是提交push到自己项目的分支库
+    git fetch upstream  #更新远程代码到本地
+    git merge upstream/master  #将自己的代码合并到自己的项目分支库</p>
+
+<h4>5.发送Pull Requests</h4>
+
+<p>进入自己的cms_6bey分支库，点击右上角的“Pull Request” 按钮，进入发送Pull Request界面。上方左边是原始库，右边为自己的分支库，在下方填写标题及评论。点击“Send pull request”按钮，则Pull Request 发送成功。然后就等原始库的维护人员审核，是否采用你的Pull Request，采用则你的代码更新会合并到原始库，完成代码贡献。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/26/ubuntu12-dot-04an-zhuang-emacs24/">ubuntu12.04安装emacs24</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-26T16:04:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>4:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>因为最近看了一些文章，emacs24增加了包管理机制，因此很方便安装一些插件，具体参考<a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/index.html">emacs</a>，下面主要介绍一下emacs24的主要安装方法:
+在终端中输入如下代码就可以直接安装:
+    sudo add-apt-repository ppa:cassou/emacs
+    sudo apt-get update
+    sudo apt-get install emacs-snapshot
+    emacs-snapshot</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/25/rubyzhong-guan-yu-shi-jian-ge-shi-de-han-shu/">Ruby中关于时间格式的函数</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-25T20:04:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>rails中关于时间操作的方法<a href="http://apidock.com/ruby/Time/strftime">strftime</a>详细指导.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/">Rails_admin跟devise的配合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-24T21:43:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:43 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在做项目的使用经过同学的推荐使用了<a href="https://github.com/sferik/rails_admin">rails_admin</a>里面自带了<a href="https://github.com/plataformatec/devise">devise</a>，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结，具体阐述一下rails_admin的使用方法:
+1. 首先根据<a href="https://github.com/sferik/rails_admin#installation">Installation</a>安装基本的配置环境,包括devise。
+2. 接着需要对config/initializers/rails_admin.rb进行配置:
+    RailsAdmin may need a way to know who the current user is]
+    config.current_user_method { current_admin } # auto-generated
+这一段代码主要是对于当前需要验证的用户的识别，可以是current_MODELNAME,很多系统的管理员是单独的model例如admin，那么就改成current_admin。
+     Include specific models (exclude the others):
+     config.included_models = [model1,model2,model3,&hellip;.]
+这个主要是对于需要后台进行管理的model的配置，如果配置了一个model以后，会有相应model的CRUD，同时会有导出等功能.
+3. 最后说一下个人使用rails_admin的常用一些配置跟DSL具体参见<a href="https://github.com/sferik/rails_admin/wiki">wiki</a>
+首先就是对于model中的例如性别、xx类型，在数据库中都是存储的int类型，但是在页面中需要用一个清晰明了的汉字来表示，那么怎么做呢，rails_admin提供了一种单独的DSL(<a href="https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL">DSL两种配置方法</a>):
+当model中有一个xx(如:ad_type)属性在页面中需要使用select来进行转换，参见<a href="https://github.com/sferik/rails_admin/wiki/Enumeration">Enumeration</a>,定义一个方法如下:
+    def ad_type_enum
+    {首页广告: 1, 弹出层广告: 2 , 关于我们: 3 ,关于背景: 4}
+    end
+那么在视图中就会把hash自动转换成select，这样很好的解决了用户界面跟数据之间数据类型的问题。
+其次对于更详细的用法需要参考上面的wiki的链接。</p>
+
+<h3>补充说明</h3>
+
+<p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
+     #在config/initializers/devise.rb中修改如下
+     config.scoped_views = true</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/23/2013ge-ren-xiang-fa/">2013个人想法</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-23T10:33:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>10:33 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这几天也在根据中国的教育情况构思了一个产品，暂且取名&#8221;icancode&#8221;。具体内容会慢慢加上来，敬请期待&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/22/redis-delete-key/">Redis Delete Key</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-22T10:20:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>10:20 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>redis中如果需要删除关于某一个key的所有的内容可以运行如下命令：
+      redis-cli -n 0 KEYS ub:2011-07-<em> | xargs redis-cli DEL(ub:2011-07-</em>是你要删除的某一个key)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/3">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/index.html">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

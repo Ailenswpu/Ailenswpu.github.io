@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mac | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mac下chrome遇到shockwave Flash Crash问题]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/07/03/macxia-chromeyu-dao-shockwave-flash-crashwen-ti/"/>
+    <updated>2013-07-03T08:58:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/07/03/macxia-chromeyu-dao-shockwave-flash-crashwen-ti</id>
+    <content type="html"><![CDATA[<p>在使用mac的chrome过程中，经常会遇到chrome的shockwave flash crash的问题，上网搜索了资料，找到了解决方案如下：<br/>
+1.  打开chrome<br/>
+2.  在地址栏中输入 &ldquo;chrome:plugins&rdquo;<br/>
+3.  在出现的页面中的右上角,找到&#8221;+ 详细信息&#8221;,点开相信信息<br/>
+4.  找到 &ldquo;Adobe Flash Player&rdquo;,你会看到这个下面有好几个 shockwave flash<br/>
+5.  保留第一个shockwave flash,禁用其他的shockwave flash <br/>
+6.  重启chrome<br/>
+7.  顺利解决问题</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Person | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/person/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[2013个人想法]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/03/23/2013ge-ren-xiang-fa/"/>
+    <updated>2013-03-23T10:33:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/03/23/2013ge-ren-xiang-fa</id>
+    <content type="html"><![CDATA[<p>这几天也在根据中国的教育情况构思了一个产品，暂且取名&#8221;icancode&#8221;。具体内容会慢慢加上来，敬请期待&hellip;</p>
+]]></content>
+  </entry>
+  
+</feed>

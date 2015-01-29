@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 杂项 | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/za-xiang/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Ubunut Sublime Text2输入中文]]></title>
+    <link href="http://ailenswpu.github.io/blog/2012/11/19/ubunut-sublime-text2shu-ru-zhong-wen/"/>
+    <updated>2012-11-19T16:06:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2012/11/19/ubunut-sublime-text2shu-ru-zhong-wen</id>
+    <content type="html"><![CDATA[<p>昨天安装了sublime text2但是没办法输入中文，于是找了各种办法终于找到了这样一个帖子
+<a href="http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html">http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html</a></p>
+]]></content>
+  </entry>
+  
+</feed>

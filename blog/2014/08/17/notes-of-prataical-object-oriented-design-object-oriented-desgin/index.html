@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="对于程序员来说，面向对象设计是一个非常熟悉的名词。从大一开始就接触所谓的面向对象，可是一直到今天，对于面向对象设计还是处于懵懵懂懂的状态。有幸现在公司的老大在
+面试的时候给我介绍了一本书面向对象设计实践指南：Ruby语言描述,去年年底看了一下当时当时确实有了一些体会， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-17T22:13:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:13 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>对于程序员来说，面向对象设计是一个非常熟悉的名词。从大一开始就接触所谓的面向对象，可是一直到今天，对于面向对象设计还是处于懵懵懂懂的状态。有幸现在公司的老大在
+面试的时候给我介绍了一本书<a href="http://book.douban.com/subject/25795276/">面向对象设计实践指南：Ruby语言描述</a>,去年年底看了一下当时当时确实有了一些体会，
+不过当你积累的知识长时间没有被实践的时候，那么只会产生一种后果，那就是遗忘。好在上周被批评了一下，重新认识到了自己的问题，工作了半年其实还是有点停滞不前，
+看的书确实过少。上周花了一天时间又把这本书看完了，确实又有了更进一步的体会。接下来会花一些实践把这些总结成自己的博客。今天这篇先介绍第一张本书对Object-Oriented
+ Design的看法。</p>
+
+<h2>设计礼赞</h2>
+
+<p>无论是一个小的游戏还是一个完整的应用程序，都是看最终的完成结果，一个设计不好的应用会让程序员越陷越深，处于无尽的问题之中。而最终带给程序员福音的还是面向对象设计，
+面向对象设计能够给程序员解决道德和编程技术难题，能够很好解决效率问题。这就是为什么需要进行设计的最主要原因。</p>
+
+<h3>设计解决的问题</h3>
+
+<ol>
+<li>需求变化带来对于整个项目的影响，设计能够拥抱变化，低耦合的设计能够很好处理需求变化的问题。</li>
+<li>面向对象设计能够很好地管理一个对象的各个部件之间的依赖，能够使得各个部件之间的变化对比彼此产生很小的影响。</li>
+<li>面向对象设计本质上是对代码的组织管理，好的设计最终的目的为能够轻松应对将来的变化。
+
+<h3>设计工具</h3>
+
+<h4>设计原则</h4></li>
+<li>SOLID(Single Responsibility、Open-Closed、 Liskov Substitution、Interface Segregation、Dependency Inversion.)</li>
+<li>Design Patterns(Gof)
+
+<h4>设计行动</h4></li>
+<li>设计失败取决于具体的经验，经验不足以及语言的特性可能会导致糟糕的设计。</li>
+<li>敏捷开发不会做Big Up Front Design (BUFD)，敏捷开发需要根据需求一步步迭代，软件的最终完成时间是不可预期的。</li>
+</ol>
+
+
+<p>原理很重要，但是接下来几篇博客会在具体的行动中来一步步实现好的设计。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-17T22:13:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:13 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ruby/'>ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ailenswpu.github.io/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/" data-via="" data-counturl="http://ailenswpu.github.io/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/" title="Previous Post: it's time to think how to change my life">&laquo; it&#8217;s time to think how to change my life</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/19/design-class-with-single-responsibility/" title="Next Post: Chapter2: Designing Classes with a Single Responsibility">Chapter2: Designing Classes with a Single Responsibility &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

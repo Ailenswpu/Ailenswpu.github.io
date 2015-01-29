@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Life | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/life/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[It's Time to Think How to Change My Life]]></title>
+    <link href="http://ailenswpu.github.io/blog/2014/08/10/its-time-to-think-how-to-change-my-life/"/>
+    <updated>2014-08-10T23:38:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2014/08/10/its-time-to-think-how-to-change-my-life</id>
+    <content type="html"><![CDATA[<p>I didn&rsquo;t write blog for a long time, Sometimes I felt like a failure of my life。So it&rsquo;s time to change my life, just fighting!!<br/>
+Last monty, I bought a book  <How To Get There Thikng> written by Ruanyifeng really good coder and author and blogger, he mentioned that
+writting blog can benefit your thinking.Yeah, it&rsquo;s really cool.So my first goal is to insist to write blog.Meanwhile I list the daily
+taks of my life, No exceptional circumstances , I must finish the task of list. Also I list the immediate goal term goal of my life.</p>
+
+<h3>Immediate Goal</h3>
+
+<ol>
+<li> improve code and OO design</li>
+<li> study opensource code</li>
+<li> keep writing,at least one blog a week</li>
+<li> keep reading,at least one hour one day</li>
+<li> read some celebrity biography</li>
+</ol>
+
+
+<h3>Term Goal</h3>
+
+<ol>
+<li> keep the enthusiasm of startup</li>
+<li> try to establish the internet co in recent 3 years</li>
+<li> try to be abroad in recent 3 years</li>
+<li> to be someone like jobs</li>
+</ol>
+
+
+<h3>Daily Task</h3>
+
+<ol>
+<li> keep reading, at least one hour one day</li>
+<li> keep studying source code, and writing note</li>
+<li> keep tracking jackpotcoin</li>
+<li> code review</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

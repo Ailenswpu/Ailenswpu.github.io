@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails_admin跟devise的配合使用 - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="最近在做项目的使用经过同学的推荐使用了rails_admin里面自带了devise，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails_admin跟devise的配合使用</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-24T21:43:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:43 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>最近在做项目的使用经过同学的推荐使用了<a href="https://github.com/sferik/rails_admin">rails_admin</a>里面自带了<a href="https://github.com/plataformatec/devise">devise</a>，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结，具体阐述一下rails_admin的使用方法:
+1. 首先根据<a href="https://github.com/sferik/rails_admin#installation">Installation</a>安装基本的配置环境,包括devise。
+2. 接着需要对config/initializers/rails_admin.rb进行配置:
+    RailsAdmin may need a way to know who the current user is]
+    config.current_user_method { current_admin } # auto-generated
+这一段代码主要是对于当前需要验证的用户的识别，可以是current_MODELNAME,很多系统的管理员是单独的model例如admin，那么就改成current_admin。
+     Include specific models (exclude the others):
+     config.included_models = [model1,model2,model3,&hellip;.]
+这个主要是对于需要后台进行管理的model的配置，如果配置了一个model以后，会有相应model的CRUD，同时会有导出等功能.
+3. 最后说一下个人使用rails_admin的常用一些配置跟DSL具体参见<a href="https://github.com/sferik/rails_admin/wiki">wiki</a>
+首先就是对于model中的例如性别、xx类型，在数据库中都是存储的int类型，但是在页面中需要用一个清晰明了的汉字来表示，那么怎么做呢，rails_admin提供了一种单独的DSL(<a href="https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL">DSL两种配置方法</a>):
+当model中有一个xx(如:ad_type)属性在页面中需要使用select来进行转换，参见<a href="https://github.com/sferik/rails_admin/wiki/Enumeration">Enumeration</a>,定义一个方法如下:
+    def ad_type_enum
+    {首页广告: 1, 弹出层广告: 2 , 关于我们: 3 ,关于背景: 4}
+    end
+那么在视图中就会把hash自动转换成select，这样很好的解决了用户界面跟数据之间数据类型的问题。
+其次对于更详细的用法需要参考上面的wiki的链接。</p>
+
+<h3>补充说明</h3>
+
+<p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
+     #在config/initializers/devise.rb中修改如下
+     config.scoped_views = true</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2013-03-24T21:43:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:43 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>rails</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ailenswpu.github.io/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/" data-via="" data-counturl="http://ailenswpu.github.io/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/23/2013ge-ren-xiang-fa/" title="Previous Post: 2013个人想法">&laquo; 2013个人想法</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/03/25/rubyzhong-guan-yu-shi-jian-ge-shi-de-han-shu/" title="Next Post: ruby中关于时间格式的函数">ruby中关于时间格式的函数 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 分享 | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/fen-xiang/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[使用CloudFoundry部署自己应用(Spring、Grails、Scala、Play、Node.js、Ruby]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/03/27/shi-yong-cloudfoundrybu-shu-zi-ji-ying-yong-spring,-grails,-scala,-play,-node-dot-js,-ruby/"/>
+    <updated>2013-03-27T22:53:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/03/27/shi-yong-cloudfoundrybu-shu-zi-ji-ying-yong-spring,-grails,-scala,-play,-node-dot-js,-ruby</id>
+    <content type="html"><![CDATA[<p>今天分享一下免费的CloudFoundry、据说大名鼎鼎的<a href="http://ruby-china.org/">ruby-china</a>也是挂在上面，包括新浪的SAE也是基于CloudFoundry.
+<a href="https://github.com/cloudfoundry/vmc">VMC介绍</a>。
+详细的教程看官方的翻译链接<a href="http://cndocs.cloudfoundry.com/getting-started.html">CloudFoundry</a>。
+感觉很不错，目前缺少原创的文章，慢慢习惯写blog。期待自己的改变。</p>
+]]></content>
+  </entry>
+  
+</feed>

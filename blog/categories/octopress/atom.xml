@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress的安装和配置]]></title>
+    <link href="http://ailenswpu.github.io/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi/"/>
+    <updated>2012-10-28T20:36:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi</id>
+    <content type="html"><![CDATA[<p>   最近一时脑子发热想起了写博客，确实如此，很多时候发觉自己需要记录一些东西。因此按照rubychina上面一位高手的文章终于搭建成功了，并且成功用Github Pages部署到github上面去，博客地址为：<a href="http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82">http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82</a>  首先Octopress源代码是根据Jekyll，采用rails来编写，最新的需要的配置环境如下：ruby1.9.3，rails3.X，git，ssh等。很多linux已经安装好了。<br/>
+  具体安装rails的过程请看：<a href="http://blog.csdn.net/renkai611919/article/details/7792252">http://blog.csdn.net/renkai611919/article/details/7792252</a><br/>
+   具体的安装过程看：<a href="http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82">http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82</a><br/>
+   需要加以说明的是如果你的github的用户名中有大小写字母的时候一定要严格按照大小写，否则在rake deploy的时候不能push上去（这个问题当时纠结了我好久）。</p>
+]]></content>
+  </entry>
+  
+</feed>

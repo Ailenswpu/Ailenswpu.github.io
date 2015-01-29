@@ -9,7 +9,12 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="1.Object#tap 是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
+你通过调用hash.[]来更新hash，因此你必须明确地返回才能得到更新后的结果，代码如下: 1
+2
+3
+4
+def &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,7 +71,957 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-01-29T21:51:35+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:51 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>1.Object#tap</h1>
+
+<p>是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
+你通过调用hash.[]来更新hash，因此你必须明确地返回才能得到更新后的结果，代码如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+</span><span class='line'>  <span class="n">params</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>代码最后一行的params看上去似乎是多余的。<br/>
+因此可以通过(Object#tap)[<a href="http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap">http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap</a>]来简化代码。对象只要调用tap方法，传递一个你需要
+执行的代码块，对象调用代码块的后返回自己。因此改进的update_params代码如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">update_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">params</span><span class="o">.</span><span class="n">tap</span> <span class="p">{</span><span class="o">|</span><span class="nb">p</span><span class="o">|</span> <span class="nb">p</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Object#tap在很多地方都很有用.有一个简单法则：对象的方法本身不必要返回自己，当你需要时候即可以用Object#tap来替换。</p>
+
+<h1>2.Array#bsearch</h1>
+
+<p>不知道你们在工作中是否会遇到遍历数组?Ruby的枚举提供了很多寻找方法比如：select,reject和find，这些是我日常工作中经常使用的，但是当数据集很大的时候，我开始
+担心遍历这些数组需要耗费很多的时间。</p>
+
+<p>如果你使用过ActiveRecord来做SQL查询，在ActiveRecord背后封装了很多魔法，因此你必须要把搜索复杂的降到最低。但是很多时候你必须要把所有数据先查询出来然后
+才能做进一步工作。比如：当数据库中的数据做了加密的时候，你不能直接通过SQL来做操作。</p>
+
+<p>在这个时候，我通常思考如何使用算法复杂度最低(大O)的算法来做数据筛选，如果你不知道大O可以参考Justin Abrahms&#8217;s的<a href="https://justin.abrah.ms/computer-science/big-o-notation-explained.html"> Big-O Notation Explained By A Self-Taught Programmer</a>
+或者(Big-O Complexity Cheat Sheet)[<a href="http://bigocheatsheet.com/">http://bigocheatsheet.com/</a>]。</p>
+
+<p>基本的原则就是算法的复杂度决定着算法的运行时间的长短，复杂度从小打到依次排序为：O(1), O(log n), O(n), O(n log(n)), O(n<sup>2</sup>), O(2<sup>n</sup>), O(n!)，因此我们倾向于
+使用复杂度低的算法。</p>
+
+<p>在Ruby中，当对数组做查询的时候，第一反应是使用Enumerable#find，也可以是detect。但是这个方法会遍历整个数组，直到条件匹配。如果最终结果在前面那么还好，如果
+结果在数组最后面，那么最终搜索的复杂度为O(n)。</p>
+
+<p>在Ruby中有一个更快的方法(Array#bsearch)[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch">http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch</a>], 搜索的复杂度为O(log n)，如果想要查看
+Binary Search的工作原理，可以查看(Building A Binary Search)[<a href="http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/">http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/</a>]。</p>
+
+<p>下面是从50,000,000数字中搜索特定值的运行时间对比：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;benchmark&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">50_000_000</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:find</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:bsearch</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>         <span class="n">user</span>       <span class="nb">system</span>     <span class="n">total</span>       <span class="n">real</span>
+</span><span class='line'><span class="n">find</span>     <span class="mi">3</span><span class="o">.</span><span class="mo">020000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">010000</span>   <span class="mi">3</span><span class="o">.</span><span class="mo">030000</span>   <span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mo">02</span><span class="mi">8417</span><span class="p">)</span>
+</span><span class='line'><span class="n">bsearch</span>  <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="mi">0</span><span class="o">.</span><span class="mo">000000</span>   <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="mo">000006</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>正如你看到的，bsearch速度非常快。但是使用bsearch的大前提就是：数组必须是排序好的。这在很多时候限制了bsearch的用途，但是仍然在很多时候会用到，比如：当你在按照
+created_at排序好的数据库记录中按时间查询某个记录。</p>
+
+<h1>3.Enumerable#flat_map</h1>
+
+<p>当处理相关联的数据时候，我们通常需要查询一些不相关一些列数据，然后以嵌套的数组的形式返回。假设你有一个博客，你想查询出某些用户的上个月的所有的博客的评论的作者，那么
+代码如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">map</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你最终有可能得到如下结果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[[[</span><span class="s1">&#39;Ben&#39;</span><span class="p">,</span> <span class="s1">&#39;Sam&#39;</span><span class="p">,</span> <span class="s1">&#39;David&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[</span><span class="s1">&#39;Keith&#39;</span><span class="o">]]</span><span class="p">,</span> <span class="o">[[]</span><span class="p">,</span> <span class="o">[</span><span class="kp">nil</span><span class="o">]]</span><span class="p">,</span> <span class="o">[[</span><span class="s1">&#39;Chris&#39;</span><span class="o">]</span><span class="p">,</span> <span class="o">[]]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但是真正的需求是我想得到的是作者，而不是[]或者nil,因此你可以通过flatten来合并：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
+</span><span class='line'>    <span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ruby
+Ruby中还有一种更好的方法就是使用flat_map：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">CommentFinder</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">find_for_users</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="n">user_ids</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">user</span><span class="o">.</span><span class="n">posts</span><span class="o">.</span><span class="n">flat_map</span> <span class="p">{</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">post</span><span class="o">.</span><span class="n">comments</span><span class="o">.</span><span class="n">flat_map</span> <span class="p">{</span> <span class="o">|</span><span class="n">comment</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">comment</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">username</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面两种并没有太大区别，但是使用flat_map没必要多次调用flatten。</p>
+
+<h1>4.Array.new with a Block</h1>
+
+<p>一度在我集训的时候，我们导师Jeff Casimir (founder of (Turing School)[<a href="http://turing.io/">http://turing.io/</a>])让我们在一小时时间内去开发一个Battleship，这是一次很好的
+面向对象的编程练习，我们需要Rules, Players, Games, and Boards。<br/>
+创建Board的表现形式是一个很有趣的练习，在多次迭代之后，我发现了最简单的方式去构建一个8x8的格子:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Board</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">board</span>
+</span><span class='line'>    <span class="vi">@board</span> <span class="o">||=</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;0&#39;</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么到底发生了什么呢？当你调用(Array.new(n))[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new">http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new</a>],就会创建一个长度为n的数组：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="p">,</span> <span class="kp">nil</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当你传递代码块的时候，就会把代码块中的值加入到数组中：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;O&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">[</span><span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>因此如果你在代码块中传第一个包含8个&#8217;0&#8217;的数组，那么你就会得到一个8x8的所有元素为&#8217;0&#8217;的数组。使用Array.new加上代码块，你可以构建出任何大小，任何嵌套的数组。</p>
+
+<h1>5.&lt;=></h1>
+
+<p>这个如&#8221;宇宙飞船&#8221;的符号是我在Ruby中最喜欢的结构之一，它在广泛使用于Ruby的内置类中，同时在枚举中也广泛使用。</p>
+
+<p>下面通过整形数值调用&lt;=>来看一下用法，当你运行5&lt;=>5时候, 返回值 0，当你运行4&lt;=>5返回-1，当你运行5&lt;=>4，返回1.因此，如果两个数字一样，返回0，前者小于后者，返回-1，如果
+前者大于后者返回1.</p>
+
+<p>你可以使用&lt;=>来重新定义自己的逻辑，使其只返回0，1，-1.</p>
+
+<p>下面是&lt;=>的一个非常cool的使用场景，来自Exercism， 有一个练习叫做Clock，你必须使用自定义的+和-来调整时钟的小时分钟。当时间超过60分钟的时候就会变得非常复杂，
+因为超过60分钟是不合法的数据，因此你必须要加一个小时，同时减去60分钟。<br/>
+一个叫dalexj的聪明小伙子的解决方案如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">fix_minutes</span>
+</span><span class='line'>    <span class="k">until</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">60</span><span class="p">)</span><span class="o">.</span><span class="n">member?</span> <span class="n">minutes</span>
+</span><span class='line'>      <span class="vi">@hours</span> <span class="o">-=</span> <span class="mi">60</span> <span class="o">&lt;=&gt;</span> <span class="n">minutes</span>
+</span><span class='line'>      <span class="vi">@minutes</span> <span class="o">+=</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="mi">60</span> <span class="o">&lt;=&gt;</span> <span class="n">minutes</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="vi">@hours</span> <span class="o">%=</span> <span class="mi">24</span>
+</span><span class='line'>    <span class="nb">self</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&lt;=>符号非常适用于定义你自己对对象的排序，同时可以用于某些数学运算，因为它仅仅返回三个固定的数字。</p>
+
+<p>原文链接为：<a href="https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using">https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using</a></p>
+
+<p>处女翻译贴献给了ruby-china，如果哪里有错误的请大家及时指正。:smile:</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-19T06:47:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:47 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这一章我们将围绕设计一个具有<strong>单一职责</strong>的类来展开描述。面向对象系统的基础是<strong>消息（message）</strong>，但是明显的组织结构是<strong>类（class）</strong>，消息是设计的核心，但是类也很突出
+因此本章主要集中在如何决定一个类所包含的内容，接下来几篇博客将设计重点从类转移到消息。</p>
+
+<h2>1.决定类的内容</h2>
+
+<p>假设你正在思考某个应用程序。你应该知道它做什么，你甚至已经思考过如何实现其中最有意思的那几个行为。这不是一个技术问题，而是一个组织问题。你知道如何编写代码，但是
+不知道应该把它放在哪里。</p>
+
+<h3>1.1将方法分组成类</h3>
+
+<p>像Ruby这样基于类的OO语言里，方法被定义在类里，你所创建的那些类会永久地影响你对这个应用程序的思考。他们定义了一个虚拟世界，一个会向下束缚每个人的想象力的世界。你
+正在构建一个从外界可能难以想象的盒子。<br/>
+尽管将方法正确分组成类很重要，但是项目早起阶段不可能处理的很正确。你所了解到的永远都会比现在少。如果你的应用程序成功了，那么你今天所做的那些决定在以后会有许多将被
+更改。当那天到来的生活，你成功完成这些更改的能力取决于你对应用程序的设计。</p>
+
+<h3><strong>设计是保留可变性的艺术，而非达到完美型的行为。</strong></h3>
+
+<h3>1.2组织代码以便于更改</h3>
+
+<p>主张代码应该容易更改的做法类似于规定孩子要有礼貌，这种声明不可能有人反对，但是无法帮助父母培养出一个和蔼可亲的孩子。“容易”一词太过于广泛，你需要将它具体化，并且将评判
+代码的标准也具体化。<br/>
+如果将<em>易于更该</em>定义成下面几条：</p>
+
+<ul>
+<li>更改不会产生意想不到的副作用</li>
+<li>需求轻微变化对代码的更改要求也相应较小</li>
+<li>现有的代码易于重用</li>
+<li>最简单的更改方式是添加其自身也已于更改的代码</li>
+</ul>
+
+
+<p>那么编写的代码具有以下几个特点:</p>
+
+<ul>
+<li>透明性(Transparent)：在所更改的代码，以及在远处依赖于它的代码里，更改所产生的后果是显而易见的</li>
+<li>合理性(Reasonable)：任何更改所产生的成本都应该与更改所产生的效益成正比</li>
+<li>可用性(Usable)：现有代码在新的环境里和意想不到的环境里都能使用</li>
+<li>典范性(Exemplary)：代码本身应该鼓励那些为延续这些特点而对它进行的更改</li>
+</ul>
+
+
+<p>具有透明性、合理性、可用性和典范性（简写为TRUE）这四种特点的代码,不仅能满足今天的需求，而且也易于更改，以满足未来的需求。为创建具有TRUE特点代码，所要做的第一步是
+保证每个类都只有<em>一种单一的、定义明确的</em>职责。</p>
+
+<h2>2.创建具有单一职责的类</h2>
+
+<p>一个类应该尽可能做最小的用途。即是说，他应该具有单一职责。  接下来将举例说明如何创建一个具有单一职责的类，并且会解释这一点之所以重要的原因。在改示例里，需要
+将自行车拆成一个个小部件。</p>
+
+<h3>2.1示例程序：自行车和齿轮</h3>
+
+<p>自行车是一种非常高效的机器，部分原因在于它使用齿轮给人类带来的方便。在骑自行车时候你可以选择使用小齿轮（容易踩踏，但是不够快）活着选择大齿轮（踩踏费力，但是前进速度快）。 <br/>
+齿轮工作原理为：在双脚每踩动一圈踏板后，带动自行车所跑过的距离。具体讲，即齿轮控制了每踩动车轮所转过的圈数。如果用小齿轮，则需要双脚踩动多次才能让车轮转一次，采用
+大齿轮，完整踏一次则可以让车轮转动很多圈。 <br/>
+“小”和“大”这些术语都不够精确。对于不同齿轮，单车族采用了&#8221;齿轮牙齿比率&#8221;的概念。如下面的简单的Ruby脚本: <br/>
+        chainring cog = 52                      # number of teeth
+        ratio         = 11                      # -> 4.72727272727273
+        puts ratio    = chainring / cog.to_f    # -> 1.11111111111111
+        chainring cog = 30                      ￼￼￼
+        ratio         = 27                      # number of teeth
+        puts ratio    = chainring / cog.to_f    # -> 4.72727272727273
+一个代码52颗齿轮的牙盘和一个带有11颗齿的飞轮组合在一起（52x11）形成的齿轮拥有率为4.73，每踩踏一次，轮子转动圈数接近5。而（30x27）的结构踩起来会更轻松。<br/>
+如果通读一下上面的那些描述，并找出表示领域内对象的一些名词，你便会看到像自行车和齿轮这样的词组。这些名词代表了最简单的可以成为类的候选项。直觉告诉我们自行车应是
+一个类，但是上面描述没有任何关于自行车行为。因此到目前为止还不具资格。不过齿轮由牙盘、飞轮和比率。即是说它拥有了数据和行为。它应该理解为一个类。根据上面的描述
+可以创拟建这样一个简单的Gear类: <br/>
+      class Gear
+        attr_reader :chainring, :cog def initialize(chainring, cog)
+        @chainring = chainring
+        @cog = cog end
+        def ratio
+          chainring / cog.to_f
+        end
+      end
+      puts Gear.new(52, 11).ratio puts Gear.new(30, 27).ratio
+这个gear类很简单。在提供牙盘和飞轮具体齿数后，你便可以创建一个新的Gear实例。每一个i实现了三个方法，chainring、cog和ratio。<br/>
+这是将你的齿轮计算器展示给某个朋友，他会发现这个很有用，但是立即要求更改。他有两辆自行车，这些自行车拥有完全相同的齿轮，但是只是轮子尺寸不一样。他希望你考虑到不同
+车轮带来的影响。<br/>
+在美国有一种“齿轮英寸数”的方法来对拥有不同齿轮和轮子的自行车进行比较。计算公式为：<br/>
+齿轮英寸数 = 轮子直径 x 齿轮比率，其中轮子直径 = 钢圈直径 + 两倍轮胎直径。 <br/>
+更改Gear类，添加新行为：<br/>
+    class Gear
+      attr_reader :chainring, :cog, :rim, :tire def initialize(chainring, cog, rim, tire)
+        @chainring = chainring @cog = cog
+        @rim = rim
+        @tire = tire
+      end
+      def ratio
+        chainring / cog.to_f
+      end
+      def gear_inches
+        # tire goes around rim twice for diameter
+        ratio * (rim + (tire * 2))
+      end
+    end
+    puts Gear.new(52, 11, 26, 1.5).gear_inches
+    # -> 137.090909090909
+    puts Gear.new(52, 11, 24, 1.25).gear_inches # -> 125.272727272727
+这个新的gear_inches方法假定符合钢圈和轮胎尺寸的单位为英寸，这个可能正确，也可能不正确。尽管有次警告，但是Gear类还是符合规范，而且代码也能工作，只是下面的错误
+要排除在外面
+    puts Gear.new(52, 11).ratio # didn&rsquo;t this used to work?
+    # ArgumentError: wrong number of arguments (2 for 4)
+    # from (irb):20:in &lsquo;initialize&rsquo;
+    # from (irb):20:in &lsquo;new&rsquo;
+    # from (irb):20
+在添加gear_inches会引入上面这个错误。在更改后构造方法又引入了额外两个参数：rim和tire。更改某个方法参数个数会对现有的调用的那些函数产生影响。有可能会产生严重的问题。 <br/>
+既然有了基本的Gear类，那么现在有一个问题，这种组织代码的结构是组好的么？<br/>
+答案是：视具体情况而定。如果其中程序永远不变，那么当前就够了，但是已经预料到了：有可能需要为单车一族提供一个完成的计算器程序。在即将发生演变的程序里，Gear是众多类
+的一个，为了让演变更加有效，代码必须易于更改。</p>
+
+<h3>2.2要依赖行为，不要依赖数据</h3>
+
+<p>行为可以在方法里被捕获到，并且通过发送消息获得调用。当创建具有单一职责的类时，每一个细小的行为都只能存在于一个地方。避免重复（DRY）这一说法是这个思想的简洁描述。
+满足DRY的代码能够容忍变化，因为行为上的任何变化都可以只通过更改一个地方来是是实现。<br/>
+除了行为以外，对象通常还包含数据。数据是保存在实例变量里面的，并且可以是任何内容。访问数据通常可以通过这样两种方式的某一个方式来实现：直接应用变量或者将变量包裹在访问器方法里面。</p>
+
+<h4>1隐藏实例变量</h4>
+
+<p>将实例变量总是包裹在访问器里面，而不是直接应用做法具体如下：<br/>
+    class Gear
+      attr_reader :chainring, :cog # &lt;&mdash;&mdash;-
+      def initialize(chainring, cog)
+        @chainring = chainring
+        @cog = cog
+      end
+      def ratio
+        chainring / cog.to_f
+      end
+    end
+    内部实现为:
+    def cog
+      @cog
+    end
+现在这个cog便是这段代码唯一能够理解cog含义的地方。cog变成了消息发送的结果，实现这个方法cog由数据(四处应用)变成了行为（只被定义了一次）。<br/>
+如果@cog被引用10次，那么突然需要调整，这段代码也需要大量的调整，但是如果放到访问器里面，那么只需要改动一次。甚至会有更复杂的实现也只需要改动一次如下。<br/>
+    def cog
+      @cog * (foo? ? bar_adjustment : baz_adjustment)
+    end</p>
+
+<h4>2隐藏数据结构</h4>
+
+<p>如果说附带一个实例变量是一个坏事情，那么依赖于一个复杂的数据结构则是糟糕透顶的事情，一起看看下面这个类：
+     class ObscuringReferences
+       attr_reader :data
+       def initialize(data)
+         @data = data
+       end
+       def diameters
+        data.collect {|cell|cell[0] + (cell[1] * 2)}
+       end
+     end
+这个类希望使用一个由钢圈和轮胎构成的二维数组进行初始化：<br/>
+    @data = [[622, 20], [622, 23], [559, 30], [559, 40]]</p>
+
+<p>ObscuringReferences将其初始化参数放到变量@data中，并乖乖使用Ruby的attr_reader将@data包裹在方法里。 <br/>
+不过由@data包含一个复杂的数据结构，所以只隐藏实例变量还不够。方法@data仅仅是返回了这个数组。为做些有用的事情，data的每一位发送者还必须完全了解数据的哪一部分处于
+这个数据的哪一个位置上面。<br/>
+方法diameters不仅知道如何计算直径，而且还知道数组的什么地方可以找到钢圈和轮胎。他清楚知道，当遍历data时候，钢圈在[0]位置上，而轮胎在[1]位置上。<br/>
+它<strong>依赖于</strong>数组的结构，如果结构发生变化，那么这段代码必须要更改。当你的数据在数组的时候，你少不了会四处引用这些数组的结构。这些引用都很脆弱。他们躲开了封装，
+并偷偷散落在代码里。他们不符合全DRY原则。钢圈在[0]所因为的信息不应该被复制多次，他只应该存在于一个地方。<br/>
+这段代码确实很糟糕。加入data返回一个数组，而这个数组由被许多地方引用的散列构成，那么出现什么样的后果？改变它的结构会影响到整段代码，每次更改都意味着一次错误率的创建。
+这个问题非常隐蔽。<br/>
+在Ruby中很容易将结构与意义分离开来，就像你可以使用一个方法将整个变量包裹起来一样，Ruby中可以使用Struct类来包裹结构。当然C#也有类似于Struct的结构。<br/>
+在下面这示例，具有与前面那个类完全一样的接口，他接受一个二维数组作为初始化参数，并且实现了diameters方法。尽管他们外观很相同，但是内部实现却迥然不同。
+    class RevealingReferences attr_reader :wheels
+      def initialize(data)
+        @wheels = wheelify(data)
+      end
+      def diameters
+        wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)}
+      end
+      # &hellip; now everyone can send rim/tire to wheel
+      Wheel = Struct.new(:rim, :tire)
+      def wheelify(data) data.collect {|cell|
+        Wheel.new(cell[0], cell[1])}
+      end
+    end
+现在上面那个diameters对那个数组的结构一无所知。diameters知道的仅限于：消息wheels会返回一个枚举，并且每一个枚举会响应rim和tire请求。以前对cell[1]的应用变成了
+发送给wheel.tire消息。<br/>
+这样的样式代码让你不会受到外部所属的数据结构变化的影响。并且还能提高代码的可读性，以及让意图更加明显。它将对结构的索引转变成了往对象发送消息，上面的的wheelify方法将混乱的
+结构信息隔离起来，让这段代码更符合DRY原则。让整个类更适应变化。</p>
+
+<h3>2.2全面推行单一职责</h3>
+
+<p>创建具有单一职责的类对设计来说具有重要的意义。单一职责也可以用于代码的其他许多地方。</p>
+
+<h4>将额外的责任从方法里提取出来</h4>
+
+<p>与类一样方法也具有单一职责。所有原因都相同，只拥有一种职责可以让他们更易于更改和重用。所有设计技术在询问它做什么的时候，尽量用<strong>一句话来描述他们的职责</strong>。<br/>
+RevealingReferences的diameters方法： <br/>
+    def diameters
+      wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)}
+    end
+显然有两个职责：遍历轮子，并计算出每一个轮子的直径。<br/>
+将其分为两个方法，每个方法承担一种责任，下面将计算轮子的直径放到了另外一个方法，当然这种重构会引入另外一个消息发送，但此时应该认为发送消息是没有代价的，现在的目的是编写
+易于更改的代码：
+    def diameters
+      wheels.collect {|wheel| diameter(wheel)}
+    end
+    # second - calculate diameter of ONE wheel
+    def diameter(wheel)
+      wheel.rim + (wheel.tire * 2))
+    end
+再看看前面的Gear里面的gear_inches方法: <br/>
+    def gear_inches
+      ratio * (rim + (tire * 2))
+    end
+仔细看看gear_inches是Gear类的一项职责么？假设他是也很合理，那为什么这个方法看上去还是让人感觉错了呢？他有点混乱不确定，最终导致这个问题的就是这个方法<em>自身</em>不止有
+一种职责。<br/>
+隐藏在内部的是对车轮直径的计算，那么立刻行动，将直径计算放到新得方法,这样更容易检查类的职责：<br/>
+    def gear_inches
+      ratio * diameter
+    end
+    def diameter
+      rim + (tire * 2)
+    end
+这个重构并没有改变直径的计算方法，他只是将这个行为隔离在一个独立的方法里面。即使在你不了解最终设计的时候也很有必要这么做。<br/>
+这个简单的重构让问题变得一目了然。Gear绝对要对gear_inches计算负责，但Gear不应该计算轮子直径。<br/>
+这种单个重构其影响力很小，但是这个编码风格积累起来的影响力确实巨大的。具有单一职责的方法具有以下几个优点：</p>
+
+<ul>
+<li>暴露之前影藏的特性</li>
+<li>避免使用注释(如果你觉得你在某个方法里面的某些代码需要注释，请将其提取出来，成为一个独立的方法，<strong>优秀的设计方法名就是一个很好的注释</strong>)</li>
+<li>鼓励重用</li>
+<li>易于移动到另外一个类</li>
+</ul>
+
+
+<p>Ruby允许你将计算直径的职责在不经指派的情况下从Gear一到另外一个新的类里面。下面的示例扩展了前面那个Wheel结构，增加了计算直径的方法：<br/>
+    class Gear
+      attr_reader :chainring, :cog, :wheel
+      def initialize(chainring, cog, rim, tire)
+        @chainring = chainring
+        @cog = cog
+        @wheel = Wheel.new(rim, tire)
+      end
+      def ratio
+        chainring / cog.to_f
+      end
+      def gear_inches
+        ratio * wheel.diameter
+      end
+      Wheel = Struct.new(:rim, :tire) do def diameter
+        rim + (tire * 2) end
+      end
+    end
+现在有了一个新的Wheel，它计算自己的直径，将这个Wheel嵌入到Gear里面显然不是长远目标，但是它距离最终设计又近了一步。 <br/>
+如果有一个用过过多职责、混乱不堪的类，请将这些职责分离成不同的类。将精力全部集中到主类上面，决定他的职责，并迅速执行决定。如果你确定还有额外的职责无法删除，请将它
+隔离起来，不要让无关的职责渗透进来。</p>
+
+<h2>3.最后是真实轮子的需求</h2>
+
+<p>都知道轮子周长为PI乘以直径，嵌入的那个Wheel已经能够计算直径因此添加一个计算周长的方法是很简单的事情。这些变化都很小。下面是重构过后最终的代码：<br/>
+    class Gear
+      attr_reader :chainring, :cog, :wheel</p>
+
+<pre><code>  def initialize(chainring, cog, wheel=nil)
+    @chainring = chainring 
+    @cog = cog @wheel = wheel
+  end
+
+  def ratio
+    chainring / cog.to_f
+  end
+
+  def gear_inches
+    ratio * wheel.diameter
+  end 
+end
+
+class Wheel
+  attr_reader :rim, :tire
+
+  def initialize(rim, tire) 
+    @rim = rim
+    @tire = tire
+  end
+
+  def diameter
+    rim + (tire * 2)
+  end
+
+  def circumference 
+    diameter * Math::PI
+  end 
+end
+@wheel = Wheel.new(26, 1.5) puts @wheel.circumference
+# -&gt; 91.106186954104
+puts Gear.new(52, 11, @wheel).gear_inches # -&gt; 137.090909090909
+
+puts Gear.new(52, 11).ratio # -&gt; 4.72727272727273
+</code></pre>
+
+<p>这两个类都具有单一职责。这段代码并非完美，但是相比之前已经达到了更高的标准，已经很好了。</p>
+
+<h2>4.小结</h2>
+
+<p>通往可更改和可维护面向对象软件道路，起始于具有单一指责的类，那些只负责一件事情的类将这种事情与应用程序其他事情<em>隔离</em>开来,这种隔离可支持无不良后果的更改和不进行复制的重用。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-17T22:13:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:13 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>对于程序员来说，面向对象设计是一个非常熟悉的名词。从大一开始就接触所谓的面向对象，可是一直到今天，对于面向对象设计还是处于懵懵懂懂的状态。有幸现在公司的老大在
+面试的时候给我介绍了一本书<a href="http://book.douban.com/subject/25795276/">面向对象设计实践指南：Ruby语言描述</a>,去年年底看了一下当时当时确实有了一些体会，
+不过当你积累的知识长时间没有被实践的时候，那么只会产生一种后果，那就是遗忘。好在上周被批评了一下，重新认识到了自己的问题，工作了半年其实还是有点停滞不前，
+看的书确实过少。上周花了一天时间又把这本书看完了，确实又有了更进一步的体会。接下来会花一些实践把这些总结成自己的博客。今天这篇先介绍第一张本书对Object-Oriented
+ Design的看法。</p>
+
+<h2>设计礼赞</h2>
+
+<p>无论是一个小的游戏还是一个完整的应用程序，都是看最终的完成结果，一个设计不好的应用会让程序员越陷越深，处于无尽的问题之中。而最终带给程序员福音的还是面向对象设计，
+面向对象设计能够给程序员解决道德和编程技术难题，能够很好解决效率问题。这就是为什么需要进行设计的最主要原因。</p>
+
+<h3>设计解决的问题</h3>
+
+<ol>
+<li>需求变化带来对于整个项目的影响，设计能够拥抱变化，低耦合的设计能够很好处理需求变化的问题。</li>
+<li>面向对象设计能够很好地管理一个对象的各个部件之间的依赖，能够使得各个部件之间的变化对比彼此产生很小的影响。</li>
+<li>面向对象设计本质上是对代码的组织管理，好的设计最终的目的为能够轻松应对将来的变化。
+
+<h3>设计工具</h3>
+
+<h4>设计原则</h4></li>
+<li>SOLID(Single Responsibility、Open-Closed、 Liskov Substitution、Interface Segregation、Dependency Inversion.)</li>
+<li>Design Patterns(Gof)
+
+<h4>设计行动</h4></li>
+<li>设计失败取决于具体的经验，经验不足以及语言的特性可能会导致糟糕的设计。</li>
+<li>敏捷开发不会做Big Up Front Design (BUFD)，敏捷开发需要根据需求一步步迭代，软件的最终完成时间是不可预期的。</li>
+</ol>
+
+
+<p>原理很重要，但是接下来几篇博客会在具体的行动中来一步步实现好的设计。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-10T23:38:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:38 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I didn&rsquo;t write blog for a long time, Sometimes I felt like a failure of my life。So it&rsquo;s time to change my life, just fighting!!<br/>
+Last monty, I bought a book  <How To Get There Thikng> written by Ruanyifeng really good coder and author and blogger, he mentioned that
+writting blog can benefit your thinking.Yeah, it&rsquo;s really cool.So my first goal is to insist to write blog.Meanwhile I list the daily
+taks of my life, No exceptional circumstances , I must finish the task of list. Also I list the immediate goal term goal of my life.</p>
+
+<h3>Immediate Goal</h3>
+
+<ol>
+<li> improve code and OO design</li>
+<li> study opensource code</li>
+<li> keep writing,at least one blog a week</li>
+<li> keep reading,at least one hour one day</li>
+<li> read some celebrity biography</li>
+</ol>
+
+
+<h3>Term Goal</h3>
+
+<ol>
+<li> keep the enthusiasm of startup</li>
+<li> try to establish the internet co in recent 3 years</li>
+<li> try to be abroad in recent 3 years</li>
+<li> to be someone like jobs</li>
+</ol>
+
+
+<h3>Daily Task</h3>
+
+<ol>
+<li> keep reading, at least one hour one day</li>
+<li> keep studying source code, and writing note</li>
+<li> keep tracking jackpotcoin</li>
+<li> code review</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-01-09T07:56:00+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:56 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天回来的时候已经十点多，实在太累。想想还是今早早起把昨天的面试做个总结。 <br/>
+其实做事一向稳扎稳打的我鼓着勇气参加了昨天的面试，其实算不算面试，两个搞技术的聊聊天，对于tony的印象非常好，而且对于我来说确实看到了自己的影子。 <br/>
+对于昨天的两次涉及到技术的交流我还是感到非常不足，本身自己的实力没有到那个地步，同时对于开始建模的方式不一样，所以都不是很理想。但是跟tony的第二次谈话让我受益匪浅。他提到一种&#8221;自我陶醉&#8221;状态，程序员都有自己的一个&#8221;小世界&#8221;,往往忽律了&#8221;大世界&#8221;。我现在就处于这样的瓶颈期。低水平循环是我目前的状态。一个多月前其实自己就意识到了这种状态，目前的水平让我盖一个两三层的楼房不成问题，但是让我盖高楼大厦那就是力不从心了。真的非常感谢tony，在关键的时刻能够点拨我。他也介绍给我了两本书：《Refactoring Ruby Edition.2009》跟《Practical Object-Oriented Desig - Metz, Sandi》。这几天一定要仔细看看，寒假回家打算再看一次。不管能不能去tap4fun，对于自己的问题已经深刻认识了，接下来要把自己的问题放在第一位。这两本书已经买了中文版的，趁寒假时间来个突破。把自己的实力提升一个层次。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/01/goodbye-2013/">Goodbye 2013, Hello 2014</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-01-01T14:06:00+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>2:06 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>终于忍不住要把自己的2013年总结一些，其实还是有些舍不得2013，经历了太多的事情，感悟了太多的事情，做一个总结，算是对过去的一个交代，也算是我自自己对即将要来的2014的一个展望。
+2013年，我本科毕业，庆幸的是我能够保研，能够继续读书，虽说是庆幸，以为见证了太多的当代年轻人的毕业后地生活，几千元的薪水在吃住后所剩无几，曾经有着大学生光环的我们也不过如此。对，现实就是如此。身边同时还有着几位二战的朋友，他们的勇气我不得不佩服，把自己的人生再次压在了2013年，还有几天他们就考试了，衷心祝福他们能够取得好的成绩。  <br/>
+感情是可谓是起起伏伏，从去年开始的耍朋友到今年二月份，刚好半年，这段匆匆忙忙、起起伏伏的所谓地爱情是结束了。太多的感慨，太多的回忆&hellip;&hellip;.而今年五月份遇到了自己现在地女朋友，总感觉是命中注定，很多时候一刹那估计我的命运会在另外一条轨迹。想多了，晓说中高晓松说的“人一生下来剧本就是写好了，你只需要做最好的自己”，造化这个东西不得不听从他的安排。感情由刚开始的热情、激情慢慢转化为平淡，吵架似乎是生活中必不可少的，两天一小吵，三天一大吵，吵着吵着让我慢慢成长，爱情确实需要慢慢的磨合，两个完全不同的家庭背景的人走在一起需要走很长的一段路程。我估计才刚刚开始，不管怎么样，“已得一人心，白首不相离”。我2013年最大的收获。<br/>
+接着上面的关于研究生这个问题，很多人挣破头皮去考研究生，我只想说”呵呵”。对于学历这个问题已经看透，&#8221;paper maker&#8221;已经起到了至关重要的作用，国外地学术氛围使用paper来分享idea，而中国把这些作为硬性标准来评职称、凭工资，殊不知迈开的第一个步伐已经走错了方向，真心希望高等教育能够换一种方式，有的人说&#8221;大学四年，什么都没长，只长了体重&#8221;，再来一个&#8221;呵呵&#8221;。前几天远程了gigabase的面试，虽然感觉有点紧张，发挥地不是很好。但是真心希望能够进行自己人生的第一份工作，我无法想象再过三年会是什么样，再过三年在这样地环境会是什么样，或许冒着肄业的风险，但是我还是迈出了第一步。老友记中羽泉说到&#8221;中国现在年轻人的一代根本不知道自己想要什么&#8221;，我自己也努力想过，确实以前不知道自己到底要什么，但是该我自己反思的时刻来了，那么我该要什么呢？一个稳定的家庭？一份稳定的工作？一个健康的身体？这些固然很重要，但是总发觉自己不是那种安分守己的人，但是做事的时候却处处小心。“性格决定命运”确实如此吧，经历了微大学，经历了各种失败，各种挫折，我想我总会慢慢成长。说一下自己2014年的人生规划: <br/>
+1.   找到一份工作，努力工作，把自己的技术提升到一个层次。<br/>
+2.   努力改正自己的缺点，做到有始有终、知行合一。<br/>
+3.   生活是尽量少吵架，学会忍。<br/>
+4.   培养自己的人脉关系。<br/>
+5.   多去旅游，至少去三个地方。<br/>
+6.   给老爸过一个生日。<br/>
+7.   提升英语，达到流利说的地步。</p>
+
+<p>今天是2014年第一天，充满希望的2014年，希望一个全新的自己。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/08/osx-an-zhuang-coffeescript/">Osx 安装coffeescript</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-12-08T17:33:00+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:33 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近学习<a href="http://coffeescript.org/">CoffeeScript</a>,因为电脑是OSX，在安装时候出现了一些问题，现将具体的安装步奏总结如下:</p>
+
+<h3>1.安装<a href="http://nodejs.org/">node.js</a></h3>
+
+<p>下载OSX的安装包<a href="http://nodejs.org/dist/v0.10.22/node-v0.10.22.pkg">node.js</a>,并安装。</p>
+
+<h3>2.  安装coffeescript</h3>
+
+<p>安装好了nodejs后利用node.js的<a href="https://npmjs.org/">nmp</a>的包管理工具安装coffeescrit,在console中输入:<br/>
+     npm install -g coffee-script
+console出现：</p>
+
+<pre><code>npm http GET https://registry.npmjs.org/coffee-script
+npm http 304 https://registry.npmjs.org/coffee-script
+/Users/mac/.npm-packages/bin/coffee -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/coffee
+/Users/mac/.npm-packages/bin/cake -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/cake
+coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
+</code></pre>
+
+<p>安装成功。</p>
+
+<h3>3.解决command not found问题:</h3>
+
+<p>因为npm没有把coffee加入到PATH中需要手动加入如下命令: <br/>
+    export PATH=/usr/local/share/npm/lib/node_modules/coffee-script/bin/:$PATH
+这样就安装成功。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/14/git-fetch-new-branch-from-remote/">Git Fetch New Branch From Remote</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-11-14T21:17:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:17 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在很多情况下，使用git开发需要创建过个分支，当别人创建新的分支你怎么样才能pull下来，并且正常开发呢？下面几个步奏:  <br/>
+    git fetch origin
+    git checkout &ndash;track origin/<remote_branch_name>
+这样轻松解决问题。一个不错的参考网站:  <br/>
+<a href="http://rogerdudler.github.io/git-guide/index.zh.html">git参考手册</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/17/sheng-huo-you-gan/">生活有感</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-07-17T22:00:00+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:00 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>很多天没有怎么接触代码了，确实有了与世隔绝的感觉，生活总是会眷顾我，让我有了一个懂事听话的老婆在我身边，<br/>
+生活中少呆在电脑面前，而更多的是做饭、洗衣服等.<br/>
+有时候总是会给自己说，</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/03/macxia-chromeyu-dao-shockwave-flash-crashwen-ti/">Mac下chrome遇到shockwave Flash Crash问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-07-03T08:58:00+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>8:58 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在使用mac的chrome过程中，经常会遇到chrome的shockwave flash crash的问题，上网搜索了资料，找到了解决方案如下：<br/>
+1.  打开chrome<br/>
+2.  在地址栏中输入 &ldquo;chrome:plugins&rdquo;<br/>
+3.  在出现的页面中的右上角,找到&#8221;+ 详细信息&#8221;,点开相信信息<br/>
+4.  找到 &ldquo;Adobe Flash Player&rdquo;,你会看到这个下面有好几个 shockwave flash<br/>
+5.  保留第一个shockwave flash,禁用其他的shockwave flash <br/>
+6.  重启chrome<br/>
+7.  顺利解决问题</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -77,6 +1032,26 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
     
   </ul>
 </section>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ubuntu | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/ubuntu/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ubuntu12.04开机无法进入问题]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti/"/>
+    <updated>2013-04-02T15:16:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti</id>
+    <content type="html"><![CDATA[<p>今天我的ubuntu12.04在我的强制关机后再一次英勇牺牲了。开机的时候出现了如下错误:
+     mount: mounting /dev on /root/dev failed: No such file or directory
+     mount: mounting /sys on /root/sys failed: No such file or directory
+     mount: mounting /proc on /root/proc failed: No such file or directory
+     Target filesystem doesn&rsquo;t have /sbin/init
+     [  3.392164] ioc0: LSI53C1030 B0 : Capabilities={Initiator}
+     No init found . Try passing init=bootarg.
+后来查了一下是引导分区的问题，具体解决办法如下:
+1. 先输入如下命令:
+    sudo fdisk -l
+得到如下结果:
+       Disk /dev/sda: 500.1 GB, 500107862016 bytes
+       255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
+       Units = sectors of 1 * 512 = 512 bytes
+       Sector size (logical/physical): 512 bytes / 4096 bytes
+       I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+       Disk identifier: 0x0c300c2f
+       Device Boot      Start         End      Blocks   Id  System
+       /dev/sda1   *          63   148038974    74019456    7  HPFS/NTFS/exFAT
+       Partition 1 does not start on physical sector boundary.
+       /dev/sda2       148039036   976768064   414364514+   5  Extended
+       Partition 2 does not start on physical sector boundary.
+       /dev/sda5       148039038   331388819    91674891    7  HPFS/NTFS/exFAT
+       Partition 5 does not start on physical sector boundary.
+       /dev/sda6       499171743   914433816   207631037    7  HPFS/NTFS/exFAT
+       Partition 6 does not start on physical sector boundary.
+       /dev/sda7       914435928   976768064    31166068+   7  HPFS/NTFS/exFAT
+       /dev/sda8       331388928   331780095      195584   83  Linux
+       /dev/sda9       331782144   371779583    19998720   83  Linux
+       /dev/sda10      371781632   375779327     1998848   82  Linux swap / Solaris
+       /dev/sda11      375781376   499169279    61693952   83  Linux</p>
+
+<pre><code>   Partition table entries are not in disk order
+</code></pre>
+
+<p>找到自己的linux分区，其中/dev/sda8是/boot 分区，/dev/sda9是/分区,输入:
+    sudo fsck /dev/sda8
+    sudo fsdk /dev/sda9
+对磁盘进行修复，最后启动ok.</p>
+]]></content>
+  </entry>
+  
+</feed>

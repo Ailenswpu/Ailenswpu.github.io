@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails中一些不常用但是很实用的技巧 - My Octopress Blog</title>
+  <meta name="author" content="Your Name">
+
+  
+  <meta name="description" content="好久没有写博客了、感觉没有提高，先来检讨一下: 1.collection &amp;&amp; pluck 很多时候我们的代码里面充斥这如下这样的代码： published_book_titles = Book.published.map(&amp;:title) &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://ailenswpu.github.io/blog/2013/04/11/railszhong-%5B_%5D-xie-bu-chang-yong-dan-shi-hen-shi-yong-de-ji-qiao/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Octopress Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="ailenswpu.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails中一些不常用但是很实用的技巧</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-04-11T22:26:00+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:26 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>好久没有写博客了、感觉没有提高，先来检讨一下:</p>
+
+<h3>1.collection &amp;&amp; pluck</h3>
+
+<p>很多时候我们的代码里面充斥这如下这样的代码：
+    published_book_titles = Book.published.map(&amp;:title)
+这样的代码当数据量很大的时候效率很低，那么应该改成:
+    published_book_titles = Book.published.pluck(:title)
+pluck在做查询的时候会指针对特定的列进行查询，而上面一种写法会先把所有数据查询出来然后再进行特定列的筛选。</p>
+
+<h3>2.find_by</h3>
+
+<p>很多时候，如果我们需要查找单条记录代码会是:
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#114;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+但是rails设计的时候更常用的是dynamic finder:
+    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#111;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+如果你使用find_by可以写成这样子：
+    User.find_by(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#119;&#x70;&#x75;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    #或者写成
+    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#110;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#x73;&#119;&#x70;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
+
+<h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
+
+<pre><code>User.where(email: "renkaiswpu@gmail.com").first_or_create
+</code></pre>
+
+<p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#x61;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#101;&#110;&#107;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;).first_or_create do |user|
+       user.name = = &lsquo;renkai&rsquo;
+    end
+同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
+
+<h3>4.find_each &amp; find</h3>
+
+<p>当你在遍历成千上万条数据的时候，如果使用each那么会一次性从数据库中把记录查询出来，效率可想而知！！但是当你用find_each的时候那么rails会先加载前1000条数据，其他的会在后续时间继续加载，直到加载完全部放到内存中。
+    Book.where(:published => true).find_each do |book|
+       puts &ldquo;Do something with #{book.title} here!&rdquo;
+    end</p>
+
+<h3>4.rake notes</h3>
+
+<p>很多场合下我们会用todolist来提醒自己做一些feature,那么如何使用rake来提醒自己呢，只要在rb文件中加入如下格式的代码：
+    #encoding : utf-8
+    class Blog
+      # TODO: 使用mongodb
+      # FIXME: 修改bug
+      include Mongoid::Document
+      include Rails.application.routes.url_helpers
+      field :name, type: String
+      field :content, type: String
+      attr_accessible :file
+      field :file
+      mount_uploader :file, FileUploader
+    end
+那么再使用:
+    rake notes
+    rake notes:todo
+    rake notes:fixme
+就可以轻松知道自己的tasklist了。
+更加详细的请参考<a href="https://speakerdeck.com/jeg2/10-things-you-didnt-know-rails-could-do">rails技巧</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Your Name</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2013-04-11T22:26:00+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:26 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://ailenswpu.github.io/blog/2013/04/11/railszhong-%5B_%5D-xie-bu-chang-yong-dan-shi-hen-shi-yong-de-ji-qiao/" data-via="" data-counturl="http://ailenswpu.github.io/blog/2013/04/11/railszhong-%5B_%5D-xie-bu-chang-yong-dan-shi-hen-shi-yong-de-ji-qiao/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti/" title="Previous Post: ubuntu12.04开机无法进入问题">&laquo; ubuntu12.04开机无法进入问题</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/03/macxia-chromeyu-dao-shockwave-flash-crashwen-ti/" title="Next Post: Mac下chrome遇到shockwave flash crash问题">Mac下chrome遇到shockwave flash crash问题 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Your Name -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Five Ruby Methods You Should Be Using]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/01/29/five-ruby-methods-you-should-be-using/"/>
+    <updated>2015-01-29T21:51:35+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/01/29/five-ruby-methods-you-should-be-using</id>
+    <content type="html"><![CDATA[<h1>1.Object#tap</h1>
+
+<p>是否有过当你调用某个对象的方法时候，返回值并不是你想要的？这时候你就需要重新获取对象，并对对象做操作。比如：你想要给存储一系列参数的hash加一个任意值，
+你通过调用hash.[]来更新hash，因此你必须明确地返回才能得到更新后的结果，代码如下:<br/>
+<code>ruby
+def update_params(params)
+  params[:foo] = 'bar'
+  params
+end
+</code>
+代码最后一行的params看上去似乎是多余的。<br/>
+因此可以通过(Object#tap)[<a href="http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap">http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap</a>]来简化代码。对象只要调用tap方法，传递一个你需要
+执行的代码块，对象调用代码块的后返回自己。因此改进的update_params代码如下:
+<code>ruby
+def update_params(params)
+  params.tap {|p| p[:foo] = 'bar' }
+end
+</code>
+Object#tap在很多地方都很有用.有一个简单法则：对象的方法本身不必要返回自己，当你需要时候即可以用Object#tap来替换。</p>
+
+<h1>2.Array#bsearch</h1>
+
+<p>不知道你们在工作中是否会遇到遍历数组?Ruby的枚举提供了很多寻找方法比如：select,reject和find，这些是我日常工作中经常使用的，但是当数据集很大的时候，我开始
+担心遍历这些数组需要耗费很多的时间。</p>
+
+<p>如果你使用过ActiveRecord来做SQL查询，在ActiveRecord背后封装了很多魔法，因此你必须要把搜索复杂的降到最低。但是很多时候你必须要把所有数据先查询出来然后
+才能做进一步工作。比如：当数据库中的数据做了加密的时候，你不能直接通过SQL来做操作。</p>
+
+<p>在这个时候，我通常思考如何使用算法复杂度最低(大O)的算法来做数据筛选，如果你不知道大O可以参考Justin Abrahms&#8217;s的<a href="https://justin.abrah.ms/computer-science/big-o-notation-explained.html"> Big-O Notation Explained By A Self-Taught Programmer</a>
+或者(Big-O Complexity Cheat Sheet)[<a href="http://bigocheatsheet.com/">http://bigocheatsheet.com/</a>]。</p>
+
+<p>基本的原则就是算法的复杂度决定着算法的运行时间的长短，复杂度从小打到依次排序为：O(1), O(log n), O(n), O(n log(n)), O(n<sup>2</sup>), O(2<sup>n</sup>), O(n!)，因此我们倾向于
+使用复杂度低的算法。</p>
+
+<p>在Ruby中，当对数组做查询的时候，第一反应是使用Enumerable#find，也可以是detect。但是这个方法会遍历整个数组，直到条件匹配。如果最终结果在前面那么还好，如果
+结果在数组最后面，那么最终搜索的复杂度为O(n)。</p>
+
+<p>在Ruby中有一个更快的方法(Array#bsearch)[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch">http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch</a>], 搜索的复杂度为O(log n)，如果想要查看
+Binary Search的工作原理，可以查看(Building A Binary Search)[<a href="http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/">http://fluxusfrequency.github.io/blog/2014/01/31/building-a-binary-search/</a>]。</p>
+
+<p>下面是从50,000,000数字中搜索特定值的运行时间对比：
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">benchmark</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;data = (0..50_000_000)&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Benchmark</span><span class="o">.</span><span class="n">bm</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:find</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">x</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="ss">:bsearch</span><span class="p">)</span> <span class="p">{</span> <span class="n">data</span><span class="o">.</span><span class="n">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">number</span><span class="o">|</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">40_000_000</span> <span class="p">}</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;     user       system     total       real</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;find     3.020000   0.010000   3.030000   (3.028417)</span>
+</span><span class='line'><span class="sr">bsearch  0.000000   0.000000   0.000000   (0.000006)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>正如你看到的，bsearch速度非常快。但是使用bsearch的大前提就是：数组必须是排序好的。这在很多时候限制了bsearch的用途，但是仍然在很多时候会用到，比如：当你在按照
+created_at排序好的数据库记录中按时间查询某个记录。</p>
+
+<h1>3.Enumerable#flat_map</h1>
+
+<p>当处理相关联的数据时候，我们通常需要查询一些不相关一些列数据，然后以嵌套的数组的形式返回。假设你有一个博客，你想查询出某些用户的上个月的所有的博客的评论的作者，那么
+代码如下：<br/>
+<code>ruby
+module CommentFinder
+  def self.find_for_users(user_ids)
+    users = User.where(id: user_ids)
+    user.posts.map do |post|
+      post.comments.map |comment|
+        comment.author.username
+      end
+    end
+  end
+end
+</code>
+你最终有可能得到如下结果：<br/>
+<code>ruby
+[[['Ben', 'Sam', 'David'], ['Keith']], [[], [nil]], [['Chris'], []]]
+</code></p>
+
+<p>但是真正的需求是我想得到的是作者，而不是[]或者nil,因此你可以通过flatten来合并：
+<code>ruby
+module CommentFinder
+  def self.find_for_users(user_ids)
+    users = User.where(id: user_ids)
+    user.posts.map { |post|
+      post.comments.map { |comment|
+        comment.author.username
+      }.flatten
+    }.flatten
+  end
+end
+</code>ruby
+Ruby中还有一种更好的方法就是使用flat_map：
+<code>ruby
+module CommentFinder
+  def self.find_for_users(user_ids)
+    users = User.where(id: user_ids)
+    user.posts.flat_map { |post|
+      post.comments.flat_map { |comment|
+        comment.author.username
+      }
+    }
+  end
+end
+</code>
+后面两种并没有太大区别，但是使用flat_map没必要多次调用flatten。</p>
+
+<h1>4.Array.new with a Block</h1>
+
+<p>一度在我集训的时候，我们导师Jeff Casimir (founder of (Turing School)[<a href="http://turing.io/">http://turing.io/</a>])让我们在一小时时间内去开发一个Battleship，这是一次很好的
+面向对象的编程练习，我们需要Rules, Players, Games, and Boards。<br/>
+创建Board的表现形式是一个很有趣的练习，在多次迭代之后，我发现了最简单的方式去构建一个8x8的格子:
+<code>ruby
+class Board
+  def board
+    @board ||= Array.new(8) { Array.new(8) { '0' } }
+  end
+end
+</code></p>
+
+<p>那么到底发生了什么呢？当你调用(Array.new(n))[<a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new">http://www.ruby-doc.org/core-2.1.5/Array.html#method-c-new</a>],就会创建一个长度为n的数组：</p>
+
+<pre><code class="ruby">Array.new(8)
+=&gt; [nil, nil, nil, nil, nil, nil, nil, nil]
+</code></pre>
+
+<p>当你传递代码块的时候，就会把代码块中的值加入到数组中：</p>
+
+<pre><code class="ruby">Array.new(8) { 'O' }
+=&gt; ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
+</code></pre>
+
+<p>因此如果你在代码块中传第一个包含8个&#8217;0&#8217;的数组，那么你就会得到一个8x8的所有元素为&#8217;0&#8217;的数组。使用Array.new加上代码块，你可以构建出任何大小，任何嵌套的数组。</p>
+
+<h1>5.&lt;=></h1>
+
+<p>这个如&#8221;宇宙飞船&#8221;的符号是我在Ruby中最喜欢的结构之一，它在广泛使用于Ruby的内置类中，同时在枚举中也广泛使用。</p>
+
+<p>下面通过整形数值调用&lt;=>来看一下用法，当你运行5&lt;=>5时候, 返回值 0，当你运行4&lt;=>5返回-1，当你运行5&lt;=>4，返回1.因此，如果两个数字一样，返回0，前者小于后者，返回-1，如果
+前者大于后者返回1.</p>
+
+<p>你可以使用&lt;=>来重新定义自己的逻辑，使其只返回0，1，-1.</p>
+
+<p>下面是&lt;=>的一个非常cool的使用场景，来自Exercism， 有一个练习叫做Clock，你必须使用自定义的+和-来调整时钟的小时分钟。当时间超过60分钟的时候就会变得非常复杂，
+因为超过60分钟是不合法的数据，因此你必须要加一个小时，同时减去60分钟。<br/>
+一个叫dalexj的聪明小伙子的解决方案如下：<br/>
+<code>ruby
+def fix_minutes
+    until (0...60).member? minutes
+      @hours -= 60 &lt;=&gt; minutes
+      @minutes += 60 * (60 &lt;=&gt; minutes)
+    end
+    @hours %= 24
+    self
+  end
+</code>
+&lt;=>符号非常适用于定义你自己对对象的排序，同时可以用于某些数学运算，因为它仅仅返回三个固定的数字。</p>
+
+<p>原文链接为：<a href="https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using">https://blog.engineyard.com/2015/five-ruby-methods-you-should-be-using</a></p>
+
+<p>处女翻译贴献给了ruby-china，如果哪里有错误的请大家及时指正。:smile:</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Notes of Prataical Object Oriented Design --Object-Oriented Desgin]]></title>
+    <link href="http://ailenswpu.github.io/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/"/>
+    <updated>2014-08-17T22:13:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin</id>
+    <content type="html"><![CDATA[<p>对于程序员来说，面向对象设计是一个非常熟悉的名词。从大一开始就接触所谓的面向对象，可是一直到今天，对于面向对象设计还是处于懵懵懂懂的状态。有幸现在公司的老大在
+面试的时候给我介绍了一本书<a href="http://book.douban.com/subject/25795276/">面向对象设计实践指南：Ruby语言描述</a>,去年年底看了一下当时当时确实有了一些体会，
+不过当你积累的知识长时间没有被实践的时候，那么只会产生一种后果，那就是遗忘。好在上周被批评了一下，重新认识到了自己的问题，工作了半年其实还是有点停滞不前，
+看的书确实过少。上周花了一天时间又把这本书看完了，确实又有了更进一步的体会。接下来会花一些实践把这些总结成自己的博客。今天这篇先介绍第一张本书对Object-Oriented
+ Design的看法。</p>
+
+<h2>设计礼赞</h2>
+
+<p>无论是一个小的游戏还是一个完整的应用程序，都是看最终的完成结果，一个设计不好的应用会让程序员越陷越深，处于无尽的问题之中。而最终带给程序员福音的还是面向对象设计，
+面向对象设计能够给程序员解决道德和编程技术难题，能够很好解决效率问题。这就是为什么需要进行设计的最主要原因。</p>
+
+<h3>设计解决的问题</h3>
+
+<ol>
+<li>需求变化带来对于整个项目的影响，设计能够拥抱变化，低耦合的设计能够很好处理需求变化的问题。</li>
+<li>面向对象设计能够很好地管理一个对象的各个部件之间的依赖，能够使得各个部件之间的变化对比彼此产生很小的影响。</li>
+<li>面向对象设计本质上是对代码的组织管理，好的设计最终的目的为能够轻松应对将来的变化。
+
+<h3>设计工具</h3>
+
+<h4>设计原则</h4></li>
+<li>SOLID(Single Responsibility、Open-Closed、 Liskov Substitution、Interface Segregation、Dependency Inversion.)</li>
+<li>Design Patterns(Gof)
+
+<h4>设计行动</h4></li>
+<li>设计失败取决于具体的经验，经验不足以及语言的特性可能会导致糟糕的设计。</li>
+<li>敏捷开发不会做Big Up Front Design (BUFD)，敏捷开发需要根据需求一步步迭代，软件的最终完成时间是不可预期的。</li>
+</ol>
+
+
+<p>原理很重要，但是接下来几篇博客会在具体的行动中来一步步实现好的设计。</p>
+]]></content>
+  </entry>
+  
+</feed>

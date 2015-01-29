@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Git | My Octopress Blog]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-01-29T21:56:30+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[Your Name]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Git Fetch New Branch From Remote]]></title>
+    <link href="http://ailenswpu.github.io/blog/2013/11/14/git-fetch-new-branch-from-remote/"/>
+    <updated>2013-11-14T21:17:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2013/11/14/git-fetch-new-branch-from-remote</id>
+    <content type="html"><![CDATA[<p>在很多情况下，使用git开发需要创建过个分支，当别人创建新的分支你怎么样才能pull下来，并且正常开发呢？下面几个步奏:  <br/>
+    git fetch origin
+    git checkout &ndash;track origin/<remote_branch_name>
+这样轻松解决问题。一个不错的参考网站:  <br/>
+<a href="http://rogerdudler.github.io/git-guide/index.zh.html">git参考手册</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Git命令使用颜色]]></title>
+    <link href="http://ailenswpu.github.io/blog/2012/11/22/gitming-ling-shi-yong-yan-se/"/>
+    <updated>2012-11-22T11:05:00+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2012/11/22/gitming-ling-shi-yong-yan-se</id>
+    <content type="html"><![CDATA[<p>最近经常使用git，无免产生一些遐想，在使用git命令的时候需要配置一些颜色，具体的步骤如下：<br/>
+1.打开所在项目的.git文件，然后用文本编辑器（emacs,vim等）打开config文件。
+2.在文件最后面加上那个<br/>
+    [color]
+     branch = auto
+     diff = auto
+     status = auto
+    [color &ldquo;branch&rdquo;]
+     current = yellow reverse
+     local = yellow
+     remote = green
+    [color &ldquo;diff&rdquo;]
+     meta = yellow bold
+     frag = magenta bold
+     old = red bold
+     new = green bold
+    [color &ldquo;status&rdquo;]
+     added = yellow
+     changed = green
+     untracked = cyan</p>
+]]></content>
+  </entry>
+  
+</feed>
