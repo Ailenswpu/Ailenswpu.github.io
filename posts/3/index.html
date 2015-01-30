@@ -9,9 +9,8 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="因为最近换成ruby2.0所以，按照原来的rubychina的wiki的方法安装的时候碰到了这样的错误:
-当运行到passenger-install-nginx-module
-就会出现如下错误: /usr/local/rvm/wrappers/ruby-2.0.0-p0/rake nginx: &hellip;">
+  <meta name="description" content="redis中如果需要删除关于某一个key的所有的内容可以运行如下命令： redis-cli -n 0 KEYS ub:2011-07- | xargs redis-cli DEL(ub:2011-07-是你要删除的某一个key)
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +66,36 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/22/redis-delete-key/">Redis Delete Key</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-22T10:20:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2013</span></span> <span class='time'>10:20 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>redis中如果需要删除关于某一个key的所有的内容可以运行如下命令：
+      redis-cli -n 0 KEYS ub:2011-07-<em> | xargs redis-cli DEL(ub:2011-07-</em>是你要删除的某一个key)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -462,6 +491,10 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/30/how-to-add-swap-on-ubuntu-14-dot-04/">How to Add Swap on Ubuntu 14.04</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
       </li>
     
@@ -475,10 +508,6 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     
       <li class="post">
         <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/09/20140108mian-shi/">20140108面试</a>
       </li>
     
   </ul>
