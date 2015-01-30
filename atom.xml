@@ -4,7 +4,7 @@
   <title><![CDATA[coding on the way]]></title>
   <link href="http://ailenswpu.github.io/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-01-30T22:29:50+08:00</updated>
+  <updated>2015-01-30T22:37:43+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -32,34 +32,54 @@
 
 <p>我们可以通过输入以下命令查新系统的swap信息：</p>
 
-<pre><code>sudo swapon -s 
-Filename                Type        Size    Used    Priority    
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo swapon -s
+</span><span class='line'>Filename                Type        Size    Used    Priority
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这时候看到系统中没有交换空间，另外可以通过free查看当前系统的内存和交换空间的使用情况：</p>
 
-<pre><code>free -m
-             total       used       free     shared    buffers     cached
-Mem:          3953        154       3799          0          8         83
--/+ buffers/cache:         62       3890
-swap:            0          0          0
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>free -m
+</span><span class='line'>             total       used       free     shared    buffers     cached
+</span><span class='line'>Mem:          <span class="m">3953</span>        <span class="m">154</span>       <span class="m">3799</span>          <span class="m">0</span>          <span class="m">8</span>         83
+</span><span class='line'>-/+ buffers/cache:         <span class="m">62</span>       3890
+</span><span class='line'>swap:            <span class="m">0</span>          <span class="m">0</span>          0
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h4>2.查看磁盘当前可用空间</h4>
 
 <p>在创建swap之前首先要查看当前磁盘的可用空间，可以通过df命令来查看:</p>
 
-<pre><code>df -h
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>df -h
+</span><span class='line'>
+</span><span class='line'>Filesystem      Size  Used Avail Use% Mounted on
+</span><span class='line'>/dev/vda1        30G  9.9G   19G  36% /
+</span><span class='line'>none            4.0K     <span class="m">0</span>  4.0K   0% /sys/fs/cgroup
+</span><span class='line'>udev            487M  4.0K  487M   1% /dev
+</span><span class='line'>tmpfs           100M  324K  100M   1% /run
+</span><span class='line'>none            5.0M     <span class="m">0</span>  5.0M   0% /run/lock
+</span><span class='line'>none            498M     <span class="m">0</span>  498M   0% /run/shm
+</span><span class='line'>none            100M     <span class="m">0</span>  100M   0% /run/user
+</span></code></pre></td></tr></table></div></figure>
 
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/vda1        30G  9.9G   19G  36% /
-none            4.0K     0  4.0K   0% /sys/fs/cgroup
-udev            487M  4.0K  487M   1% /dev
-tmpfs           100M  324K  100M   1% /run
-none            5.0M     0  5.0M   0% /run/lock
-none            498M     0  498M   0% /run/shm
-none            100M     0  100M   0% /run/user
-</code></pre>
 
 <p>可以看到磁盘还有接近20G的空间，可以腾出1G来做swap，默认情况下认为swap为RAM的2倍比较合适，不过这个看个人的需求，我的RAM为1G，因此加上2G swap就够了，不过
 还是创建了4G的空间。</p>
@@ -70,69 +90,112 @@ none            100M     0  100M   0% /run/user
 
 <h5>3.1传统的慢的方法：</h5>
 
-<pre><code>sudo dd if=/dev/zero of=/swapfile bs=1G count=4
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/swapfile <span class="nv">bs</span><span class="o">=</span>1G <span class="nv">count</span><span class="o">=</span>4
+</span><span class='line'>
+</span><span class='line'>ls -lh /swapfile
+</span><span class='line'>
+</span><span class='line'>-rw-r--r-- <span class="m">1</span> root root 4.0G Jan <span class="m">26</span> 01:43 /swapfile
+</span></code></pre></td></tr></table></div></figure>
 
-ls -lh /swapfile
 
--rw-r--r-- 1 root root 4.0G Jan 26 01:43 /swapfile
-</code></pre>
+<p></p>
 
 <h5>3.2快速方法：</h5>
 
-<pre><code>sudo fallocate -l 4G /swapfile
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo fallocate -l 4G /swapfile
+</span><span class='line'>
+</span><span class='line'>ls -lh /swapfile
+</span><span class='line'>
+</span><span class='line'>-rw-r--r-- <span class="m">1</span> root root 4.0G Jan <span class="m">26</span> 01:50 /swapfile
+</span></code></pre></td></tr></table></div></figure>
 
-ls -lh /swapfile
-
--rw-r--r-- 1 root root 4.0G Jan 26 01:50 /swapfile
-</code></pre>
 
 <h4>4.格式化swap文件</h4>
 
 <p>当创建好了swap文件之后OS并不知道这个文件的用途，因此我们需要告诉操作系统创建好的文件用作swap。在格式化之前我们必须保证交换空间仅能为root只读，因此需要输入：</p>
 
-<pre><code>sudo chmod 600 /swapfile
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo chmod <span class="m">600</span> /swapfile
+</span><span class='line'>
+</span><span class='line'>ls -lh /swapfile
+</span><span class='line'>
+</span><span class='line'>-rw------- <span class="m">1</span> root root 4.0G Jan <span class="m">26</span> 01:43 /swapfile
+</span></code></pre></td></tr></table></div></figure>
 
-ls -lh /swapfile
-
--rw------- 1 root root 4.0G Jan 26 01:43 /swapfile
-</code></pre>
 
 <p>可以看到/swapfile文件为root只读。接下来通过mkswap来格式化swap文件：</p>
 
-<pre><code>sudo mkswap /swapfile
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo mkswap /swapfile
+</span><span class='line'>
+</span><span class='line'>Setting up swapspace version 1, <span class="nv">size</span> <span class="o">=</span> <span class="m">4194300</span> KiB
+</span><span class='line'>no label, <span class="nv">UUID</span><span class="o">=</span>e2f1e9cf-c0a9-4ed4-b8ab-714b8a7d6944
+</span></code></pre></td></tr></table></div></figure>
 
-Setting up swapspace version 1, size = 4194300 KiB
-no label, UUID=e2f1e9cf-c0a9-4ed4-b8ab-714b8a7d6944
-</code></pre>
 
 <p>文件已经为操作系统识别的swap,通过swapon来加载当前到操作系统：</p>
 
-<pre><code>sudo swapon /swapfile
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo swapon /swapfile
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>通过以下命令可以验证是否创建成功：</p>
 
-<pre><code>sudo swapon -s
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo swapon -s
+</span><span class='line'>
+</span><span class='line'>Filename              Type        Size    Used    Priority
+</span><span class='line'>/swapfile                               file      4194300 43220   -1
+</span><span class='line'>
+</span><span class='line'>free -m
+</span><span class='line'>
+</span><span class='line'>             total       used       free     shared    buffers     cached
+</span><span class='line'>Mem:           <span class="m">994</span>        <span class="m">862</span>        <span class="m">131</span>          <span class="m">0</span>         <span class="m">24</span>        118
+</span><span class='line'>-/+ buffers/cache:        <span class="m">718</span>        275
+</span><span class='line'>Swap:         <span class="m">4095</span>         <span class="m">42</span>       4053
+</span></code></pre></td></tr></table></div></figure>
 
-Filename                Type        Size    Used    Priority
-/swapfile                               file        4194300 43220   -1
-
-free -m
-
-             total       used       free     shared    buffers     cached
-Mem:           994        862        131          0         24        118
--/+ buffers/cache:        718        275
-Swap:         4095         42       4053
-</code></pre>
 
 <h4>5.持久化swap</h4>
 
 <p>通过上面创建的交换空间当机器重启的系统不会自动挂载交换空间，我们需要更改fstab文件来自动挂载：</p>
 
-<pre><code>sudo nano /etc/fstab
-在文件最后一行输入：
-/swapfile   none    swap    sw    0   0
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo nano /etc/fstab
+</span><span class='line'>在文件最后一行输入：
+</span><span class='line'>/swapfile   none    swap    sw    <span class="m">0</span>   0
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>保存文件即可。</p>
 
@@ -142,48 +205,64 @@ Swap:         4095         42       4053
 <code>swappiness</code>参数代表着系统使用交换空间的频率，位于0-100之间，0代表着内核尽可能减少向磁盘交换数据，除非RAM完全被耗光。100代表这尽可能使用交换空间，给RAM腾空间
 我们可以看到：</p>
 
-<pre><code>cat /proc/sys/vm/swappiness
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat /proc/sys/vm/swappiness
+</span><span class='line'>60
+</span></code></pre></td></tr></table></div></figure>
 
-60
-</code></pre>
 
 <p>对于PC机器，60应该是不错的配置，但是对于VPS来说，最好是接近于0，减少swap交互，除非RAM真正被耗光。因此通过增加下面几行来调整<code>swappiness</code>到10。</p>
 
-<pre><code>sudo sysctl vm.swappiness=10
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo sysctl vm.swappiness<span class="o">=</span>10
+</span><span class='line'>vm.swappiness <span class="o">=</span> 10
+</span></code></pre></td></tr></table></div></figure>
 
-vm.swappiness = 10
-</code></pre>
 
 <p>这个值在重启之后会自动恢复为默认，因此我们需要设置为开机自动设置：</p>
 
-<pre><code>sudo nano /etc/sysctl.conf
-在末尾加上:
-vm.swappiness=10
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo nano /etc/sysctl.conf
+</span><span class='line'>在末尾加上:
+</span><span class='line'>vm.swappiness<span class="o">=</span>10
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
 
 <p>保存文件退出。<br/>
 另一个比较重要的配置是<code>vfs_cache_pressure</code>,该文件表示内核回收用于directory和inode cache内存的倾向；缺省值100表示内核将根据pagecache和swapcache，
 把directory和inode cache保持在一个合理的百分比；降低该值低于100，将导致内核倾向于保留directory和inode cache；增加该值超过100，将导致内核倾向于
 回收directory和inode cache。</p>
 
-<pre><code>cat /proc/sys/vm/vfs_cache_pressure
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat /proc/sys/vm/vfs_cache_pressure
+</span><span class='line'>100
+</span></code></pre></td></tr></table></div></figure>
 
-100
-</code></pre>
 
 <p>默认为100的值时候系统移除inode的频率过高，我们可以通过设置为50来调整频率：</p>
 
-<pre><code>sudo sysctl vm.vfs_cache_pressure=50
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo sysctl vm.vfs_cache_pressure<span class="o">=</span>50
+</span><span class='line'>vm.vfs_cache_pressure <span class="o">=</span> 50
+</span></code></pre></td></tr></table></div></figure>
 
-vm.vfs_cache_pressure = 50
-</code></pre>
 
 <p>同上，重启过后会自动恢复为默认值，因此需要设置为开机自动设置：</p>
 
-<pre><code>sudo nano /etc/sysctl.conf
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo nano /etc/sysctl.conf
+</span><span class='line'>vm.vfs_cache_pressure <span class="o">=</span> 50
+</span></code></pre></td></tr></table></div></figure>
 
-vm.vfs_cache_pressure = 50
-</code></pre>
 
 <p>保存文件即可</p>
 
@@ -999,13 +1078,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#116;&#111;&#58;&#x72;&#x65;&#110;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#x72;&#x65;&#110;&#107;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#x65;&#110;&#107;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x65;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#97;&#105;&#108;&#116;&#111;&#x3a;&#114;&#x65;&#110;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#114;&#x65;&#110;&#107;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#64;&#x67;&#109;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x65;&#110;&#x6b;&#97;&#105;&#x73;&#119;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x72;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#119;&#x70;&#117;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#119;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#101;&#x6e;&#107;&#97;&#105;&#115;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#114;&#101;&#x6e;&#107;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#58;&#x72;&#101;&#x6e;&#107;&#x61;&#105;&#x73;&#x77;&#112;&#117;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;">&#x72;&#x65;&#x6e;&#107;&#x61;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#114;&#101;&#110;&#x6b;&#x61;&#105;&#x73;&#x77;&#112;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -1014,7 +1093,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#114;&#101;&#x6e;&#107;&#97;&#105;&#x73;&#119;&#x70;&#117;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#x72;&#101;&#110;&#107;&#x61;&#x69;&#x73;&#x77;&#112;&#x75;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x72;&#x65;&#110;&#107;&#x61;&#105;&#x73;&#x77;&#x70;&#x75;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
