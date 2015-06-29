@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | coding on the way]]></title>
   <link href="http://ailenswpu.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-01-30T22:37:43+08:00</updated>
+  <updated>2015-06-29T22:47:08+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hash and Default_proc]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/06/29/hash-and-default-proc/"/>
+    <updated>2015-06-29T22:11:46+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/06/29/hash-and-default-proc</id>
+    <content type="html"><![CDATA[<p>Hash是ruby最常用的数据结构，Hash本身具有很多特性，今天讨论一下<a href="http://apidock.com/ruby/v1_9_3_392/Hash/default_proc">Hash#default_proc</a>。  <br/>
+看过这样的代码?
+<code>ruby
+result = {}
+some_collection.map do |some_entry|
+  result[some_entry] = some_expensive_operation(some_entry)
+end
+result
+</code>
+Ok，现在通过Hash#default_proc有一种更加Better的写法。 <br/>
+<code>ruby
+result = Hash.new do |hash, key|
+  hash[key] = some_expensive_operation(key)
+end
+</code>
+通过Hash.new能够将some_expensive_operation操作推迟到运行时，当hash不存在某个key的时候才开始运算，这将很大提高了效率。
+Ok, Nice,再看一个例子：</p>
+
+<pre><code class="ruby">expensive_proc = -&gt;(v) do
+  puts "Expensive calculation"
+  sleep 1
+  [v] * 2
+end
+
+expensive_proc_with_cache = Hash.new do |hash, key|
+  hash[key] = expensive_proc[key]
+end
+
+def repeat_10_times(proc)
+  10.times do |i|
+    proc[ i % 2 ]
+  end
+end
+
+repeat_10_times(expensive_proc) # Takes about 10 seconds
+repeat_10_times(expensive_proc_with_cache) # Takes about 2 seconds
+</code></pre>
+
+<p>再看一个缓存的例子： <br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">paginated_lookup</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">v</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">index</span><span class="o">[</span><span class="c1">#{index}]&amp;rdquo;</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">index</span> <span class="o">=&gt;</span> <span class="n">v</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">.</span><span class="n">next</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">.</span><span class="n">prev</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;paginated_lookup_cache = Hash.new do |hash, key|</span>
+</span><span class='line'><span class="sr">  hash.merge! paginated_lookup[key]</span>
+</span><span class='line'><span class="sr">  hash[key]</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">index</span><span class="o">[</span><span class="mi">10</span><span class="o">]&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">index</span><span class="o">[</span><span class="mi">10</span><span class="o">].</span><span class="n">next</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>值得注意的一个坑是:当我们使用<code>fetch</code>去取hash值的时候 Hash#default_proc并没有被调用.WTF?如何设计的?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Five Ruby Methods You Should Be Using]]></title>

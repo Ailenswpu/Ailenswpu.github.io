@@ -9,7 +9,13 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="背景 最近公司几款游戏的staging server是用的是DO的$5的套餐，配置是512M的内存，装了很多软件，在用cap做部署的时候经常报出了内存不足的错误，选择使用swap(交换分区)的方法来一定程度上缓解这个问题。 简介 swap(交换分区)是当计算机物理内存不足时用来暂时存储数据的地方， &hellip;">
+  <meta name="description" content="Hash是ruby最常用的数据结构，Hash本身具有很多特性，今天讨论一下Hash#default_proc。 看过这样的代码? 1
+2
+3
+4
+5
+result = {}
+some_collection.map do |some_entry| result[some_entry] = &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +71,141 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-06-29T22:11:46+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Hash是ruby最常用的数据结构，Hash本身具有很多特性，今天讨论一下<a href="http://apidock.com/ruby/v1_9_3_392/Hash/default_proc">Hash#default_proc</a>。  <br/>
+看过这样的代码?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="n">some_collection</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">some_entry</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">result</span><span class="o">[</span><span class="n">some_entry</span><span class="o">]</span> <span class="o">=</span> <span class="n">some_expensive_operation</span><span class="p">(</span><span class="n">some_entry</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">result</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok，现在通过Hash#default_proc有一种更加Better的写法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="n">some_expensive_operation</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过Hash.new能够将some_expensive_operation操作推迟到运行时，当hash不存在某个key的时候才开始运算，这将很大提高了效率。
+Ok, Nice,再看一个例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">expensive_proc</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Expensive calculation&quot;</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">expensive_proc_with_cache</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="n">expensive_proc</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">repeat_10_times</span><span class="p">(</span><span class="nb">proc</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">proc</span><span class="o">[</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">repeat_10_times</span><span class="p">(</span><span class="n">expensive_proc</span><span class="p">)</span> <span class="c1"># Takes about 10 seconds</span>
+</span><span class='line'><span class="n">repeat_10_times</span><span class="p">(</span><span class="n">expensive_proc_with_cache</span><span class="p">)</span> <span class="c1"># Takes about 2 seconds</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再看一个缓存的例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">paginated_lookup</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">v</span> <span class="o">=</span> <span class="s2">&quot;index[</span><span class="si">#{</span><span class="n">index</span><span class="si">}</span><span class="s2">]&quot;</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">index</span> <span class="o">=&gt;</span> <span class="n">v</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;.next&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;.prev&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">paginated_lookup_cache</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">.</span><span class="n">merge!</span> <span class="n">paginated_lookup</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="s2">&quot;index[10]&quot;</span>
+</span><span class='line'><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="s2">&quot;index[10].next&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>值得注意的一个坑是:当我们使用<code>fetch</code>去取hash值的时候 Hash#default_proc并没有被调用.WTF?如何设计的?</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1266,37 +1407,6 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/17/sheng-huo-you-gan/">生活有感</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-07-17T22:00:00+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:00 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>很多天没有怎么接触代码了，确实有了与世隔绝的感觉，生活总是会眷顾我，让我有了一个懂事听话的老婆在我身边，<br/>
-生活中少呆在电脑面前，而更多的是做饭、洗衣服等.<br/>
-有时候总是会给自己说，</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1312,6 +1422,10 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/30/how-to-add-swap-on-ubuntu-14-dot-04/">How to Add Swap on Ubuntu 14.04</a>
       </li>
     
@@ -1325,10 +1439,6 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
     
       <li class="post">
         <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a>
       </li>
     
   </ul>

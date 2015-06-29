@@ -4,7 +4,7 @@
   <title><![CDATA[coding on the way]]></title>
   <link href="http://ailenswpu.github.io/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-01-30T22:37:43+08:00</updated>
+  <updated>2015-06-29T22:47:08+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hash and Default_proc]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/06/29/hash-and-default-proc/"/>
+    <updated>2015-06-29T22:11:46+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/06/29/hash-and-default-proc</id>
+    <content type="html"><![CDATA[<p>Hash是ruby最常用的数据结构，Hash本身具有很多特性，今天讨论一下<a href="http://apidock.com/ruby/v1_9_3_392/Hash/default_proc">Hash#default_proc</a>。  <br/>
+看过这样的代码?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span class='line'><span class="n">some_collection</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">some_entry</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">result</span><span class="o">[</span><span class="n">some_entry</span><span class="o">]</span> <span class="o">=</span> <span class="n">some_expensive_operation</span><span class="p">(</span><span class="n">some_entry</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">result</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok，现在通过Hash#default_proc有一种更加Better的写法。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">result</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="n">some_expensive_operation</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过Hash.new能够将some_expensive_operation操作推迟到运行时，当hash不存在某个key的时候才开始运算，这将很大提高了效率。
+Ok, Nice,再看一个例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">expensive_proc</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Expensive calculation&quot;</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="o">[</span><span class="n">v</span><span class="o">]</span> <span class="o">*</span> <span class="mi">2</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">expensive_proc_with_cache</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="n">expensive_proc</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">repeat_10_times</span><span class="p">(</span><span class="nb">proc</span><span class="p">)</span>
+</span><span class='line'>  <span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">proc</span><span class="o">[</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">repeat_10_times</span><span class="p">(</span><span class="n">expensive_proc</span><span class="p">)</span> <span class="c1"># Takes about 10 seconds</span>
+</span><span class='line'><span class="n">repeat_10_times</span><span class="p">(</span><span class="n">expensive_proc_with_cache</span><span class="p">)</span> <span class="c1"># Takes about 2 seconds</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再看一个缓存的例子：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">paginated_lookup</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">v</span> <span class="o">=</span> <span class="s2">&quot;index[</span><span class="si">#{</span><span class="n">index</span><span class="si">}</span><span class="s2">]&quot;</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="n">index</span> <span class="o">=&gt;</span> <span class="n">v</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;.next&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;.prev&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">paginated_lookup_cache</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="nb">hash</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">.</span><span class="n">merge!</span> <span class="n">paginated_lookup</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'>  <span class="nb">hash</span><span class="o">[</span><span class="n">key</span><span class="o">]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="s2">&quot;index[10]&quot;</span>
+</span><span class='line'><span class="n">paginated_lookup_cache</span><span class="o">[</span><span class="mi">11</span><span class="o">]</span> <span class="o">=&gt;</span> <span class="s2">&quot;index[10].next&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>值得注意的一个坑是:当我们使用<code>fetch</code>去取hash值的时候 Hash#default_proc并没有被调用.WTF?如何设计的?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Add Swap on Ubuntu 14.04]]></title>
@@ -1078,13 +1193,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#x65;&#110;&#107;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x65;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#114;&#101;&#110;&#107;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x72;&#101;&#x6e;&#107;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#x65;&#110;&#x6b;&#97;&#105;&#x73;&#119;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#x73;&#x77;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#117;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#101;&#x6e;&#107;&#97;&#105;&#115;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#114;&#101;&#x6e;&#107;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#105;&#115;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#114;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#114;&#101;&#110;&#x6b;&#x61;&#105;&#x73;&#x77;&#112;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x65;&#110;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -1093,7 +1208,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#x72;&#x65;&#110;&#107;&#x61;&#105;&#x73;&#x77;&#x70;&#x75;&#64;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#112;&#117;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#101;&#110;&#107;&#97;&#105;&#115;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -1292,15 +1407,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 <p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
      #在config/initializers/devise.rb中修改如下
      config.scoped_views = true</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[2013个人想法]]></title>
-    <link href="http://ailenswpu.github.io/blog/2013/03/23/2013ge-ren-xiang-fa/"/>
-    <updated>2013-03-23T10:33:00+08:00</updated>
-    <id>http://ailenswpu.github.io/blog/2013/03/23/2013ge-ren-xiang-fa</id>
-    <content type="html"><![CDATA[<p>这几天也在根据中国的教育情况构思了一个产品，暂且取名&#8221;icancode&#8221;。具体内容会慢慢加上来，敬请期待&hellip;</p>
 ]]></content>
   </entry>
   
