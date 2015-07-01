@@ -4,7 +4,7 @@
   <title><![CDATA[coding on the way]]></title>
   <link href="http://ailenswpu.github.io/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-06-29T22:47:08+08:00</updated>
+  <updated>2015-07-01T22:17:21+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,131 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rack: First Principles]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/07/01/rack-first-principles/"/>
+    <updated>2015-07-01T21:38:42+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/07/01/rack-first-principles</id>
+    <content type="html"><![CDATA[<p>从事rails开发接近3年,&ldquo;rack middleware&#8221;是一个非常熟悉的名词,那么到底什么是rack？接下来这几篇文章将着重讨论一下,今天先讨论一下rack。</p>
+
+<h3>1.What is rack?</h3>
+
+<p>官方的解释为:</p>
+
+<p>  Rack provides a minimal, modular, and adaptable interface for developing web applications in Ruby. By wrapping HTTP requests and responses in the simplest way possible, it unifies and distills the API for web servers, web frameworks, and software in between (the so-called middleware) into a single method call.</p>
+
+<p>简单地说就是rack封装了http的reques和response。通过rack app能够非常简单地使用封装过后的request和response。然后通过给server提供api,frameworks,middleware和一个call方法就能够运行一个web程序。</p>
+
+<h3>2.A single method call?</h3>
+
+<p>一个rack app就是一个能够响应call方法的object,call方法包含一个env的参数,这个方法返回一个数组包含三个值:status、header、body。
+由于rack提供api给server，因此call方法的参数env就是server环境，比如一些key-value的环境变量，可以参考<a href="http://www.rubydoc.info/github/rack/rack/master/file/SPEC#The_Environment">这里</a>。<br/>
+至于为什么返回三个参数，HTTP请求通常需要的response需要三个参数：</p>
+
+<ul>
+<li>status: http状态码.参考<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">这里</a></li>
+<li>headers: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers">HTTP Headers</a></li>
+<li>body: http response正文，通常是json或者html页面</li>
+</ul>
+
+
+<h3>3. First rack application</h3>
+
+<p>我们来开发一个最简化的rack app</p>
+
+<p>安装rack</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着创建文件，写入</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># rack_app.rb</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rack&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">rack_app</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;application/json&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;{&#39;response&#39;:&#39;OK&#39;}&quot;</span><span class="o">]]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Rack</span><span class="o">::</span><span class="no">Handler</span><span class="o">::</span><span class="no">WEBrick</span><span class="o">.</span><span class="n">run</span> <span class="n">rack_app</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ruby</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">rb</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到控制台输出为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">➜</span>  <span class="no">Desktop</span>  <span class="n">ruby</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="no">WEBrick</span> <span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">1</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="n">ruby</span> <span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span> <span class="p">(</span><span class="mi">2014</span><span class="o">-</span><span class="mo">05</span><span class="o">-</span><span class="mi">08</span><span class="p">)</span> <span class="o">[</span><span class="n">x86_64</span><span class="o">-</span><span class="n">darwin13</span><span class="o">.</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="no">WEBrick</span><span class="o">::</span><span class="no">HTTPServer</span><span class="c1">#start: pid=4275 port=8080</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过<code>Rack::Handler::WEBrick.run rack_app</code>这句代码调用了rack内置的WEBrick服务器，通过浏览器访问:
+<a href="http://locahost:8080">http://locahost:8080</a>就可以访问。</p>
+
+<p>另外一种方式通过<code>rackup</code>命令同样可以启动这个服务。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># rack_app.ru</span>
+</span><span class='line'><span class="n">app</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;application/json&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;{&#39;response&#39;:&#39;OK&#39;}&quot;</span><span class="o">]]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">run</span> <span class="n">app</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>要注意使用rackup必须使用以.ru为后缀的文件，通过调用run方法告诉rackup调用call方法,run方法传一个参数如上面的app。
+然后运行:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">rackup</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">ru</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">可以看到</span>
+</span><span class='line'><span class="no">Puma</span> <span class="mi">2</span><span class="o">.</span><span class="mi">11</span><span class="o">.</span><span class="mi">1</span> <span class="n">starting</span><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Min</span> <span class="ss">threads</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max</span> <span class="ss">threads</span><span class="p">:</span> <span class="mi">16</span>
+</span><span class='line'><span class="o">*</span> <span class="ss">Environment</span><span class="p">:</span> <span class="n">development</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Listening</span> <span class="n">on</span> <span class="ss">tcp</span><span class="p">:</span><span class="sr">//</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">9292</span>
+</span><span class='line'><span class="err">由于我本地安装的是</span><span class="n">puma</span><span class="err">服务器，覆盖了内置的</span><span class="no">WEBrick</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4.总结</h3>
+
+<p>rack在整个ruby体系中web应用中占据着不可替代的作用，很多框架都是基于rack开发的，因此了解rack的原理非常重要。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hash and Default_proc]]></title>
@@ -1193,13 +1318,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#114;&#101;&#110;&#107;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x72;&#101;&#x6e;&#107;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#115;&#119;&#112;&#117;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#x73;&#x77;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#117;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x72;&#101;&#x6e;&#107;&#x61;&#x69;&#x73;&#x77;&#x70;&#117;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#105;&#115;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#114;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x65;&#110;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#101;&#110;&#x6b;&#x61;&#105;&#115;&#119;&#x70;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -1208,7 +1333,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#101;&#110;&#107;&#97;&#105;&#115;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#114;&#101;&#110;&#x6b;&#x61;&#105;&#115;&#119;&#112;&#x75;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#x65;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -1376,37 +1501,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
     <updated>2013-03-25T20:04:00+08:00</updated>
     <id>http://ailenswpu.github.io/blog/2013/03/25/rubyzhong-guan-yu-shi-jian-ge-shi-de-han-shu</id>
     <content type="html"><![CDATA[<p>rails中关于时间操作的方法<a href="http://apidock.com/ruby/Time/strftime">strftime</a>详细指导.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails_admin跟devise的配合使用]]></title>
-    <link href="http://ailenswpu.github.io/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/"/>
-    <updated>2013-03-24T21:43:00+08:00</updated>
-    <id>http://ailenswpu.github.io/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong</id>
-    <content type="html"><![CDATA[<p>最近在做项目的使用经过同学的推荐使用了<a href="https://github.com/sferik/rails_admin">rails_admin</a>里面自带了<a href="https://github.com/plataformatec/devise">devise</a>，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结，具体阐述一下rails_admin的使用方法:
-1. 首先根据<a href="https://github.com/sferik/rails_admin#installation">Installation</a>安装基本的配置环境,包括devise。
-2. 接着需要对config/initializers/rails_admin.rb进行配置:
-    RailsAdmin may need a way to know who the current user is]
-    config.current_user_method { current_admin } # auto-generated
-这一段代码主要是对于当前需要验证的用户的识别，可以是current_MODELNAME,很多系统的管理员是单独的model例如admin，那么就改成current_admin。
-     Include specific models (exclude the others):
-     config.included_models = [model1,model2,model3,&hellip;.]
-这个主要是对于需要后台进行管理的model的配置，如果配置了一个model以后，会有相应model的CRUD，同时会有导出等功能.
-3. 最后说一下个人使用rails_admin的常用一些配置跟DSL具体参见<a href="https://github.com/sferik/rails_admin/wiki">wiki</a>
-首先就是对于model中的例如性别、xx类型，在数据库中都是存储的int类型，但是在页面中需要用一个清晰明了的汉字来表示，那么怎么做呢，rails_admin提供了一种单独的DSL(<a href="https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL">DSL两种配置方法</a>):
-当model中有一个xx(如:ad_type)属性在页面中需要使用select来进行转换，参见<a href="https://github.com/sferik/rails_admin/wiki/Enumeration">Enumeration</a>,定义一个方法如下:
-    def ad_type_enum
-    {首页广告: 1, 弹出层广告: 2 , 关于我们: 3 ,关于背景: 4}
-    end
-那么在视图中就会把hash自动转换成select，这样很好的解决了用户界面跟数据之间数据类型的问题。
-其次对于更详细的用法需要参考上面的wiki的链接。</p>
-
-<h3>补充说明</h3>
-
-<p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
-     #在config/initializers/devise.rb中修改如下
-     config.scoped_views = true</p>
 ]]></content>
   </entry>
   

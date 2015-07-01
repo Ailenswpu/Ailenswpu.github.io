@@ -9,8 +9,7 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="这几天也在根据中国的教育情况构思了一个产品，暂且取名"icancode"。具体内容会慢慢加上来，敬请期待&hellip;
-">
+  <meta name="description" content="最近在做项目的使用经过同学的推荐使用了rails_admin里面自带了devise，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/">Rails_admin跟devise的配合使用</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-24T21:43:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:43 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近在做项目的使用经过同学的推荐使用了<a href="https://github.com/sferik/rails_admin">rails_admin</a>里面自带了<a href="https://github.com/plataformatec/devise">devise</a>，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结，具体阐述一下rails_admin的使用方法:
+1. 首先根据<a href="https://github.com/sferik/rails_admin#installation">Installation</a>安装基本的配置环境,包括devise。
+2. 接着需要对config/initializers/rails_admin.rb进行配置:
+    RailsAdmin may need a way to know who the current user is]
+    config.current_user_method { current_admin } # auto-generated
+这一段代码主要是对于当前需要验证的用户的识别，可以是current_MODELNAME,很多系统的管理员是单独的model例如admin，那么就改成current_admin。
+     Include specific models (exclude the others):
+     config.included_models = [model1,model2,model3,&hellip;.]
+这个主要是对于需要后台进行管理的model的配置，如果配置了一个model以后，会有相应model的CRUD，同时会有导出等功能.
+3. 最后说一下个人使用rails_admin的常用一些配置跟DSL具体参见<a href="https://github.com/sferik/rails_admin/wiki">wiki</a>
+首先就是对于model中的例如性别、xx类型，在数据库中都是存储的int类型，但是在页面中需要用一个清晰明了的汉字来表示，那么怎么做呢，rails_admin提供了一种单独的DSL(<a href="https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL">DSL两种配置方法</a>):
+当model中有一个xx(如:ad_type)属性在页面中需要使用select来进行转换，参见<a href="https://github.com/sferik/rails_admin/wiki/Enumeration">Enumeration</a>,定义一个方法如下:
+    def ad_type_enum
+    {首页广告: 1, 弹出层广告: 2 , 关于我们: 3 ,关于背景: 4}
+    end
+那么在视图中就会把hash自动转换成select，这样很好的解决了用户界面跟数据之间数据类型的问题。
+其次对于更详细的用法需要参考上面的wiki的链接。</p>
+
+<h3>补充说明</h3>
+
+<p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
+     #在config/initializers/devise.rb中修改如下
+     config.scoped_views = true</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -473,39 +523,9 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/28/octopressde-an-zhuang-he-pei-zhi/">Octopress的安装和配置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-10-28T20:36:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>8:36 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>   最近一时脑子发热想起了写博客，确实如此，很多时候发觉自己需要记录一些东西。因此按照rubychina上面一位高手的文章终于搭建成功了，并且成功用Github Pages部署到github上面去，博客地址为：<a href="http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82">http://ailenswpu.github.com.%E4%B8%8B%E9%9D%A2%E5%B0%B1%E5%85%B7%E4%BD%93%E8%AF%B4%E8%AF%B4%E6%88%91%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E7%9A%84%E6%AD%A5%E9%AA%A4%EF%BC%8C%E5%9B%A0%E4%B8%BA%E6%98%AF%E7%AC%AC%E4%B8%80%E6%AC%A1%E6%90%AD%E5%BB%BA%EF%BC%8C%E6%89%80%E4%BB%A5%E9%81%87%E5%88%B0%E4%BA%86%E4%B8%8D%E5%B0%91%E5%BC%AF%E8%B7%AF%E3%80%82</a>  首先Octopress源代码是根据Jekyll，采用rails来编写，最新的需要的配置环境如下：ruby1.9.3，rails3.X，git，ssh等。很多linux已经安装好了。<br/>
-  具体安装rails的过程请看：<a href="http://blog.csdn.net/renkai611919/article/details/7792252">http://blog.csdn.net/renkai611919/article/details/7792252</a><br/>
-   具体的安装过程看：<a href="http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82">http://happycasts.net/episodes/36%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%E9%87%8C%E9%9D%A2%E7%9A%84%E8%A7%86%E9%A2%91%E3%80%82</a><br/>
-   需要加以说明的是如果你的github的用户名中有大小写字母的时候一定要严格按照大小写，否则在rake deploy的时候不能push上去（这个问题当时纠结了我好久）。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/4">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -518,6 +538,10 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
@@ -533,10 +557,6 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     
       <li class="post">
         <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
       </li>
     
   </ul>

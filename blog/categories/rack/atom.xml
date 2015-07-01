@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rack | coding on the way]]></title>
+  <link href="http://ailenswpu.github.io/blog/categories/rack/atom.xml" rel="self"/>
+  <link href="http://ailenswpu.github.io/"/>
+  <updated>2015-07-01T22:17:21+08:00</updated>
+  <id>http://ailenswpu.github.io/</id>
+  <author>
+    <name><![CDATA[ailen]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rack: First Principles]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/07/01/rack-first-principles/"/>
+    <updated>2015-07-01T21:38:42+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/07/01/rack-first-principles</id>
+    <content type="html"><![CDATA[<p>从事rails开发接近3年,&ldquo;rack middleware&#8221;是一个非常熟悉的名词,那么到底什么是rack？接下来这几篇文章将着重讨论一下,今天先讨论一下rack。</p>
+
+<h3>1.What is rack?</h3>
+
+<p>官方的解释为:</p>
+
+<p>  Rack provides a minimal, modular, and adaptable interface for developing web applications in Ruby. By wrapping HTTP requests and responses in the simplest way possible, it unifies and distills the API for web servers, web frameworks, and software in between (the so-called middleware) into a single method call.</p>
+
+<p>简单地说就是rack封装了http的reques和response。通过rack app能够非常简单地使用封装过后的request和response。然后通过给server提供api,frameworks,middleware和一个call方法就能够运行一个web程序。</p>
+
+<h3>2.A single method call?</h3>
+
+<p>一个rack app就是一个能够响应call方法的object,call方法包含一个env的参数,这个方法返回一个数组包含三个值:status、header、body。
+由于rack提供api给server，因此call方法的参数env就是server环境，比如一些key-value的环境变量，可以参考<a href="http://www.rubydoc.info/github/rack/rack/master/file/SPEC#The_Environment">这里</a>。<br/>
+至于为什么返回三个参数，HTTP请求通常需要的response需要三个参数：</p>
+
+<ul>
+<li>status: http状态码.参考<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">这里</a></li>
+<li>headers: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers">HTTP Headers</a></li>
+<li>body: http response正文，通常是json或者html页面</li>
+</ul>
+
+
+<h3>3. First rack application</h3>
+
+<p>我们来开发一个最简化的rack app</p>
+
+<p>安装rack <br/>
+<code>ruby
+gem install rack
+</code></p>
+
+<p>接着创建文件，写入</p>
+
+<pre><code class="ruby"># rack_app.rb
+require 'rack'
+
+rack_app = Proc.new do |env|
+  [200, {'Content-Type' =&gt; 'application/json'}, ["{'response':'OK'}"]]
+end
+
+Rack::Handler::WEBrick.run rack_app
+
+ruby rack_app.rb
+</code></pre>
+
+<p>可以看到控制台输出为：<br/>
+<code>ruby
+➜  Desktop  ruby rack_app.rb
+[2015-07-01 22:00:47] INFO  WEBrick 1.3.1
+[2015-07-01 22:00:47] INFO  ruby 2.1.2 (2014-05-08) [x86_64-darwin13.0]
+[2015-07-01 22:00:47] INFO  WEBrick::HTTPServer#start: pid=4275 port=8080
+</code>
+通过<code>Rack::Handler::WEBrick.run rack_app</code>这句代码调用了rack内置的WEBrick服务器，通过浏览器访问:
+<a href="http://locahost:8080">http://locahost:8080</a>就可以访问。</p>
+
+<p>另外一种方式通过<code>rackup</code>命令同样可以启动这个服务。</p>
+
+<pre><code class="ruby"># rack_app.ru
+app = Proc.new do |env|
+  [200, {'Content-Type' =&gt; 'application/json'}, ["{'response':'OK'}"]]
+end
+
+run app
+</code></pre>
+
+<p>要注意使用rackup必须使用以.ru为后缀的文件，通过调用run方法告诉rackup调用call方法,run方法传一个参数如上面的app。
+然后运行:<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">rackup</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">ru</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;可以看到</span>
+</span><span class='line'><span class="sr">Puma 2.11.1 starting&amp;hellip;</span>
+</span><span class='line'><span class="sr">* Min threads: 0, max threads: 16</span>
+</span><span class='line'><span class="sr">* Environment: development</span>
+</span><span class='line'><span class="sr">* Listening on tcp:/</span><span class="o">/</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">9292</span>
+</span><span class='line'><span class="err">由于我本地安装的是</span><span class="n">puma</span><span class="err">服务器，覆盖了内置的</span><span class="no">WEBrick</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>4.总结</h3>
+
+<p>rack在整个ruby体系中web应用中占据着不可替代的作用，很多框架都是基于rack开发的，因此了解rack的原理非常重要。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,13 +9,7 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="Hash是ruby最常用的数据结构，Hash本身具有很多特性，今天讨论一下Hash#default_proc。 看过这样的代码? 1
-2
-3
-4
-5
-result = {}
-some_collection.map do |some_entry| result[some_entry] = &hellip;">
+  <meta name="description" content="从事rails开发接近3年,&ldquo;rack middleware"是一个非常熟悉的名词,那么到底什么是rack？接下来这几篇文章将着重讨论一下,今天先讨论一下rack。 1.What is rack? 官方的解释为: Rack provides a minimal, modular, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -71,6 +65,151 @@ some_collection.map do |some_entry| result[some_entry] = &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-01T21:38:42+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2015</span></span> <span class='time'>9:38 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从事rails开发接近3年,&ldquo;rack middleware&#8221;是一个非常熟悉的名词,那么到底什么是rack？接下来这几篇文章将着重讨论一下,今天先讨论一下rack。</p>
+
+<h3>1.What is rack?</h3>
+
+<p>官方的解释为:</p>
+
+<p>  Rack provides a minimal, modular, and adaptable interface for developing web applications in Ruby. By wrapping HTTP requests and responses in the simplest way possible, it unifies and distills the API for web servers, web frameworks, and software in between (the so-called middleware) into a single method call.</p>
+
+<p>简单地说就是rack封装了http的reques和response。通过rack app能够非常简单地使用封装过后的request和response。然后通过给server提供api,frameworks,middleware和一个call方法就能够运行一个web程序。</p>
+
+<h3>2.A single method call?</h3>
+
+<p>一个rack app就是一个能够响应call方法的object,call方法包含一个env的参数,这个方法返回一个数组包含三个值:status、header、body。
+由于rack提供api给server，因此call方法的参数env就是server环境，比如一些key-value的环境变量，可以参考<a href="http://www.rubydoc.info/github/rack/rack/master/file/SPEC#The_Environment">这里</a>。<br/>
+至于为什么返回三个参数，HTTP请求通常需要的response需要三个参数：</p>
+
+<ul>
+<li>status: http状态码.参考<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">这里</a></li>
+<li>headers: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers">HTTP Headers</a></li>
+<li>body: http response正文，通常是json或者html页面</li>
+</ul>
+
+
+<h3>3. First rack application</h3>
+
+<p>我们来开发一个最简化的rack app</p>
+
+<p>安装rack</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="n">install</span> <span class="n">rack</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接着创建文件，写入</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># rack_app.rb</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;rack&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">rack_app</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;application/json&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;{&#39;response&#39;:&#39;OK&#39;}&quot;</span><span class="o">]]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Rack</span><span class="o">::</span><span class="no">Handler</span><span class="o">::</span><span class="no">WEBrick</span><span class="o">.</span><span class="n">run</span> <span class="n">rack_app</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">ruby</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">rb</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以看到控制台输出为：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">➜</span>  <span class="no">Desktop</span>  <span class="n">ruby</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="no">WEBrick</span> <span class="mi">1</span><span class="o">.</span><span class="mi">3</span><span class="o">.</span><span class="mi">1</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="n">ruby</span> <span class="mi">2</span><span class="o">.</span><span class="mi">1</span><span class="o">.</span><span class="mi">2</span> <span class="p">(</span><span class="mi">2014</span><span class="o">-</span><span class="mo">05</span><span class="o">-</span><span class="mi">08</span><span class="p">)</span> <span class="o">[</span><span class="n">x86_64</span><span class="o">-</span><span class="n">darwin13</span><span class="o">.</span><span class="mi">0</span><span class="o">]</span>
+</span><span class='line'><span class="o">[</span><span class="mi">2015</span><span class="o">-</span><span class="mo">07</span><span class="o">-</span><span class="mo">01</span> <span class="mi">22</span><span class="p">:</span><span class="mo">00</span><span class="p">:</span><span class="mi">47</span><span class="o">]</span> <span class="no">INFO</span>  <span class="no">WEBrick</span><span class="o">::</span><span class="no">HTTPServer</span><span class="c1">#start: pid=4275 port=8080</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过<code>Rack::Handler::WEBrick.run rack_app</code>这句代码调用了rack内置的WEBrick服务器，通过浏览器访问:
+<a href="http://locahost:8080">http://locahost:8080</a>就可以访问。</p>
+
+<p>另外一种方式通过<code>rackup</code>命令同样可以启动这个服务。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># rack_app.ru</span>
+</span><span class='line'><span class="n">app</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">env</span><span class="o">|</span>
+</span><span class='line'>  <span class="o">[</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;application/json&#39;</span><span class="p">},</span> <span class="o">[</span><span class="s2">&quot;{&#39;response&#39;:&#39;OK&#39;}&quot;</span><span class="o">]]</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">run</span> <span class="n">app</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>要注意使用rackup必须使用以.ru为后缀的文件，通过调用run方法告诉rackup调用call方法,run方法传一个参数如上面的app。
+然后运行:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">rackup</span> <span class="n">rack_app</span><span class="o">.</span><span class="n">ru</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">可以看到</span>
+</span><span class='line'><span class="no">Puma</span> <span class="mi">2</span><span class="o">.</span><span class="mi">11</span><span class="o">.</span><span class="mi">1</span> <span class="n">starting</span><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Min</span> <span class="ss">threads</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">max</span> <span class="ss">threads</span><span class="p">:</span> <span class="mi">16</span>
+</span><span class='line'><span class="o">*</span> <span class="ss">Environment</span><span class="p">:</span> <span class="n">development</span>
+</span><span class='line'><span class="o">*</span> <span class="no">Listening</span> <span class="n">on</span> <span class="ss">tcp</span><span class="p">:</span><span class="sr">//</span><span class="ss">localhost</span><span class="p">:</span><span class="mi">9292</span>
+</span><span class='line'><span class="err">由于我本地安装的是</span><span class="n">puma</span><span class="err">服务器，覆盖了内置的</span><span class="no">WEBrick</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4.总结</h3>
+
+<p>rack在整个ruby体系中web应用中占据着不可替代的作用，很多框架都是基于rack开发的，因此了解rack的原理非常重要。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1374,39 +1513,6 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/14/git-fetch-new-branch-from-remote/">Git Fetch New Branch From Remote</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-11-14T21:17:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:17 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>在很多情况下，使用git开发需要创建过个分支，当别人创建新的分支你怎么样才能pull下来，并且正常开发呢？下面几个步奏:  <br/>
-    git fetch origin
-    git checkout &ndash;track origin/<remote_branch_name>
-这样轻松解决问题。一个不错的参考网站:  <br/>
-<a href="http://rogerdudler.github.io/git-guide/index.zh.html">git参考手册</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1422,6 +1528,10 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
       </li>
     
@@ -1435,10 +1545,6 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
     
       <li class="post">
         <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
       </li>
     
   </ul>

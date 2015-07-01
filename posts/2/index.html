@@ -9,9 +9,8 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="很多天没有怎么接触代码了，确实有了与世隔绝的感觉，生活总是会眷顾我，让我有了一个懂事听话的老婆在我身边，
-生活中少呆在电脑面前，而更多的是做饭、洗衣服等.
-有时候总是会给自己说，
+  <meta name="description" content="在很多情况下，使用git开发需要创建过个分支，当别人创建新的分支你怎么样才能pull下来，并且正常开发呢？下面几个步奏: git fetch origin git checkout &ndash;track origin/
+这样轻松解决问题。一个不错的参考网站: git参考手册
 ">
   
 
@@ -68,6 +67,39 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/14/git-fetch-new-branch-from-remote/">Git Fetch New Branch From Remote</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-11-14T21:17:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:17 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在很多情况下，使用git开发需要创建过个分支，当别人创建新的分支你怎么样才能pull下来，并且正常开发呢？下面几个步奏:  <br/>
+    git fetch origin
+    git checkout &ndash;track origin/<remote_branch_name>
+这样轻松解决问题。一个不错的参考网站:  <br/>
+<a href="http://rogerdudler.github.io/git-guide/index.zh.html">git参考手册</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -170,13 +202,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#x3a;&#114;&#101;&#110;&#107;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x72;&#101;&#x6e;&#107;&#x61;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#115;&#119;&#112;&#117;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#114;&#x65;&#x6e;&#x6b;&#97;&#105;&#x73;&#x77;&#x70;&#117;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#117;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x72;&#101;&#x6e;&#107;&#x61;&#x69;&#x73;&#x77;&#x70;&#117;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#105;&#115;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#114;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#112;&#117;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#109;&#x61;&#105;&#108;&#x74;&#111;&#58;&#114;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x65;&#110;&#x6b;&#97;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x72;&#101;&#110;&#x6b;&#x61;&#105;&#115;&#119;&#x70;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#97;&#x69;&#115;&#x77;&#112;&#x75;&#x40;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -185,7 +217,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#101;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;">&#114;&#101;&#110;&#107;&#97;&#105;&#115;&#x77;&#112;&#x75;&#64;&#103;&#x6d;&#97;&#105;&#108;&#46;&#99;&#x6f;&#109;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#58;&#114;&#101;&#110;&#x6b;&#x61;&#105;&#115;&#119;&#112;&#x75;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#x65;&#110;&#107;&#97;&#105;&#x73;&#x77;&#112;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -480,57 +512,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/24/rails-admingen-devisede-pei-he-shi-yong/">Rails_admin跟devise的配合使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-03-24T21:43:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:43 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近在做项目的使用经过同学的推荐使用了<a href="https://github.com/sferik/rails_admin">rails_admin</a>里面自带了<a href="https://github.com/plataformatec/devise">devise</a>，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结，具体阐述一下rails_admin的使用方法:
-1. 首先根据<a href="https://github.com/sferik/rails_admin#installation">Installation</a>安装基本的配置环境,包括devise。
-2. 接着需要对config/initializers/rails_admin.rb进行配置:
-    RailsAdmin may need a way to know who the current user is]
-    config.current_user_method { current_admin } # auto-generated
-这一段代码主要是对于当前需要验证的用户的识别，可以是current_MODELNAME,很多系统的管理员是单独的model例如admin，那么就改成current_admin。
-     Include specific models (exclude the others):
-     config.included_models = [model1,model2,model3,&hellip;.]
-这个主要是对于需要后台进行管理的model的配置，如果配置了一个model以后，会有相应model的CRUD，同时会有导出等功能.
-3. 最后说一下个人使用rails_admin的常用一些配置跟DSL具体参见<a href="https://github.com/sferik/rails_admin/wiki">wiki</a>
-首先就是对于model中的例如性别、xx类型，在数据库中都是存储的int类型，但是在页面中需要用一个清晰明了的汉字来表示，那么怎么做呢，rails_admin提供了一种单独的DSL(<a href="https://github.com/sferik/rails_admin/wiki/Railsadmin-DSL">DSL两种配置方法</a>):
-当model中有一个xx(如:ad_type)属性在页面中需要使用select来进行转换，参见<a href="https://github.com/sferik/rails_admin/wiki/Enumeration">Enumeration</a>,定义一个方法如下:
-    def ad_type_enum
-    {首页广告: 1, 弹出层广告: 2 , 关于我们: 3 ,关于背景: 4}
-    end
-那么在视图中就会把hash自动转换成select，这样很好的解决了用户界面跟数据之间数据类型的问题。
-其次对于更详细的用法需要参考上面的wiki的链接。</p>
-
-<h3>补充说明</h3>
-
-<p>在使用devise和rails_admin的时候很多时候对于不同scope的devise的页面模板不一样，需要配置scope：
-     #在config/initializers/devise.rb中修改如下
-     config.scoped_views = true</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -548,6 +529,10 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
       </li>
     
@@ -561,10 +546,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
     
       <li class="post">
         <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a>
       </li>
     
   </ul>
