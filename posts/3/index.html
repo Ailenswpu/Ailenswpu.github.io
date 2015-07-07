@@ -9,7 +9,8 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="最近在做项目的使用经过同学的推荐使用了rails_admin里面自带了devise，rails_admin是推荐很多人推荐的后台管理，其好处就是简单配置，对于CRUD系统可能很简单，但是对于一些特殊需求的可能就难以满足要求了，不过为了满足大多数人的要求，加上自己的一个总结， &hellip;">
+  <meta name="description" content="rails中关于时间操作的方法strftime详细指导.
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,35 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/25/rubyzhong-guan-yu-shi-jian-ge-shi-de-han-shu/">Ruby中关于时间格式的函数</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-25T20:04:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:04 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>rails中关于时间操作的方法<a href="http://apidock.com/ruby/Time/strftime">strftime</a>详细指导.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -464,65 +494,6 @@ bundle exec rake db:migrate</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/10/29/ubuntu12-dot-04pei-zhi-jdk/">Ubuntu12.04配置jdk</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-10-29T11:10:00+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>11:10 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>因为最近可能需要使用android开发，所以还是把jdk的环境配置起来，下面就介绍一下我在ubuntu12.04中配置jdk的具体步骤：<br/>
-先去oralce的官网下载Linux下面的JDK的压缩包，我下载的是jdk-7u9-linux-i586.tar.gz，下载后直接解压。<br/>
-Step1:<br/>
-首先将你下载好解压好文件jdk1.7.0_09使用root权限复制到/usr/lib/jvm目录里面,运行如下命令：<br/>
-    sudo cp -r ~/jdk1.7.0_09/ usr/lib/jvm<br/>
-Step2:<br/>
-接着配置环境变量<br/>
-    sudo emacs ~./bashrc<br/>
-然后保存关闭，使用source更新下<br/>
-    source ~/.bashrc<br/>
-接着使用env查看JAVA_HOME的值<br/>
-如果JAVA_HOME=/usr/lib/jvm/jdk1.7.0_09，说明配置成功<br/>
-Step3：<br/>
-将系统默认的jdk改过来（ubuntu系统自带openjdk，所以需要修改）<br>
-改成当前系配置的jdk1.7<br/>
-    sudo update-alternatives &ndash;install /usr/bin/java java /usr/lib/jvm/jdk1.7.0_09/bin/java 300<br/>
-    sudo update-alternatives &ndash;install /usr/bin/javac javac /usr/lib/jvm/jdk1.7.0_04/bin/javac 300 <br/>
-再运行:<br/>
-    sudo update-alternatives &ndash;config java <br>
-出现：<br/>
-  选择       路径                                         优先级  状态<br/>
-&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;<br/>
-* 0            /usr/lib/jvm/java-6-openjdk-i386/jre/bin/java   1061      自动模式<br/>
-  1            /usr/lib/jvm/java-6-openjdk-i386/jre/bin/java   1061      手动模式<br/>
-  2            /usr/lib/jvm/jdk1.7.0_09/bin/java               300       手动模式<br/>
-再输入2修改成自己的jdk路径<br/>
-Step4:<br/>
-然后输入java-version看到如下信息，说明jdk安装成功<br/>
-java version &ldquo;1.7.0_09&rdquo;<br/>
-Java&trade; SE Runtime Environment (build 1.7.0_09-b05)<br/>
-Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -540,6 +511,10 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
       </li>
     
@@ -553,10 +528,6 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     
       <li class="post">
         <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
       </li>
     
   </ul>

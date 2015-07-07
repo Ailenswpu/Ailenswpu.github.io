@@ -9,7 +9,10 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="从事rails开发接近3年,&ldquo;rack middleware"是一个非常熟悉的名词,那么到底什么是rack？接下来这几篇文章将着重讨论一下,今天先讨论一下rack。 1.What is rack? 官方的解释为: Rack provides a minimal, modular, &hellip;">
+  <meta name="description" content="讨论一下Ruby中用到的三个技巧: 1.Digg 遇到复杂的JSON结构的时候我们经常会通过fetch去获取值,这样做的好处是当某个值不存在的时候可以添加默认值,比如: 1
+2
+3
+complex_json = {key_1: {key_2: {key_3: &quot;somevalue& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +68,176 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-07T22:02:08+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:02 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>讨论一下Ruby中用到的三个技巧:</p>
+
+<h3>1.Digg</h3>
+
+<p>遇到复杂的JSON结构的时候我们经常会通过<code>fetch</code>去获取值,这样做的好处是当某个值不存在的时候可以添加默认值,比如:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">complex_json</span> <span class="o">=</span> <span class="p">{</span><span class="ss">key_1</span><span class="p">:</span> <span class="p">{</span><span class="ss">key_2</span><span class="p">:</span> <span class="p">{</span><span class="ss">key_3</span><span class="p">:</span> <span class="s2">&quot;somevalue&quot;</span><span class="p">}}}</span>
+</span><span class='line'><span class="c1">#为了获取key_3的值我们会写</span>
+</span><span class='line'><span class="n">complex_json</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_1</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_2</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_3</span><span class="p">,{})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>IT&rsquo;S BAD!!! <br/>
+看一下下面的代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Digg</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">digg</span><span class="p">(</span><span class="o">*</span><span class="n">path</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">path</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">memo</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>      <span class="p">(</span><span class="n">memo</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:[]</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">memo</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">||</span> <span class="p">{}))</span> <span class="o">||</span> <span class="k">break</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">send</span> <span class="ss">:include</span><span class="p">,</span> <span class="no">Digg</span>
+</span><span class='line'><span class="no">Hash</span><span class="o">.</span><span class="n">send</span> <span class="ss">:include</span><span class="p">,</span> <span class="no">Digg</span>
+</span><span class='line'><span class="n">complex_json</span><span class="o">.</span><span class="n">digg</span><span class="p">(</span><span class="ss">:key_1</span><span class="p">,</span> <span class="ss">:key_2</span><span class="p">,</span> <span class="ss">:key_3</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>IT&rsquo;S BETTER NOW!!</p>
+
+<h3>2.Symbol respond_to</h3>
+
+<p>很多时候我们会用到关于class的switch如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">case</span> <span class="n">a_thing</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">when</span> <span class="nb">Array</span><span class="p">,</span> <span class="no">Hash</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">when</span> <span class="nb">String</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看起来很ugly,如果我们用respond_to?来测试methods？可以这样写:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">case</span> <span class="n">a_thing</span>
+</span><span class='line'><span class="k">when</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span><span class="o">.</span><span class="n">respond_to?</span> <span class="ss">:fetch</span> <span class="p">}</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">when</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">x</span><span class="o">.</span><span class="n">respond_to?</span> <span class="ss">:split</span> <span class="p">}</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>看起来不错，但是可以更进一步：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">SymbolRespondTo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">~</span><span class="err">@</span>
+</span><span class='line'>    <span class="o">-&gt;</span> <span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="p">{</span> <span class="n">o</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Symbol</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="ss">:include</span><span class="p">,</span> <span class="no">SymbolRespondTo</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="n">a_thing</span>
+</span><span class='line'><span class="k">when</span> <span class="o">~</span><span class="ss">:fetch</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">when</span> <span class="o">~</span><span class="ss">:split</span>
+</span><span class='line'>  <span class="c1">#...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3.Better to_s</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">DefaultToS</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">to_s</span>
+</span><span class='line'>    <span class="k">case</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">when</span> <span class="o">~</span><span class="ss">:name</span> <span class="k">then</span> <span class="nb">name</span>
+</span><span class='line'>    <span class="k">when</span> <span class="o">~</span><span class="ss">:title</span> <span class="k">then</span> <span class="n">title</span>
+</span><span class='line'>    <span class="k">else</span> <span class="k">super</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span><span class="o">.</span><span class="n">prepend</span><span class="p">(</span><span class="ss">:to_s</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1459,60 +1632,6 @@ taks of my life, No exceptional circumstances , I must finish the task of list. 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/08/osx-an-zhuang-coffeescript/">Osx 安装coffeescript</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-12-08T17:33:00+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>5:33 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近学习<a href="http://coffeescript.org/">CoffeeScript</a>,因为电脑是OSX，在安装时候出现了一些问题，现将具体的安装步奏总结如下:</p>
-
-<h3>1.安装<a href="http://nodejs.org/">node.js</a></h3>
-
-<p>下载OSX的安装包<a href="http://nodejs.org/dist/v0.10.22/node-v0.10.22.pkg">node.js</a>,并安装。</p>
-
-<h3>2.  安装coffeescript</h3>
-
-<p>安装好了nodejs后利用node.js的<a href="https://npmjs.org/">nmp</a>的包管理工具安装coffeescrit,在console中输入:<br/>
-     npm install -g coffee-script
-console出现：</p>
-
-<pre><code>npm http GET https://registry.npmjs.org/coffee-script
-npm http 304 https://registry.npmjs.org/coffee-script
-/Users/mac/.npm-packages/bin/coffee -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/coffee
-/Users/mac/.npm-packages/bin/cake -&gt; /Users/mac/.npm-packages/lib/node_modules/coffee-script/bin/cake
-coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
-</code></pre>
-
-<p>安装成功。</p>
-
-<h3>3.解决command not found问题:</h3>
-
-<p>因为npm没有把coffee加入到PATH中需要手动加入如下命令: <br/>
-    export PATH=/usr/local/share/npm/lib/node_modules/coffee-script/bin/:$PATH
-这样就安装成功。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1528,6 +1647,10 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
       </li>
     
@@ -1541,10 +1664,6 @@ coffee-script@1.6.3 /Users/mac/.npm-packages/lib/node_modules/coffee-script
     
       <li class="post">
         <a href="/blog/2015/01/29/five-ruby-methods-you-should-be-using/">Five Ruby Methods You Should Be Using</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a>
       </li>
     
   </ul>

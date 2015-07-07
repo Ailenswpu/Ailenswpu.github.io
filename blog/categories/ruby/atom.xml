@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | coding on the way]]></title>
   <link href="http://ailenswpu.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-07-01T22:17:21+08:00</updated>
+  <updated>2015-07-07T22:26:06+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,129 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Three Little Hacks]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/07/07/three-little-hacks/"/>
+    <updated>2015-07-07T22:02:08+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/07/07/three-little-hacks</id>
+    <content type="html"><![CDATA[<p>讨论一下Ruby中用到的三个技巧:</p>
+
+<h3>1.Digg</h3>
+
+<p>遇到复杂的JSON结构的时候我们经常会通过<code>fetch</code>去获取值,这样做的好处是当某个值不存在的时候可以添加默认值,比如:<br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">complex_json</span> <span class="o">=</span> <span class="p">{</span><span class="ss">key_1</span><span class="p">:</span> <span class="p">{</span><span class="ss">key_2</span><span class="p">:</span> <span class="p">{</span><span class="ss">key_3</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">somevalue</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}}}</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;为了获取key_3的值我们会写&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">complex_json</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_1</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_2</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:key_3</span><span class="p">,{})</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="no">IT</span><span class="err">&#39;</span><span class="n">S</span> <span class="no">BAD</span><span class="o">!!!</span>
+</span><span class='line'><span class="err">看一下下面的代码</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;ruby</span>
+</span><span class='line'><span class="sr">module Digg</span>
+</span><span class='line'><span class="sr">  def digg(*path)</span>
+</span><span class='line'><span class="sr">    path.inject(self) do |memo, key|</span>
+</span><span class='line'><span class="sr">      (memo.respond_to?(:[]) &amp;amp;&amp;amp; (memo[key] || {})) || break</span>
+</span><span class='line'><span class="sr">    end</span>
+</span><span class='line'><span class="sr">  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="nb">Array</span><span class="o">.</span><span class="n">send</span> <span class="ss">:include</span><span class="p">,</span> <span class="no">Digg</span>
+</span><span class='line'><span class="no">Hash</span><span class="o">.</span><span class="n">send</span> <span class="ss">:include</span><span class="p">,</span> <span class="no">Digg</span>
+</span><span class='line'><span class="n">complex_json</span><span class="o">.</span><span class="n">digg</span><span class="p">(</span><span class="ss">:key_1</span><span class="p">,</span> <span class="ss">:key_2</span><span class="p">,</span> <span class="ss">:key_3</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>IT&rsquo;S BETTER NOW!!</p>
+
+<h3>2.Symbol respond_to</h3>
+
+<p>很多时候我们会用到关于class的switch如下:
+<code>ruby
+case a_thing
+  #...
+when Array, Hash
+  #...
+when String
+  #...
+end
+</code>
+看起来很ugly,如果我们用respond_to?来测试methods？可以这样写:<br/>
+<code>ruby
+case a_thing
+when -&gt;(x) { x.respond_to? :fetch }
+  #...
+when -&gt;(x) { x.respond_to? :split }
+  #...
+end
+</code>
+看起来不错，但是可以更进一步： <br/>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">SymbolRespondTo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">~</span><span class="err">@</span>
+</span><span class='line'>    <span class="o">-&gt;</span> <span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="p">{</span> <span class="n">o</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;Symbol.send(:include, SymbolRespondTo)&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">case</span> <span class="n">a_thing</span>
+</span><span class='line'><span class="k">when</span> <span class="o">~</span><span class="ss">:fetch</span>
+</span><span class='line'>  <span class="c1">#&amp;hellip;</span>
+</span><span class='line'><span class="k">when</span> <span class="o">~</span><span class="ss">:split</span>
+</span><span class='line'>  <span class="c1">#&amp;hellip;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>3.Better to_s</h3>
+
+<pre><code class="ruby">module DefaultToS
+  def to_s
+    case self
+    when ~:name then name
+    when ~:title then title
+    else super
+    end
+  end
+end
+
+ActiveRecord::Base.prepend(:to_s)
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hash and Default_proc]]></title>
