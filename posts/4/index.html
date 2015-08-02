@@ -9,11 +9,9 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="小范围的选择一些有用技术，透彻的学习它们，拥抱它们。然后不断的扩展这个范围。
-理解各种数据结构的优点和缺点，包括它们在内存中和在硬盘上的各自表现。
-理解各种算法的优点和缺点。
-了解你的工作领域。关上电脑，去做你的用户们在做的事。
-有准备，有愿望，有能力在任何时候投入到多种技术层面中。 &hellip;">
+  <meta name="description" content="rails rake 版本问题 之前一直困扰我们的rake版本的问题，今天查找到了解决方法。 通常情况下，如果我们电脑上同时装了不同版本的rake时，运行rake命令时会出错，如： rake db:migrate
+rake aborted!
+You have already activated &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -69,6 +67,55 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/19/rails-rake-ban-ben-wen-ti/">Rails Rake 版本问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-11-19T15:49:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>3:49 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>rails rake 版本问题</h1>
+
+<p>之前一直困扰我们的rake版本的问题，今天查找到了解决方法。</p>
+
+<p>   通常情况下，如果我们电脑上同时装了不同版本的rake时，运行rake命令时会出错，如：</p>
+
+<pre><code>rake db:migrate
+rake aborted!
+You have already activated rake 0.9.2, but your Gemfile
+requires rake 0.9.0. Consider using bundle exec.
+
+(See full trace by running task with --trace)
+
+ 之前一直不理解它所说的“ Consider using bundle exec.” 究竟是什么意思，
+</code></pre>
+
+<p>今天看到一个示例，真是恍然大悟，具体使用方法是在运行的命令前添加
+ bundle exec，如上面的命令，我们写成：
+bundle exec rake db:migrate</p>
+
+<p>这样就OK了。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -227,6 +274,10 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/02/weekly-summary-2015-08-02/">Weekly Summary(2015-08-02)</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/07/26/weekly-summary-2015-07-26/">Weekly Summary(2015-07-26)</a>
       </li>
     
@@ -240,10 +291,6 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     
       <li class="post">
         <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/01/30/how-to-add-swap-on-ubuntu-14-dot-04/">How to Add Swap on Ubuntu 14.04</a>
       </li>
     
   </ul>

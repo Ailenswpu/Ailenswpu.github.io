@@ -4,7 +4,7 @@
   <title><![CDATA[coding on the way]]></title>
   <link href="http://ailenswpu.github.io/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-08-01T11:09:22+08:00</updated>
+  <updated>2015-08-02T20:48:14+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Weekly Summary(2015-08-02)]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/08/02/weekly-summary-2015-08-02/"/>
+    <updated>2015-08-02T19:42:20+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/08/02/weekly-summary-2015-08-02</id>
+    <content type="html"><![CDATA[<p>&ldquo;You nerver need to know that&rdquo;</p>
+
+<p>有时候很想写文章，有太多的话想说，但是当把手真正放在键盘上的时候却又很难敲出几个字，一直忙忙碌碌的生活难得去掉过头看看自己。生活中很多事情需要去做，但是又有很多理由没去做(人的惰性吧)。自己半工半读差不多一年半的时间(严格说是9工1读吧)，走了很多弯路，经历了很多事情，从刚到公司的十几号人到下个星期就剩下两个人，从一个唯我独尊的我到一个虚己以听的人，从一个不怎么看书到一个逐渐懂得看书的人，从一个台球菜鸟到一个台球还可以的人(自认为和以前相比)，从一个未婚到已婚的人(领证了，但是没办婚礼)等等，经历了太多了的变化，肚子里的墨水太少，很难找到合适的词去形容这个感受。但是最欣喜的是我看到了一个在逐渐变化的自己，在工作、家庭、人生观方面都有一定提高，这是我非常高兴的事情。发自内心感谢我的老婆还有我们公司的同事，让我在不断改变自己，提升自己，让我不断能够看清自己，让自己不断去弥补自己缺点，尽管生活上有一些吵吵闹闹，工作上有一些不如意的地方，但是人生苦短，还是积极努力改变自己，TO GET BETTER LIFE。</p>
+
+<p>前两个月养成了记账的习惯，然后惊奇地发现我的工资居然都不够我们一个月的开销(上个月开始公司所有人降薪，因为公司现在是困难时期)，当我老婆手机坏了，然后我却不敢大大方方地去买一个手机，家里有急事跟我借钱，我却拿不出多少钱，这其实让我挺震惊和愧疚的。跟朋友说起这个的事情有很多人说你可以换工作啊，也有开十几k的工资让我去他们公司的，最后我还是选择拒绝，理由有很多种，但是我还是坚持着相信自己，相信公司吧。FOLLOW MY HEART。上周在论坛上找了两个远程兼职，确实为了生活，一个是比较短期的临时的兼职，一个是远程的运维兼职，都是选择晚上为工作时间，尽管可能会累些吧，但是这确实能够让我更加踏实，增加了一点生活收入吧，也算是自己的价值的一个体现吧。</p>
+
+<p>接下来公司目前会剩下两个人，必须要全力以赴，踏踏实实去写代码，踏踏实实做产品。最近也在一直调整自己的状态和心态，慢慢适应接下来的最佳实践生活，提高自己的时间利用率，只要坚持下去，我觉得一定是一个突飞猛进的自己吧[非常期待]。</p>
+
+<p>今天又唠唠叨叨了这么多，其实我也不知道在写啥，但是还是写下来了。这么多年来觉得自己一直挺不会总结的，只有通过多看书来增加自己肚子里面的墨水了。</p>
+
+<p>下周的习惯坚持:<br/>
+1. 每日冥想<br/>
+2. 慢食<br/>
+3. 每晚远程工作</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Weekly Summary(2015-07-26)]]></title>
@@ -1506,13 +1528,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#x72;&#x65;&#x6e;&#107;&#x61;&#105;&#x73;&#119;&#x70;&#x75;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#114;&#101;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#x65;&#110;&#107;&#x61;&#105;&#x73;&#x77;&#112;&#x75;&#x40;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#114;&#101;&#x6e;&#107;&#x61;&#x69;&#x73;&#x77;&#112;&#x75;&#64;&#103;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#x6f;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#x73;&#119;&#112;&#117;&#64;&#103;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x72;&#101;&#110;&#107;&#97;&#105;&#115;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#114;&#101;&#110;&#107;&#x61;&#x69;&#x73;&#x77;&#x70;&#117;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#114;&#101;&#x6e;&#x6b;&#x61;&#x69;&#115;&#119;&#112;&#117;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#114;&#x65;&#110;&#x6b;&#97;&#105;&#115;&#119;&#112;&#117;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#114;&#x65;&#110;&#x6b;&#x61;&#105;&#x73;&#x77;&#x70;&#x75;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#x6d;">&#x72;&#101;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#x70;&#x75;&#x40;&#x67;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#114;&#101;&#x6e;&#107;&#97;&#105;&#115;&#x77;&#x70;&#x75;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#114;&#101;&#x6e;&#107;&#x61;&#105;&#115;&#119;&#x70;&#x75;&#x40;&#103;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#x3a;&#x72;&#x65;&#110;&#x6b;&#97;&#105;&#x73;&#119;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#x72;&#x65;&#110;&#x6b;&#x61;&#105;&#115;&#x77;&#112;&#117;&#64;&#103;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -1521,7 +1543,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#114;&#x65;&#x6e;&#107;&#97;&#x69;&#x73;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x72;&#101;&#x6e;&#x6b;&#97;&#105;&#x73;&#119;&#112;&#x75;&#64;&#103;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#x6f;&#109;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#114;&#101;&#x6e;&#107;&#x61;&#105;&#115;&#119;&#x70;&#117;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#114;&#101;&#x6e;&#107;&#97;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#109;&#x61;&#105;&#108;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -1626,46 +1648,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
      使用中发现很多https网站弹出证书警示，需要将local/ca.crt证书导入，下面简单介绍ubuntu下chrome证书的导入方法。
      安装libnss3-tools:sudo apt-get install libnss3-tools
      然后导入证书(这里假定证书ca.crt位于&#8221;/goagent/local/ca.crt&#8221;):certutil -d sql:$HOME/.pki/nssdb -A -t &ldquo;C,,&rdquo; -n GoAgent -i &lsquo;/goagent/local/ca.crt&rsquo;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git+github创建分支&提交并贡献代码（linux环境）]]></title>
-    <link href="http://ailenswpu.github.io/blog/2013/03/26/githubgong-xian-kai-yuan-dai-ma/"/>
-    <updated>2013-03-26T21:21:00+08:00</updated>
-    <id>http://ailenswpu.github.io/blog/2013/03/26/githubgong-xian-kai-yuan-dai-ma</id>
-    <content type="html"><![CDATA[<p>最近加了一个群，里面发起了一个git开源项目<a href="https://github.com/mistbow/cms_6bey">cms_6bey</a>,需求不明确，不过还是第一次像github贡献自己的代码。下面针对第一次使用github贡献代码的说一下具体的步骤：</p>
-
-<h4>1.在github创建指定项目分支</h4>
-
-<p>登录github，打开<a href="https://github.com/mistbow/cms_6bey">cms_6bey</a>项目地址，点击右上角的fork按钮，将项目fork到自己的github资源库中。地址为:<a href="https://github.com/YOUR_USERNAME/cms_6bey">https://github.com/YOUR_USERNAME/cms_6bey</a></p>
-
-<h4>2.克隆项目到本地</h4>
-
-<p>由于此时项目只是存在与远程GitHub，所以必须克隆到本地用于开发，
-执行如下命令
-    git clone <a href="https://github.com/YOUR_USERNAME/cms_6bey">https://github.com/YOUR_USERNAME/cms_6bey</a>
-这样即在本地创建了一个项目。</p>
-
-<h4>3.配置本地库与原始库的关联</h4>
-
-<p>由于克隆后的本地库的只有一个与自己的GitHub上的分支关联的名为origin的远程，所以要提交自己的更新到原始库，必须配置与原始库<a href="https://github.com/mistbow/cms_6bey%E7%9A%84%E5%85%B3%E8%81%94%EF%BC%8C%E5%90%8D%E4%B8%BAupstream">https://github.com/mistbow/cms_6bey%E7%9A%84%E5%85%B3%E8%81%94%EF%BC%8C%E5%90%8D%E4%B8%BAupstream</a>
-执行如下命令：
-    cd cms_6bey #进入项目目录
-    git remote add upstream <a href="https://github.com/mistbow/cms_6bey">https://github.com/mistbow/cms_6bey</a> #添加跟原始资源库关联，名为upstream
-    git fetch upstream #从原始库上获取最新更新</p>
-
-<h4>4.修改代码并提交和PUSH</h4>
-
-<p>修改项目中的代码，git add 你修改的文件
-    git commit  -m &lsquo;这里是备注&rsquo;
-    git push origin master  #这里是提交push到自己项目的分支库
-    git fetch upstream  #更新远程代码到本地
-    git merge upstream/master  #将自己的代码合并到自己的项目分支库</p>
-
-<h4>5.发送Pull Requests</h4>
-
-<p>进入自己的cms_6bey分支库，点击右上角的“Pull Request” 按钮，进入发送Pull Request界面。上方左边是原始库，右边为自己的分支库，在下方填写标题及评论。点击“Send pull request”按钮，则Pull Request 发送成功。然后就等原始库的维护人员审核，是否采用你的Pull Request，采用则你的代码更新会合并到原始库，完成代码贡献。</p>
 ]]></content>
   </entry>
   
