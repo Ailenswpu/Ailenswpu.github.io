@@ -9,7 +9,12 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="&ldquo;You nerver need to know that&rdquo; 有时候很想写文章，有太多的话想说，但是当把手真正放在键盘上的时候却又很难敲出几个字，一直忙忙碌碌的生活难得去掉过头看看自己。生活中很多事情需要去做，但是又有很多理由没去做(人的惰性吧)。 &hellip;">
+  <meta name="description" content="这篇博客总结一下ruby中hash在日常开发的7中常用场景。 1.Convert JSON to Hash 当我们程序中通过别的API获取到一段JSON String的时候 1
+2
+3
+4
+5
+data = &quot;{ &#39;name&#39;: &#39;Aaron Patterson &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +70,402 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/">7 Daily Use Cases of Ruby Hash</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-09T22:59:29+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:59 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这篇博客总结一下ruby中hash在日常开发的7中常用场景。</p>
+
+<h3>1.Convert JSON to Hash</h3>
+
+<p>当我们程序中通过别的API获取到一段JSON String的时候</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;{</span>
+</span><span class='line'><span class="s2">  &#39;name&#39;: &#39;Aaron Patterson&#39;,</span>
+</span><span class='line'><span class="s2">  &#39;screen_name&#39;: &#39;tenderlove&#39;,</span>
+</span><span class='line'><span class="s2">  &#39;location&#39;: &#39;Seattle, WA&#39;</span>
+</span><span class='line'><span class="s2">}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们应该将JSON String转换成ruby的Hash，这时候我们应该需要借助json这个库:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;json&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">profile</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>IRB输出为:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;name&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;Aaron Patterson&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;screen_name&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;tenderlove&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;location&#39;</span><span class="o">=&gt;</span><span class="s1">&#39;Seattle, WA&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考<a href="http://www.ruby-doc.org/stdlib-2.1.0/libdoc/json/rdoc/JSON.html#method-i-parse">JSON Parse</a></p>
+
+<h3>2.Convert Hash To JSON</h3>
+
+<p>跟上面互逆的过程，如何将ruby的hash转化为JSON，同样需要json这个库：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">signups_of_the_week</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">monday</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">tuesday</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">wednesday</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">thursday</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">friday</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">saturday</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">sunday</span><span class="p">:</span> <span class="mi">5</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>转为json的过程为</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;json&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">signups_of_the_week</span><span class="o">.</span><span class="n">to_json</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">输出为</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="s2">&quot;{&quot;</span><span class="n">monday</span><span class="s2">&quot;:2,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">tuesday</span><span class="s2">&quot;:3,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">wednesday</span><span class="s2">&quot;:4,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">thursday</span><span class="s2">&quot;:20,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">friday</span><span class="s2">&quot;:5,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">saturday</span><span class="s2">&quot;:2,</span>
+</span><span class='line'><span class="s2">    &quot;</span><span class="n">sunday</span><span class="s2">&quot;:5}&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考<a href="http://www.ruby-doc.org/stdlib-2.1.0/libdoc/json/rdoc/JSON.html#method-i-generate">JSON#generate</a></p>
+
+<h3>3.How To Set Default Value For Nested Hash</h3>
+
+<p>当我们有一个嵌套的Hash我们该如何给这个hash赋默认的值</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">contacts</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;John&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">name</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">email</span><span class="p">:</span> <span class="s2">&quot;john@doe.com&quot;</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="s2">&quot;Freddy&quot;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">name</span> <span class="s2">&quot;Freddy&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">email</span><span class="p">:</span> <span class="s2">&quot;freddy@mercury.com&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当我们需要取其中的一个元素的时候我们不希望每次都去检查key是否存在，在ruby的hash中像<code>h[:key1][:key2]</code>是错误的，那么我们该如何设置默认值呢？</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">contacts</span> <span class="o">=</span> <span class="no">Hash</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">hsh</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">hsh</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">name</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">email</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1">#或者</span>
+</span><span class='line'><span class="n">contacts</span><span class="o">.</span><span class="n">default_proc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">hsh</span><span class="p">,</span> <span class="n">key</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">hsh</span><span class="o">[</span><span class="n">key</span><span class="o">]</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">name</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">email</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>参考<a href="http://www.ruby-doc.org/core-2.1.0/Hash.html#method-c-new">Hash#new</a>, <a href="http://www.ruby-doc.org/core-2.1.0/Hash.html#method-i-default_proc-3D">Hash#default_proc=</a></p>
+
+<h3>4.Merge Two Nested Hash</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">wish_list</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="mi">8</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">title</span><span class="p">:</span> <span class="s1">&#39;The Color of Magic&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="mi">42</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">title</span><span class="p">:</span> <span class="s1">&#39;The Hitch-Hiker&quot;s Guide to the Galaxy&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">price</span><span class="p">:</span> <span class="mi">5</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">basket</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="mi">8</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">price</span><span class="p">:</span> <span class="mi">10</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="mi">1729</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>    <span class="ss">title</span><span class="p">:</span> <span class="s1">&#39;Ramanujan:  Twelve Lectures on Subjects Suggested by His Life and Work&#39;</span><span class="p">,</span>
+</span><span class='line'>    <span class="ss">price</span><span class="p">:</span> <span class="mi">28</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当我们有上面这个hash我们该如何merge这两个呢？如果我们是rails项目可以通过ActiveSupport来完成</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;active_support/core_ext/hash&quot;</span> <span class="c1"># not necessary if in Rails</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">basket</span><span class="o">.</span><span class="n">deep_merge</span><span class="p">(</span><span class="n">wish_list</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当然我们可以自己来实现一个递归的算法：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">deep_merge</span><span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">h2</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">h1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">h2</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">key</span><span class="p">,</span> <span class="n">h1_elem</span><span class="p">,</span> <span class="n">h2_elem</span><span class="o">|</span> <span class="n">deep_merge</span><span class="p">(</span><span class="n">h1_elem</span><span class="p">,</span> <span class="n">h2_elem</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">deep_merge</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">wish_list</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>5.Filter Out Some Keys Of a Hash?</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">histogram</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="ss">monday</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">tuesday</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">wednesday</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">thursday</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">friday</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">saturday</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">sunday</span><span class="p">:</span> <span class="mi">0</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当我们想删除hash中某一些key时候，如果有AcitveSupport可以:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;active_support/core_ext/hash&quot;</span> <span class="c1"># not necessary if Rails</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">histogram</span><span class="o">.</span><span class="n">except</span><span class="p">(</span><span class="ss">:saturday</span><span class="p">,</span> <span class="ss">:sunday</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当然自己实现可以为:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="n">hsh</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">hsh</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span> <span class="n">keys</span><span class="o">.</span><span class="n">include?</span> <span class="n">k</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>6.Sort Hash By Value</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">scores</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;The Lady&quot;</span> <span class="o">=&gt;</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;Fate&quot;</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;Death&quot;</span> <span class="o">=&gt;</span> <span class="mi">10</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">#可以通过</span>
+</span><span class='line'><span class="n">leaderboard</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span> <span class="o">|</span><span class="n">_</span><span class="p">,</span> <span class="n">score</span><span class="o">|</span> <span class="o">-</span><span class="n">score</span> <span class="p">}</span><span class="err">来排序</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>7.Find Differences Between Two Hashs</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">entries</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="mi">1372284000</span> <span class="o">=&gt;</span> <span class="s1">&#39;CVE-2013-4073&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="mi">1368482400</span> <span class="o">=&gt;</span> <span class="s1">&#39;CVE-2013-2065&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">updated_entries</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="mi">1385074800</span> <span class="o">=&gt;</span> <span class="s1">&#39;CVE-2013-4164&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="mi">1372284000</span> <span class="o">=&gt;</span> <span class="s1">&#39;CVE-2013-4073&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="mi">1368482400</span> <span class="o">=&gt;</span> <span class="s1">&#39;CVE-2013-2065&#39;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">#解决方案如下：</span>
+</span><span class='line'><span class="n">new_entries</span> <span class="o">=</span> <span class="n">updated_entries</span><span class="o">.</span><span class="n">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">_</span><span class="o">|</span> <span class="n">entries</span><span class="o">.</span><span class="n">include?</span> <span class="n">k</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这是Ruby中hash一些常用的方法，很多时候可以通过这些方法减少冗余代码。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/09/weekly-summary-2015-08-09/">Weekly Summary 2015-08-09</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-09T21:57:06+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:57 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>这是忙碌而又快乐的一周，忙碌是因为自己干了两份remote的兼职，每天下班后匆忙做完晚饭到晚上11:30pm大概3-4个小时去做remote的工作，忙碌的生活能让人更加踏实、快乐，更加让我看到了自己的价值，这是一件非常享受的事情。如果有机会会一直做下去，一方面为了钱[主要原因]，另一方面，通过remote[后面一定要读一下37signal的《remote》这本书]看到了一种极度自由的状态[想起汪峰的哥《像梦一样自由》]。这就是我现在觉得正确的选择吧[虽然很多人觉得不是最好的选择，工资低、没前途等等]，但是人生就像打台球[转折太大，最近一直痴迷台球]，带口球容易进，但是你要冒着随时白球会进带的危险，而且&#8221;一血反杀&#8221;这事情我是经常上演着，当然也会遇到黑球和白球一起进带的时候，大多数人你这是运气不好，其实还不就是球技差，实力没到位，你要是能够掌握好角度和球杆的力量的配合，上面那些都不是问题，所以归根结底还是一个硬实力的问题。</p>
+
+<p>这周又离职了两个同事，下周只剩下两个人，接下来将会以最新的作息时间安排和个人工作管理。IT公司其实并不是人越多越好，3-5个人干不好的事情哪怕30个人50个人也未必干得好，当然Microsoft之类的公司除外。这算是一个全新的开始吧，面临着很多挑战个人时间管理、番茄土豆、深入思考、写文章等等，这将对我个人的能力一个非常大的机遇和挑战。</p>
+
+<p>之前的习惯慢食基本上慢慢在养成，而冥想由于各种作息时间原因而没能坚持下来，接下来给自己做一个调整，冥想放到每天午休前几分钟，接下来的一周给自己的安排是：</p>
+
+<ul>
+<li>午休冥想</li>
+<li>远程工作</li>
+<li>深度思考和文章</li>
+<li>锻炼</li>
+<li>深度思考和番茄工作时间不看手机</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1535,128 +1936,6 @@ puts Gear.new(52, 11).ratio # -&gt; 4.72727272727273
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/17/notes-of-prataical-object-oriented-design-object-oriented-desgin/">Notes of Prataical Object Oriented Design &#8211;Object-Oriented Desgin</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-17T22:13:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>10:13 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>对于程序员来说，面向对象设计是一个非常熟悉的名词。从大一开始就接触所谓的面向对象，可是一直到今天，对于面向对象设计还是处于懵懵懂懂的状态。有幸现在公司的老大在
-面试的时候给我介绍了一本书<a href="http://book.douban.com/subject/25795276/">面向对象设计实践指南：Ruby语言描述</a>,去年年底看了一下当时当时确实有了一些体会，
-不过当你积累的知识长时间没有被实践的时候，那么只会产生一种后果，那就是遗忘。好在上周被批评了一下，重新认识到了自己的问题，工作了半年其实还是有点停滞不前，
-看的书确实过少。上周花了一天时间又把这本书看完了，确实又有了更进一步的体会。接下来会花一些实践把这些总结成自己的博客。今天这篇先介绍第一张本书对Object-Oriented
- Design的看法。</p>
-
-<h2>设计礼赞</h2>
-
-<p>无论是一个小的游戏还是一个完整的应用程序，都是看最终的完成结果，一个设计不好的应用会让程序员越陷越深，处于无尽的问题之中。而最终带给程序员福音的还是面向对象设计，
-面向对象设计能够给程序员解决道德和编程技术难题，能够很好解决效率问题。这就是为什么需要进行设计的最主要原因。</p>
-
-<h3>设计解决的问题</h3>
-
-<ol>
-<li>需求变化带来对于整个项目的影响，设计能够拥抱变化，低耦合的设计能够很好处理需求变化的问题。</li>
-<li>面向对象设计能够很好地管理一个对象的各个部件之间的依赖，能够使得各个部件之间的变化对比彼此产生很小的影响。</li>
-<li>面向对象设计本质上是对代码的组织管理，好的设计最终的目的为能够轻松应对将来的变化。
-
-<h3>设计工具</h3>
-
-<h4>设计原则</h4></li>
-<li>SOLID(Single Responsibility、Open-Closed、 Liskov Substitution、Interface Segregation、Dependency Inversion.)</li>
-<li>Design Patterns(Gof)
-
-<h4>设计行动</h4></li>
-<li>设计失败取决于具体的经验，经验不足以及语言的特性可能会导致糟糕的设计。</li>
-<li>敏捷开发不会做Big Up Front Design (BUFD)，敏捷开发需要根据需求一步步迭代，软件的最终完成时间是不可预期的。</li>
-</ol>
-
-
-<p>原理很重要，但是接下来几篇博客会在具体的行动中来一步步实现好的设计。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/10/its-time-to-think-how-to-change-my-life/">It&#8217;s Time to Think How to Change My Life</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-10T23:38:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:38 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I didn&rsquo;t write blog for a long time, Sometimes I felt like a failure of my life。So it&rsquo;s time to change my life, just fighting!!<br/>
-Last monty, I bought a book  <How To Get There Thikng> written by Ruanyifeng really good coder and author and blogger, he mentioned that
-writting blog can benefit your thinking.Yeah, it&rsquo;s really cool.So my first goal is to insist to write blog.Meanwhile I list the daily
-taks of my life, No exceptional circumstances , I must finish the task of list. Also I list the immediate goal term goal of my life.</p>
-
-<h3>Immediate Goal</h3>
-
-<ol>
-<li> improve code and OO design</li>
-<li> study opensource code</li>
-<li> keep writing,at least one blog a week</li>
-<li> keep reading,at least one hour one day</li>
-<li> read some celebrity biography</li>
-</ol>
-
-
-<h3>Term Goal</h3>
-
-<ol>
-<li> keep the enthusiasm of startup</li>
-<li> try to establish the internet co in recent 3 years</li>
-<li> try to be abroad in recent 3 years</li>
-<li> to be someone like jobs</li>
-</ol>
-
-
-<h3>Daily Task</h3>
-
-<ol>
-<li> keep reading, at least one hour one day</li>
-<li> keep studying source code, and writing note</li>
-<li> keep tracking jackpotcoin</li>
-<li> code review</li>
-</ol>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1672,6 +1951,14 @@ taks of my life, No exceptional circumstances , I must finish the task of list. 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/">7 Daily Use Cases of Ruby Hash</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/09/weekly-summary-2015-08-09/">Weekly Summary 2015-08-09</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/08/02/weekly-summary-2015-08-02/">Weekly Summary(2015-08-02)</a>
       </li>
     
@@ -1681,14 +1968,6 @@ taks of my life, No exceptional circumstances , I must finish the task of list. 
     
       <li class="post">
         <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
       </li>
     
   </ul>

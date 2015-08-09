@@ -9,7 +9,11 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="最近加了一个群，里面发起了一个git开源项目cms_6bey,需求不明确，不过还是第一次像github贡献自己的代码。下面针对第一次使用github贡献代码的说一下具体的步骤： 1.在github创建指定项目分支 登录github，打开cms_6bey项目地址，点击右上角的fork按钮， &hellip;">
+  <meta name="description" content="今天分享一下免费的CloudFoundry、据说大名鼎鼎的ruby-china也是挂在上面，包括新浪的SAE也是基于CloudFoundry.
+VMC介绍。
+详细的教程看官方的翻译链接CloudFoundry。
+感觉很不错，目前缺少原创的文章，慢慢习惯写blog。期待自己的改变。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +69,71 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/27/shi-yong-cloudfoundrybu-shu-zi-ji-ying-yong-spring,-grails,-scala,-play,-node-dot-js,-ruby/">使用CloudFoundry部署自己应用(Spring、Grails、Scala、Play、Node.js、Ruby</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-27T22:53:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>27</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:53 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天分享一下免费的CloudFoundry、据说大名鼎鼎的<a href="http://ruby-china.org/">ruby-china</a>也是挂在上面，包括新浪的SAE也是基于CloudFoundry.
+<a href="https://github.com/cloudfoundry/vmc">VMC介绍</a>。
+详细的教程看官方的翻译链接<a href="http://cndocs.cloudfoundry.com/getting-started.html">CloudFoundry</a>。
+感觉很不错，目前缺少原创的文章，慢慢习惯写blog。期待自己的改变。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/03/26/goagentshang-twitterde-cuo-wu/">Goagent上twitter的错误</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-03-26T22:11:00+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今天学习了一下linux下面使用goagent来进行翻墙浏览twitter、facebook等。具体参照<a href="https://code.google.com/p/goagent/wiki/InstallGuide">IntallGuide</a>。不过出现了打开twitter等网站证书的问题，参照了<a href="http://ruby-china.org/topics/3114">ruby-china</a>，这个导入了证书还是没用。
+汗颜，搞了好久，最后终于在<a href="https://code.google.com/p/goagent/issues/detail?id=775">googlecode</a>知道到了如下方法:
+     使用中发现很多https网站弹出证书警示，需要将local/ca.crt证书导入，下面简单介绍ubuntu下chrome证书的导入方法。
+     安装libnss3-tools:sudo apt-get install libnss3-tools
+     然后导入证书(这里假定证书ca.crt位于&#8221;/goagent/local/ca.crt&#8221;):certutil -d sql:$HOME/.pki/nssdb -A -t &ldquo;C,,&rdquo; -n GoAgent -i &lsquo;/goagent/local/ca.crt&rsquo;</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -409,84 +478,6 @@ M-x recover-session RETURN 如果你编辑了几个文件, 用这个恢复<br/><
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/11/22/gitming-ling-shi-yong-yan-se/">Git命令使用颜色</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-11-22T11:05:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2012</span></span> <span class='time'>11:05 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近经常使用git，无免产生一些遐想，在使用git命令的时候需要配置一些颜色，具体的步骤如下：<br/>
-1.打开所在项目的.git文件，然后用文本编辑器（emacs,vim等）打开config文件。
-2.在文件最后面加上那个<br/>
-    [color]
-     branch = auto
-     diff = auto
-     status = auto
-    [color &ldquo;branch&rdquo;]
-     current = yellow reverse
-     local = yellow
-     remote = green
-    [color &ldquo;diff&rdquo;]
-     meta = yellow bold
-     frag = magenta bold
-     old = red bold
-     new = green bold
-    [color &ldquo;status&rdquo;]
-     added = yellow
-     changed = green
-     untracked = cyan</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/11/19/ubunut-sublime-text2shu-ru-zhong-wen/">Ubunut Sublime Text2输入中文</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-11-19T16:06:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>4:06 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>昨天安装了sublime text2但是没办法输入中文，于是找了各种办法终于找到了这样一个帖子
-<a href="http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html">http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -504,6 +495,14 @@ M-x recover-session RETURN 如果你编辑了几个文件, 用这个恢复<br/><
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/">7 Daily Use Cases of Ruby Hash</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/09/weekly-summary-2015-08-09/">Weekly Summary 2015-08-09</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/08/02/weekly-summary-2015-08-02/">Weekly Summary(2015-08-02)</a>
       </li>
     
@@ -513,14 +512,6 @@ M-x recover-session RETURN 如果你编辑了几个文件, 用这个恢复<br/><
     
       <li class="post">
         <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
       </li>
     
   </ul>

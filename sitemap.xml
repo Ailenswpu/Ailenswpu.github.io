@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://ailenswpu.github.io/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/</loc>
+    <lastmod>2015-08-09T22:59:29+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>http://ailenswpu.github.io/blog/2015/08/09/weekly-summary-2015-08-09/</loc>
+    <lastmod>2015-08-09T21:57:06+08:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>http://ailenswpu.github.io/blog/2015/08/02/weekly-summary-2015-08-02/</loc>
     <lastmod>2015-08-02T19:42:20+08:00</lastmod>
     <priority>0.8</priority>
@@ -172,13 +182,13 @@
   </url>
   <url>
     <loc>http://ailenswpu.github.io/blog/archives/</loc>
-    <lastmod>2015-08-02T20:48:14+08:00</lastmod>
+    <lastmod>2015-08-09T23:25:57+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>http://ailenswpu.github.io/</loc>
-    <lastmod>2015-08-02T20:48:14+08:00</lastmod>
+    <lastmod>2015-08-09T23:25:57+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>

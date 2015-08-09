@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | coding on the way]]></title>
   <link href="http://ailenswpu.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-08-02T20:48:14+08:00</updated>
+  <updated>2015-08-09T23:25:57+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,238 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[7 Daily Use Cases of Ruby Hash]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/"/>
+    <updated>2015-08-09T22:59:29+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/08/09/7-daily-use-cases-of-ruby-hash</id>
+    <content type="html"><![CDATA[<p>这篇博客总结一下ruby中hash在日常开发的7中常用场景。</p>
+
+<h3>1.Convert JSON to Hash</h3>
+
+<p>当我们程序中通过别的API获取到一段JSON String的时候
+<code>ruby
+data = "{
+  'name': 'Aaron Patterson',
+  'screen_name': 'tenderlove',
+  'location': 'Seattle, WA'
+}"
+</code>
+我们应该将JSON String转换成ruby的Hash，这时候我们应该需要借助json这个库:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">json</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;profile = JSON.parse(data)</span>
+</span><span class='line'><span class="sr">&lt;code&gt;</span>
+</span><span class='line'><span class="sr">IRB输出为:</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">ruby</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="nb">name</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">=&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Aaron</span> <span class="no">Patterson</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">screen_name</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">=&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">tenderlove</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">location</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">=&gt;&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="no">Seattle</span><span class="p">,</span> <span class="no">WA</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+参考<a href="http://www.ruby-doc.org/stdlib-2.1.0/libdoc/json/rdoc/JSON.html#method-i-parse">JSON Parse</a></p>
+
+<h3>2.Convert Hash To JSON</h3>
+
+<p>跟上面互逆的过程，如何将ruby的hash转化为JSON，同样需要json这个库：
+<code>ruby
+signups_of_the_week = {
+    monday: 2,
+    tuesday: 3,
+    wednesday: 4,
+    thursday: 20,
+    friday: 5,
+    saturday: 2,
+    sunday: 5
+}
+</code>
+转为json的过程为
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">json</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;signups_of_the_week.to_json&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="err">输出为</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;{</span><span class="s2">&quot;monday&amp;rdquo;:2,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;tuesday&amp;rdquo;:3,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;wednesday&amp;rdquo;:4,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;thursday&amp;rdquo;:20,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;friday&amp;rdquo;:5,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;saturday&amp;rdquo;:2,</span>
+</span><span class='line'><span class="s2">    &amp;ldquo;sunday&amp;rdquo;:5}&amp;ldquo;</span>
+</span></code></pre></td></tr></table></div></figure>
+参考<a href="http://www.ruby-doc.org/stdlib-2.1.0/libdoc/json/rdoc/JSON.html#method-i-generate">JSON#generate</a></p>
+
+<h3>3.How To Set Default Value For Nested Hash</h3>
+
+<p>当我们有一个嵌套的Hash我们该如何给这个hash赋默认的值
+<code>ruby
+contacts = {
+  "John" =&gt; {
+    name: "John",
+    email: "john@doe.com"
+  },
+  "Freddy" =&gt; {
+    name "Freddy",
+    email: "freddy@mercury.com"
+  }
+}
+</code>
+当我们需要取其中的一个元素的时候我们不希望每次都去检查key是否存在，在ruby的hash中像<code>h[:key1][:key2]</code>是错误的，那么我们该如何设置默认值呢？</p>
+
+<pre><code class="ruby">contacts = Hash.new do |hsh, key|
+  hsh[key] = {
+    name: key,
+    email: ""
+  }
+end
+#或者
+contacts.default_proc = Proc.new do |hsh, key|
+  hsh[key] = {
+    name: key,
+    email: ""
+  }
+end
+</code></pre>
+
+<p>参考<a href="http://www.ruby-doc.org/core-2.1.0/Hash.html#method-c-new">Hash#new</a>, <a href="http://www.ruby-doc.org/core-2.1.0/Hash.html#method-i-default_proc-3D">Hash#default_proc=</a></p>
+
+<h3>4.Merge Two Nested Hash</h3>
+
+<pre><code class="ruby">wish_list = {
+  8 =&gt; {
+    title: 'The Color of Magic',
+  },
+  42 =&gt; {
+    title: 'The Hitch-Hiker"s Guide to the Galaxy',
+    price: 5
+  }
+}
+
+basket = {
+  8 =&gt; {
+    price: 10
+  },
+  1729 =&gt; {
+    title: 'Ramanujan:  Twelve Lectures on Subjects Suggested by His Life and Work',
+    price: 28
+  }
+}
+</code></pre>
+
+<p>当我们有上面这个hash我们该如何merge这两个呢？如果我们是rails项目可以通过ActiveSupport来完成
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">active_support</span><span class="o">/</span><span class="n">core_ext</span><span class="o">/</span><span class="nb">hash</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="c1"># not necessary if in Rails&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">basket</span><span class="o">.</span><span class="n">deep_merge</span><span class="p">(</span><span class="n">wish_list</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">当然我们可以自己来实现一个递归的算法：</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;ruby</span>
+</span><span class='line'><span class="sr">def deep_merge(h1, h2)</span>
+</span><span class='line'><span class="sr">  h1.merge(h2) { |key, h1_elem, h2_elem| deep_merge(h1_elem, h2_elem) }</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">deep_merge</span><span class="p">(</span><span class="n">basket</span><span class="p">,</span> <span class="n">wish_list</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>5.Filter Out Some Keys Of a Hash?</h3>
+
+<pre><code class="ruby">histogram = {
+  monday: 5,
+  tuesday: 7,
+  wednesday: 10,
+  thursday: 18,
+  friday: 7,
+  saturday: 2,
+  sunday: 0
+}
+</code></pre>
+
+<p>当我们想删除hash中某一些key时候，如果有AcitveSupport可以:
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">active_support</span><span class="o">/</span><span class="n">core_ext</span><span class="o">/</span><span class="nb">hash</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span> <span class="c1"># not necessary if Rails&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">histogram</span><span class="o">.</span><span class="n">except</span><span class="p">(</span><span class="ss">:saturday</span><span class="p">,</span> <span class="ss">:sunday</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">当然自己实现可以为</span><span class="p">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;ruby</span>
+</span><span class='line'><span class="sr">def filter(hsh, *keys)</span>
+</span><span class='line'><span class="sr">  hsh.reject { |k, _| keys.include? k }</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>6.Sort Hash By Value</h3>
+
+<pre><code class="ruby">scores = {
+  "The Lady" =&gt; 3,
+  "Fate" =&gt; 2,
+  "Death" =&gt; 10
+}
+#可以通过
+leaderboard = scores.sort_by { |_, score| -score }来排序
+</code></pre>
+
+<h3>7.Find Differences Between Two Hashs</h3>
+
+<pre><code class="ruby">entries = {
+  1372284000 =&gt; 'CVE-2013-4073',
+  1368482400 =&gt; 'CVE-2013-2065'
+}
+
+updated_entries = {
+  1385074800 =&gt; 'CVE-2013-4164',
+  1372284000 =&gt; 'CVE-2013-4073',
+  1368482400 =&gt; 'CVE-2013-2065'
+}
+#解决方案如下：
+new_entries = updated_entries.reject { |k, _| entries.include? k }
+</code></pre>
+
+<p>这是Ruby中hash一些常用的方法，很多时候可以通过这些方法减少冗余代码。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Three Little Hacks]]></title>

@@ -9,9 +9,9 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="rails rake 版本问题 之前一直困扰我们的rake版本的问题，今天查找到了解决方法。 通常情况下，如果我们电脑上同时装了不同版本的rake时，运行rake命令时会出错，如： rake db:migrate
-rake aborted!
-You have already activated &hellip;">
+  <meta name="description" content="最近经常使用git，无免产生一些遐想，在使用git命令的时候需要配置一些颜色，具体的步骤如下：
+1.打开所在项目的.git文件，然后用文本编辑器（emacs,vim等）打开config文件。
+2.在文件最后面加上那个 [color] branch = auto diff = auto status &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,84 @@ You have already activated &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/22/gitming-ling-shi-yong-yan-se/">Git命令使用颜色</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-11-22T11:05:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2012</span></span> <span class='time'>11:05 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近经常使用git，无免产生一些遐想，在使用git命令的时候需要配置一些颜色，具体的步骤如下：<br/>
+1.打开所在项目的.git文件，然后用文本编辑器（emacs,vim等）打开config文件。
+2.在文件最后面加上那个<br/>
+    [color]
+     branch = auto
+     diff = auto
+     status = auto
+    [color &ldquo;branch&rdquo;]
+     current = yellow reverse
+     local = yellow
+     remote = green
+    [color &ldquo;diff&rdquo;]
+     meta = yellow bold
+     frag = magenta bold
+     old = red bold
+     new = green bold
+    [color &ldquo;status&rdquo;]
+     added = yellow
+     changed = green
+     untracked = cyan</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/19/ubunut-sublime-text2shu-ru-zhong-wen/">Ubunut Sublime Text2输入中文</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-11-19T16:06:00+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>4:06 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>昨天安装了sublime text2但是没办法输入中文，于是找了各种办法终于找到了这样一个帖子
+<a href="http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html">http://www.dedecms.com/knowledge/servers/linux-bsd/2012/1114/16574.html</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -274,6 +352,14 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/">7 Daily Use Cases of Ruby Hash</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/09/weekly-summary-2015-08-09/">Weekly Summary 2015-08-09</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/08/02/weekly-summary-2015-08-02/">Weekly Summary(2015-08-02)</a>
       </li>
     
@@ -283,14 +369,6 @@ Java HotSpot&trade; Server VM (build 23.5-b02, mixed modeb)<br/></p>
     
       <li class="post">
         <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/01/rack-first-principles/">Rack: First Principles</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/29/hash-and-default-proc/">Hash and Default_proc</a>
       </li>
     
   </ul>
