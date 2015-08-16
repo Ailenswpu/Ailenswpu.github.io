@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Summary | coding on the way]]></title>
   <link href="http://ailenswpu.github.io/blog/categories/summary/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-08-09T23:25:57+08:00</updated>
+  <updated>2015-08-16T23:37:14+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Weekly-summary-2015-08-16]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/08/16/weekly-summary-2015-08-16/"/>
+    <updated>2015-08-16T21:30:31+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/08/16/weekly-summary-2015-08-16</id>
+    <content type="html"><![CDATA[<h3>整体总结：</h3>
+
+<p>上周的工作处于过渡期，目标在于更加注重和提高个人生产力，排除干扰，自己的micro solution为有：工作期间关闭所有im，只打开slack、手机放在另一个桌子上、桌上和工作无关的杂物全部清除掉。
+前两天处于一种适应期，后面三天慢慢进入状态，逐渐认识到把工作当成人生的一种历练，高效地写出漂亮的代码、做出出色的产品、不断提高自我review。通过morning meeting能够双方互相交流，互相帮助对方看清问题这是一件非常有益的事情，比如我因为经济问题去做临时兼职，自己看不到问题的所谓，经过自己的仔细思考确实是一件得不偿失的事情，好比如台球停在洞口旁边的球，虽然很容易进，但是如果技术不到位，白球很容易就进带，很有可能就会前功尽弃。乔布斯说过：&#8221;A级人才的自尊心，不需要你呵护&#8221;，希望我们以后就是这样，实话实说，任何问题都可以直接指出来。根据自己的实际情况取消了pomotodo。 pomotodo本身也是一个打扰，希望不断锻炼提高自己集中注意力的时间。上周也研读了《创业维艰》这本书，目前看了2/3，非常有感触，对于员工之间的协调和管理之前确实存在着问题，导致了orca和rita最后离职时候的情绪，这方面以后可以参照作者的经验去慢慢解决。</p>
+
+<h3>工作总结：</h3>
+
+<ul>
+<li>1.完成机器人的测试和代码，周五测试出有bug</li>
+<li>2.逐渐习惯写、思考</li>
+</ul>
+
+
+<h3>下周工作计划：</h3>
+
+<ul>
+<li>1.解决机器人的bug</li>
+<li>2.调试beta版本数值</li>
+<li>3.为beta上线做准备</li>
+</ul>
+
+
+<h3>感想</h3>
+
+<p>我和tony彼此有着很高的默契，目前是公司非常重要的时刻，我们接下来应该全力以赴去把新产品做好、把技术做扎实，能够证明公司的实力、证明团队的实力。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Weekly Summary(2015-08-02)]]></title>

@@ -9,12 +9,8 @@
   <meta name="author" content="ailen">
 
   
-  <meta name="description" content="这篇博客总结一下ruby中hash在日常开发的7中常用场景。 1.Convert JSON to Hash 当我们程序中通过别的API获取到一段JSON String的时候 1
-2
-3
-4
-5
-data = &quot;{ &#39;name&#39;: &#39;Aaron Patterson &hellip;">
+  <meta name="description" content="整体总结： 上周的工作处于过渡期，目标在于更加注重和提高个人生产力，排除干扰，自己的micro solution为有：工作期间关闭所有im，只打开slack、手机放在另一个桌子上、桌上和工作无关的杂物全部清除掉。
+前两天处于一种适应期，后面三天慢慢进入状态，逐渐认识到把工作当成人生的一种历练， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +66,59 @@ data = &quot;{ &#39;name&#39;: &#39;Aaron Patterson &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/16/weekly-summary-2015-08-16/">Weekly-summary-2015-08-16</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-16T21:30:31+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:30 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>整体总结：</h3>
+
+<p>上周的工作处于过渡期，目标在于更加注重和提高个人生产力，排除干扰，自己的micro solution为有：工作期间关闭所有im，只打开slack、手机放在另一个桌子上、桌上和工作无关的杂物全部清除掉。
+前两天处于一种适应期，后面三天慢慢进入状态，逐渐认识到把工作当成人生的一种历练，高效地写出漂亮的代码、做出出色的产品、不断提高自我review。通过morning meeting能够双方互相交流，互相帮助对方看清问题这是一件非常有益的事情，比如我因为经济问题去做临时兼职，自己看不到问题的所谓，经过自己的仔细思考确实是一件得不偿失的事情，好比如台球停在洞口旁边的球，虽然很容易进，但是如果技术不到位，白球很容易就进带，很有可能就会前功尽弃。乔布斯说过：&#8221;A级人才的自尊心，不需要你呵护&#8221;，希望我们以后就是这样，实话实说，任何问题都可以直接指出来。根据自己的实际情况取消了pomotodo。 pomotodo本身也是一个打扰，希望不断锻炼提高自己集中注意力的时间。上周也研读了《创业维艰》这本书，目前看了2/3，非常有感触，对于员工之间的协调和管理之前确实存在着问题，导致了orca和rita最后离职时候的情绪，这方面以后可以参照作者的经验去慢慢解决。</p>
+
+<h3>工作总结：</h3>
+
+<ul>
+<li>1.完成机器人的测试和代码，周五测试出有bug</li>
+<li>2.逐渐习惯写、思考</li>
+</ul>
+
+
+<h3>下周工作计划：</h3>
+
+<ul>
+<li>1.解决机器人的bug</li>
+<li>2.调试beta版本数值</li>
+<li>3.为beta上线做准备</li>
+</ul>
+
+
+<h3>感想</h3>
+
+<p>我和tony彼此有着很高的默契，目前是公司非常重要的时刻，我们接下来应该全力以赴去把新产品做好、把技术做扎实，能够证明公司的实力、证明团队的实力。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1571,371 +1620,6 @@ Ruby中还有一种更好的方法就是使用flat_map：</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/19/design-class-with-single-responsibility/">Chapter2: Designing Classes With a Single Responsibility</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-19T06:47:00+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>6:47 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这一章我们将围绕设计一个具有<strong>单一职责</strong>的类来展开描述。面向对象系统的基础是<strong>消息（message）</strong>，但是明显的组织结构是<strong>类（class）</strong>，消息是设计的核心，但是类也很突出
-因此本章主要集中在如何决定一个类所包含的内容，接下来几篇博客将设计重点从类转移到消息。</p>
-
-<h2>1.决定类的内容</h2>
-
-<p>假设你正在思考某个应用程序。你应该知道它做什么，你甚至已经思考过如何实现其中最有意思的那几个行为。这不是一个技术问题，而是一个组织问题。你知道如何编写代码，但是
-不知道应该把它放在哪里。</p>
-
-<h3>1.1将方法分组成类</h3>
-
-<p>像Ruby这样基于类的OO语言里，方法被定义在类里，你所创建的那些类会永久地影响你对这个应用程序的思考。他们定义了一个虚拟世界，一个会向下束缚每个人的想象力的世界。你
-正在构建一个从外界可能难以想象的盒子。<br/>
-尽管将方法正确分组成类很重要，但是项目早起阶段不可能处理的很正确。你所了解到的永远都会比现在少。如果你的应用程序成功了，那么你今天所做的那些决定在以后会有许多将被
-更改。当那天到来的生活，你成功完成这些更改的能力取决于你对应用程序的设计。</p>
-
-<h3><strong>设计是保留可变性的艺术，而非达到完美型的行为。</strong></h3>
-
-<h3>1.2组织代码以便于更改</h3>
-
-<p>主张代码应该容易更改的做法类似于规定孩子要有礼貌，这种声明不可能有人反对，但是无法帮助父母培养出一个和蔼可亲的孩子。“容易”一词太过于广泛，你需要将它具体化，并且将评判
-代码的标准也具体化。<br/>
-如果将<em>易于更该</em>定义成下面几条：</p>
-
-<ul>
-<li>更改不会产生意想不到的副作用</li>
-<li>需求轻微变化对代码的更改要求也相应较小</li>
-<li>现有的代码易于重用</li>
-<li>最简单的更改方式是添加其自身也已于更改的代码</li>
-</ul>
-
-
-<p>那么编写的代码具有以下几个特点:</p>
-
-<ul>
-<li>透明性(Transparent)：在所更改的代码，以及在远处依赖于它的代码里，更改所产生的后果是显而易见的</li>
-<li>合理性(Reasonable)：任何更改所产生的成本都应该与更改所产生的效益成正比</li>
-<li>可用性(Usable)：现有代码在新的环境里和意想不到的环境里都能使用</li>
-<li>典范性(Exemplary)：代码本身应该鼓励那些为延续这些特点而对它进行的更改</li>
-</ul>
-
-
-<p>具有透明性、合理性、可用性和典范性（简写为TRUE）这四种特点的代码,不仅能满足今天的需求，而且也易于更改，以满足未来的需求。为创建具有TRUE特点代码，所要做的第一步是
-保证每个类都只有<em>一种单一的、定义明确的</em>职责。</p>
-
-<h2>2.创建具有单一职责的类</h2>
-
-<p>一个类应该尽可能做最小的用途。即是说，他应该具有单一职责。  接下来将举例说明如何创建一个具有单一职责的类，并且会解释这一点之所以重要的原因。在改示例里，需要
-将自行车拆成一个个小部件。</p>
-
-<h3>2.1示例程序：自行车和齿轮</h3>
-
-<p>自行车是一种非常高效的机器，部分原因在于它使用齿轮给人类带来的方便。在骑自行车时候你可以选择使用小齿轮（容易踩踏，但是不够快）活着选择大齿轮（踩踏费力，但是前进速度快）。 <br/>
-齿轮工作原理为：在双脚每踩动一圈踏板后，带动自行车所跑过的距离。具体讲，即齿轮控制了每踩动车轮所转过的圈数。如果用小齿轮，则需要双脚踩动多次才能让车轮转一次，采用
-大齿轮，完整踏一次则可以让车轮转动很多圈。 <br/>
-“小”和“大”这些术语都不够精确。对于不同齿轮，单车族采用了&#8221;齿轮牙齿比率&#8221;的概念。如下面的简单的Ruby脚本:</p>
-
-<pre><code>    chainring cog = 52                      # number of teeth
-    ratio         = 11                      # -&gt; 4.72727272727273
-    puts ratio    = chainring / cog.to_f    # -&gt; 1.11111111111111
-    chainring cog = 30                      ￼￼￼
-    ratio         = 27                      # number of teeth
-    puts ratio    = chainring / cog.to_f    # -&gt; 4.72727272727273
-</code></pre>
-
-<p>一个代码52颗齿轮的牙盘和一个带有11颗齿的飞轮组合在一起（52x11）形成的齿轮拥有率为4.73，每踩踏一次，轮子转动圈数接近5。而（30x27）的结构踩起来会更轻松。<br/>
-如果通读一下上面的那些描述，并找出表示领域内对象的一些名词，你便会看到像自行车和齿轮这样的词组。这些名词代表了最简单的可以成为类的候选项。直觉告诉我们自行车应是
-一个类，但是上面描述没有任何关于自行车行为。因此到目前为止还不具资格。不过齿轮由牙盘、飞轮和比率。即是说它拥有了数据和行为。它应该理解为一个类。根据上面的描述
-可以创拟建这样一个简单的Gear类:</p>
-
-<pre><code>  class Gear
-    attr_reader :chainring, :cog def initialize(chainring, cog)
-    @chainring = chainring
-    @cog = cog end
-    def ratio
-      chainring / cog.to_f
-    end
-  end
-  puts Gear.new(52, 11).ratio puts Gear.new(30, 27).ratio
-</code></pre>
-
-<p>这个gear类很简单。在提供牙盘和飞轮具体齿数后，你便可以创建一个新的Gear实例。每一个i实现了三个方法，chainring、cog和ratio。<br/>
-这是将你的齿轮计算器展示给某个朋友，他会发现这个很有用，但是立即要求更改。他有两辆自行车，这些自行车拥有完全相同的齿轮，但是只是轮子尺寸不一样。他希望你考虑到不同
-车轮带来的影响。<br/>
-在美国有一种“齿轮英寸数”的方法来对拥有不同齿轮和轮子的自行车进行比较。计算公式为：<br/>
-齿轮英寸数 = 轮子直径 x 齿轮比率，其中轮子直径 = 钢圈直径 + 两倍轮胎直径。 <br/>
-更改Gear类，添加新行为：</p>
-
-<pre><code>class Gear
-  attr_reader :chainring, :cog, :rim, :tire def initialize(chainring, cog, rim, tire)
-    @chainring = chainring @cog = cog
-    @rim = rim
-    @tire = tire
-  end
-  def ratio
-    chainring / cog.to_f
-  end
-  def gear_inches
-    # tire goes around rim twice for diameter
-    ratio * (rim + (tire * 2)) 
-  end
-end
-puts Gear.new(52, 11, 26, 1.5).gear_inches
-# -&gt; 137.090909090909
-puts Gear.new(52, 11, 24, 1.25).gear_inches # -&gt; 125.272727272727
-</code></pre>
-
-<p>这个新的gear_inches方法假定符合钢圈和轮胎尺寸的单位为英寸，这个可能正确，也可能不正确。尽管有次警告，但是Gear类还是符合规范，而且代码也能工作，只是下面的错误
-要排除在外面</p>
-
-<pre><code>puts Gear.new(52, 11).ratio # didn't this used to work?
-# ArgumentError: wrong number of arguments (2 for 4) 
-# from (irb):20:in 'initialize'
-# from (irb):20:in 'new' 
-# from (irb):20
-</code></pre>
-
-<p>在添加gear_inches会引入上面这个错误。在更改后构造方法又引入了额外两个参数：rim和tire。更改某个方法参数个数会对现有的调用的那些函数产生影响。有可能会产生严重的问题。 <br/>
-既然有了基本的Gear类，那么现在有一个问题，这种组织代码的结构是组好的么？<br/>
-答案是：视具体情况而定。如果其中程序永远不变，那么当前就够了，但是已经预料到了：有可能需要为单车一族提供一个完成的计算器程序。在即将发生演变的程序里，Gear是众多类
-的一个，为了让演变更加有效，代码必须易于更改。</p>
-
-<h3>2.2要依赖行为，不要依赖数据</h3>
-
-<p>行为可以在方法里被捕获到，并且通过发送消息获得调用。当创建具有单一职责的类时，每一个细小的行为都只能存在于一个地方。避免重复（DRY）这一说法是这个思想的简洁描述。
-满足DRY的代码能够容忍变化，因为行为上的任何变化都可以只通过更改一个地方来是是实现。<br/>
-除了行为以外，对象通常还包含数据。数据是保存在实例变量里面的，并且可以是任何内容。访问数据通常可以通过这样两种方式的某一个方式来实现：直接应用变量或者将变量包裹在访问器方法里面。</p>
-
-<h4>1隐藏实例变量</h4>
-
-<p>将实例变量总是包裹在访问器里面，而不是直接应用做法具体如下：</p>
-
-<pre><code>class Gear
-  attr_reader :chainring, :cog # &lt;------- 
-  def initialize(chainring, cog)
-    @chainring = chainring
-    @cog = cog 
-  end
-  def ratio
-    chainring / cog.to_f
-  end 
-end
-内部实现为:
-def cog 
-  @cog
-end
-</code></pre>
-
-<p>现在这个cog便是这段代码唯一能够理解cog含义的地方。cog变成了消息发送的结果，实现这个方法cog由数据(四处应用)变成了行为（只被定义了一次）。<br/>
-如果@cog被引用10次，那么突然需要调整，这段代码也需要大量的调整，但是如果放到访问器里面，那么只需要改动一次。甚至会有更复杂的实现也只需要改动一次如下。</p>
-
-<pre><code>def cog
-  @cog * (foo? ? bar_adjustment : baz_adjustment)
-end
-</code></pre>
-
-<h4>2隐藏数据结构</h4>
-
-<p>如果说附带一个实例变量是一个坏事情，那么依赖于一个复杂的数据结构则是糟糕透顶的事情，一起看看下面这个类：</p>
-
-<pre><code> class ObscuringReferences
-   attr_reader :data
-   def initialize(data)
-     @data = data 
-   end
-   def diameters
-    data.collect {|cell|cell[0] + (cell[1] * 2)} 
-   end
- end
-</code></pre>
-
-<p>这个类希望使用一个由钢圈和轮胎构成的二维数组进行初始化：</p>
-
-<pre><code>@data = [[622, 20], [622, 23], [559, 30], [559, 40]]
-</code></pre>
-
-<p>ObscuringReferences将其初始化参数放到变量@data中，并乖乖使用Ruby的attr_reader将@data包裹在方法里。 <br/>
-不过由@data包含一个复杂的数据结构，所以只隐藏实例变量还不够。方法@data仅仅是返回了这个数组。为做些有用的事情，data的每一位发送者还必须完全了解数据的哪一部分处于
-这个数据的哪一个位置上面。<br/>
-方法diameters不仅知道如何计算直径，而且还知道数组的什么地方可以找到钢圈和轮胎。他清楚知道，当遍历data时候，钢圈在[0]位置上，而轮胎在[1]位置上。<br/>
-它<strong>依赖于</strong>数组的结构，如果结构发生变化，那么这段代码必须要更改。当你的数据在数组的时候，你少不了会四处引用这些数组的结构。这些引用都很脆弱。他们躲开了封装，
-并偷偷散落在代码里。他们不符合全DRY原则。钢圈在[0]所因为的信息不应该被复制多次，他只应该存在于一个地方。<br/>
-这段代码确实很糟糕。加入data返回一个数组，而这个数组由被许多地方引用的散列构成，那么出现什么样的后果？改变它的结构会影响到整段代码，每次更改都意味着一次错误率的创建。
-这个问题非常隐蔽。<br/>
-在Ruby中很容易将结构与意义分离开来，就像你可以使用一个方法将整个变量包裹起来一样，Ruby中可以使用Struct类来包裹结构。当然C#也有类似于Struct的结构。<br/>
-在下面这示例，具有与前面那个类完全一样的接口，他接受一个二维数组作为初始化参数，并且实现了diameters方法。尽管他们外观很相同，但是内部实现却迥然不同。</p>
-
-<pre><code>class RevealingReferences attr_reader :wheels
-  def initialize(data)
-    @wheels = wheelify(data) 
-  end
-  def diameters 
-    wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)} 
-  end
-  # ... now everyone can send rim/tire to wheel
-  Wheel = Struct.new(:rim, :tire)
-  def wheelify(data) data.collect {|cell|
-    Wheel.new(cell[0], cell[1])} 
-  end
-end
-</code></pre>
-
-<p>现在上面那个diameters对那个数组的结构一无所知。diameters知道的仅限于：消息wheels会返回一个枚举，并且每一个枚举会响应rim和tire请求。以前对cell[1]的应用变成了
-发送给wheel.tire消息。<br/>
-这样的样式代码让你不会受到外部所属的数据结构变化的影响。并且还能提高代码的可读性，以及让意图更加明显。它将对结构的索引转变成了往对象发送消息，上面的的wheelify方法将混乱的
-结构信息隔离起来，让这段代码更符合DRY原则。让整个类更适应变化。</p>
-
-<h3>2.2全面推行单一职责</h3>
-
-<p>创建具有单一职责的类对设计来说具有重要的意义。单一职责也可以用于代码的其他许多地方。</p>
-
-<h4>将额外的责任从方法里提取出来</h4>
-
-<p>与类一样方法也具有单一职责。所有原因都相同，只拥有一种职责可以让他们更易于更改和重用。所有设计技术在询问它做什么的时候，尽量用<strong>一句话来描述他们的职责</strong>。<br/>
-RevealingReferences的diameters方法：</p>
-
-<pre><code>def diameters 
-  wheels.collect {|wheel|wheel.rim + (wheel.tire * 2)} 
-end
-</code></pre>
-
-<p>显然有两个职责：遍历轮子，并计算出每一个轮子的直径。<br/>
-将其分为两个方法，每个方法承担一种责任，下面将计算轮子的直径放到了另外一个方法，当然这种重构会引入另外一个消息发送，但此时应该认为发送消息是没有代价的，现在的目的是编写
-易于更改的代码：</p>
-
-<pre><code>def diameters
-  wheels.collect {|wheel| diameter(wheel)}
-end
-# second - calculate diameter of ONE wheel
-def diameter(wheel)
-  wheel.rim + (wheel.tire * 2))
-end
-</code></pre>
-
-<p>再看看前面的Gear里面的gear_inches方法:</p>
-
-<pre><code>def gear_inches
-  ratio * (rim + (tire * 2)) 
-end
-</code></pre>
-
-<p>仔细看看gear_inches是Gear类的一项职责么？假设他是也很合理，那为什么这个方法看上去还是让人感觉错了呢？他有点混乱不确定，最终导致这个问题的就是这个方法<em>自身</em>不止有
-一种职责。<br/>
-隐藏在内部的是对车轮直径的计算，那么立刻行动，将直径计算放到新得方法,这样更容易检查类的职责：</p>
-
-<pre><code>def gear_inches 
-  ratio * diameter
-end
-def diameter
-  rim + (tire * 2)
-end
-</code></pre>
-
-<p>这个重构并没有改变直径的计算方法，他只是将这个行为隔离在一个独立的方法里面。即使在你不了解最终设计的时候也很有必要这么做。<br/>
-这个简单的重构让问题变得一目了然。Gear绝对要对gear_inches计算负责，但Gear不应该计算轮子直径。<br/>
-这种单个重构其影响力很小，但是这个编码风格积累起来的影响力确实巨大的。具有单一职责的方法具有以下几个优点：</p>
-
-<ul>
-<li>暴露之前影藏的特性</li>
-<li>避免使用注释(如果你觉得你在某个方法里面的某些代码需要注释，请将其提取出来，成为一个独立的方法，<strong>优秀的设计方法名就是一个很好的注释</strong>)</li>
-<li>鼓励重用</li>
-<li>易于移动到另外一个类</li>
-</ul>
-
-
-<p>Ruby允许你将计算直径的职责在不经指派的情况下从Gear一到另外一个新的类里面。下面的示例扩展了前面那个Wheel结构，增加了计算直径的方法：</p>
-
-<pre><code>class Gear
-  attr_reader :chainring, :cog, :wheel
-  def initialize(chainring, cog, rim, tire)
-    @chainring = chainring
-    @cog = cog
-    @wheel = Wheel.new(rim, tire)
-  end
-  def ratio
-    chainring / cog.to_f
-  end
-  def gear_inches
-    ratio * wheel.diameter
-  end
-  Wheel = Struct.new(:rim, :tire) do def diameter
-    rim + (tire * 2) end
-  end 
-end
-</code></pre>
-
-<p>现在有了一个新的Wheel，它计算自己的直径，将这个Wheel嵌入到Gear里面显然不是长远目标，但是它距离最终设计又近了一步。 <br/>
-如果有一个用过过多职责、混乱不堪的类，请将这些职责分离成不同的类。将精力全部集中到主类上面，决定他的职责，并迅速执行决定。如果你确定还有额外的职责无法删除，请将它
-隔离起来，不要让无关的职责渗透进来。</p>
-
-<h2>3.最后是真实轮子的需求</h2>
-
-<p>都知道轮子周长为PI乘以直径，嵌入的那个Wheel已经能够计算直径因此添加一个计算周长的方法是很简单的事情。这些变化都很小。下面是重构过后最终的代码：<br/>
-    class Gear
-      attr_reader :chainring, :cog, :wheel</p>
-
-<pre><code>  def initialize(chainring, cog, wheel=nil)
-    @chainring = chainring 
-    @cog = cog @wheel = wheel
-  end
-
-  def ratio
-    chainring / cog.to_f
-  end
-
-  def gear_inches
-    ratio * wheel.diameter
-  end 
-end
-
-class Wheel
-  attr_reader :rim, :tire
-
-  def initialize(rim, tire) 
-    @rim = rim
-    @tire = tire
-  end
-
-  def diameter
-    rim + (tire * 2)
-  end
-
-  def circumference 
-    diameter * Math::PI
-  end 
-end
-@wheel = Wheel.new(26, 1.5) puts @wheel.circumference
-# -&gt; 91.106186954104
-puts Gear.new(52, 11, @wheel).gear_inches # -&gt; 137.090909090909
-
-puts Gear.new(52, 11).ratio # -&gt; 4.72727272727273
-</code></pre>
-
-<p>这两个类都具有单一职责。这段代码并非完美，但是相比之前已经达到了更高的标准，已经很好了。</p>
-
-<h2>4.小结</h2>
-
-<p>通往可更改和可维护面向对象软件道路，起始于具有单一指责的类，那些只负责一件事情的类将这种事情与应用程序其他事情<em>隔离</em>开来,这种隔离可支持无不良后果的更改和不进行复制的重用。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1951,6 +1635,10 @@ puts Gear.new(52, 11).ratio # -&gt; 4.72727272727273
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/16/weekly-summary-2015-08-16/">Weekly-summary-2015-08-16</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/08/09/7-daily-use-cases-of-ruby-hash/">7 Daily Use Cases of Ruby Hash</a>
       </li>
     
@@ -1964,10 +1652,6 @@ puts Gear.new(52, 11).ratio # -&gt; 4.72727272727273
     
       <li class="post">
         <a href="/blog/2015/07/26/weekly-summary-2015-07-26/">Weekly Summary(2015-07-26)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/07/three-little-hacks/">Three Little Hacks</a>
       </li>
     
   </ul>

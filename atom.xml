@@ -4,7 +4,7 @@
   <title><![CDATA[coding on the way]]></title>
   <link href="http://ailenswpu.github.io/atom.xml" rel="self"/>
   <link href="http://ailenswpu.github.io/"/>
-  <updated>2015-08-09T23:25:57+08:00</updated>
+  <updated>2015-08-16T23:37:14+08:00</updated>
   <id>http://ailenswpu.github.io/</id>
   <author>
     <name><![CDATA[ailen]]></name>
@@ -12,6 +12,39 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Weekly-summary-2015-08-16]]></title>
+    <link href="http://ailenswpu.github.io/blog/2015/08/16/weekly-summary-2015-08-16/"/>
+    <updated>2015-08-16T21:30:31+08:00</updated>
+    <id>http://ailenswpu.github.io/blog/2015/08/16/weekly-summary-2015-08-16</id>
+    <content type="html"><![CDATA[<h3>整体总结：</h3>
+
+<p>上周的工作处于过渡期，目标在于更加注重和提高个人生产力，排除干扰，自己的micro solution为有：工作期间关闭所有im，只打开slack、手机放在另一个桌子上、桌上和工作无关的杂物全部清除掉。
+前两天处于一种适应期，后面三天慢慢进入状态，逐渐认识到把工作当成人生的一种历练，高效地写出漂亮的代码、做出出色的产品、不断提高自我review。通过morning meeting能够双方互相交流，互相帮助对方看清问题这是一件非常有益的事情，比如我因为经济问题去做临时兼职，自己看不到问题的所谓，经过自己的仔细思考确实是一件得不偿失的事情，好比如台球停在洞口旁边的球，虽然很容易进，但是如果技术不到位，白球很容易就进带，很有可能就会前功尽弃。乔布斯说过：&#8221;A级人才的自尊心，不需要你呵护&#8221;，希望我们以后就是这样，实话实说，任何问题都可以直接指出来。根据自己的实际情况取消了pomotodo。 pomotodo本身也是一个打扰，希望不断锻炼提高自己集中注意力的时间。上周也研读了《创业维艰》这本书，目前看了2/3，非常有感触，对于员工之间的协调和管理之前确实存在着问题，导致了orca和rita最后离职时候的情绪，这方面以后可以参照作者的经验去慢慢解决。</p>
+
+<h3>工作总结：</h3>
+
+<ul>
+<li>1.完成机器人的测试和代码，周五测试出有bug</li>
+<li>2.逐渐习惯写、思考</li>
+</ul>
+
+
+<h3>下周工作计划：</h3>
+
+<ul>
+<li>1.解决机器人的bug</li>
+<li>2.调试beta版本数值</li>
+<li>3.为beta上线做准备</li>
+</ul>
+
+
+<h3>感想</h3>
+
+<p>我和tony彼此有着很高的默契，目前是公司非常重要的时刻，我们接下来应该全力以赴去把新产品做好、把技术做扎实，能够证明公司的实力、证明团队的实力。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[7 Daily Use Cases of Ruby Hash]]></title>
@@ -1884,13 +1917,13 @@ pluck在做查询的时候会指针对特定的列进行查询，而上面一种
 <h3>2.find_by</h3>
 
 <p>很多时候，如果我们需要查找单条记录代码会是:
-    User.where(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#116;&#111;&#58;&#x72;&#x65;&#110;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x72;&#x65;&#x6e;&#x6b;&#x61;&#105;&#x73;&#x77;&#112;&#x75;&#x40;&#103;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
+    User.where(email: &ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#114;&#101;&#110;&#107;&#97;&#x69;&#115;&#x77;&#112;&#117;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#114;&#101;&#x6e;&#x6b;&#97;&#105;&#115;&#x77;&#112;&#117;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;).first
 但是rails设计的时候更常用的是dynamic finder:
-    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#x6f;&#58;&#x72;&#x65;&#x6e;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#x75;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#114;&#x65;&#110;&#107;&#97;&#x69;&#x73;&#x77;&#112;&#117;&#64;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
+    User.find_by_email_and_username &lsquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x72;&#x65;&#110;&#x6b;&#x61;&#105;&#115;&#x77;&#112;&#117;&#x40;&#103;&#109;&#x61;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#x72;&#x65;&#110;&#x6b;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#64;&#103;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a>&rsquo; &lsquo;renkaiswpu&rsquo;
 如果你使用find_by可以写成这样子：
-    User.find_by(email: &ldquo;<a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#58;&#x72;&#101;&#x6e;&#x6b;&#97;&#105;&#x73;&#x77;&#x70;&#117;&#64;&#103;&#109;&#97;&#105;&#x6c;&#46;&#99;&#111;&#109;">&#114;&#x65;&#x6e;&#x6b;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
+    User.find_by(email: &ldquo;<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#114;&#101;&#110;&#x6b;&#97;&#x69;&#x73;&#x77;&#112;&#x75;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#x72;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;</a>&rdquo;,username: &ldquo;renkaiswpu&rdquo;&ldquo;)
     #或者写成
-    User.where(email: &#8221;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x72;&#x65;&#x6e;&#x6b;&#x61;&#105;&#x73;&#x77;&#x70;&#117;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#114;&#101;&#x6e;&#107;&#x61;&#105;&#x73;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
+    User.where(email: &#8221;<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#114;&#x65;&#x6e;&#107;&#x61;&#x69;&#115;&#x77;&#x70;&#x75;&#x40;&#103;&#109;&#97;&#x69;&#108;&#46;&#99;&#x6f;&#x6d;">&#x72;&#101;&#110;&#107;&#x61;&#105;&#115;&#x77;&#x70;&#117;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#99;&#111;&#109;</a>&rdquo;).find_by username: &ldquo;renkaiswpu&rdquo;&ldquo;
 github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看出find_by的目的是取代使用method_missing的dynamic finder，find_by的实质就是where().first</p>
 
 <h3>3.first_or_create &amp;&amp; first_or_initialize</h3>
@@ -1899,7 +1932,7 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
 </code></pre>
 
 <p>这个正如他的名字，当你在查询一个记录的时候如果存在则返回该记录，如果没有则新建一个，更加简介的做法，采用代码块:
-    User.where(email: &ldquo;<a href="&#109;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x72;&#x65;&#x6e;&#x6b;&#x61;&#105;&#115;&#119;&#x70;&#117;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#x6f;&#109;">&#114;&#101;&#110;&#x6b;&#97;&#105;&#x73;&#119;&#x70;&#x75;&#x40;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a>&rdquo;).first_or_create do |user|
+    User.where(email: &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#114;&#x65;&#x6e;&#x6b;&#97;&#x69;&#x73;&#119;&#x70;&#x75;&#64;&#103;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#114;&#x65;&#110;&#x6b;&#97;&#x69;&#115;&#119;&#x70;&#117;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>&rdquo;).first_or_create do |user|
        user.name = = &lsquo;renkai&rsquo;
     end
 同理，如果使用first_or_initialize 这样的数据不会存储到数据库中。</p>
@@ -1932,53 +1965,6 @@ github的<a href="https://github.com/rails/rails/pull/5639">讨论</a>可以看�
     rake notes:fixme
 就可以轻松知道自己的tasklist了。
 更加详细的请参考<a href="https://speakerdeck.com/jeg2/10-things-you-didnt-know-rails-could-do">rails技巧</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ubuntu12.04开机无法进入问题]]></title>
-    <link href="http://ailenswpu.github.io/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti/"/>
-    <updated>2013-04-02T15:16:00+08:00</updated>
-    <id>http://ailenswpu.github.io/blog/2013/04/02/ubuntu12-dot-04kai-ji-wu-fa-jin-ru-wen-ti</id>
-    <content type="html"><![CDATA[<p>今天我的ubuntu12.04在我的强制关机后再一次英勇牺牲了。开机的时候出现了如下错误:
-     mount: mounting /dev on /root/dev failed: No such file or directory
-     mount: mounting /sys on /root/sys failed: No such file or directory
-     mount: mounting /proc on /root/proc failed: No such file or directory
-     Target filesystem doesn&rsquo;t have /sbin/init
-     [  3.392164] ioc0: LSI53C1030 B0 : Capabilities={Initiator}
-     No init found . Try passing init=bootarg.
-后来查了一下是引导分区的问题，具体解决办法如下:
-1. 先输入如下命令:
-    sudo fdisk -l
-得到如下结果:
-       Disk /dev/sda: 500.1 GB, 500107862016 bytes
-       255 heads, 63 sectors/track, 60801 cylinders, total 976773168 sectors
-       Units = sectors of 1 * 512 = 512 bytes
-       Sector size (logical/physical): 512 bytes / 4096 bytes
-       I/O size (minimum/optimal): 4096 bytes / 4096 bytes
-       Disk identifier: 0x0c300c2f
-       Device Boot      Start         End      Blocks   Id  System
-       /dev/sda1   *          63   148038974    74019456    7  HPFS/NTFS/exFAT
-       Partition 1 does not start on physical sector boundary.
-       /dev/sda2       148039036   976768064   414364514+   5  Extended
-       Partition 2 does not start on physical sector boundary.
-       /dev/sda5       148039038   331388819    91674891    7  HPFS/NTFS/exFAT
-       Partition 5 does not start on physical sector boundary.
-       /dev/sda6       499171743   914433816   207631037    7  HPFS/NTFS/exFAT
-       Partition 6 does not start on physical sector boundary.
-       /dev/sda7       914435928   976768064    31166068+   7  HPFS/NTFS/exFAT
-       /dev/sda8       331388928   331780095      195584   83  Linux
-       /dev/sda9       331782144   371779583    19998720   83  Linux
-       /dev/sda10      371781632   375779327     1998848   82  Linux swap / Solaris
-       /dev/sda11      375781376   499169279    61693952   83  Linux</p>
-
-<pre><code>   Partition table entries are not in disk order
-</code></pre>
-
-<p>找到自己的linux分区，其中/dev/sda8是/boot 分区，/dev/sda9是/分区,输入:
-    sudo fsck /dev/sda8
-    sudo fsdk /dev/sda9
-对磁盘进行修复，最后启动ok.</p>
 ]]></content>
   </entry>
   
